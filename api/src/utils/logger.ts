@@ -13,6 +13,5 @@ export const logger = pino({
     },
   },
 
-  timestamp: () =>
-    `,"time":"${format(new Date(), "hh:mm:ss aa | MMM-dd-yyyy")}"`,
+  timestamp: () => `,"time":"${format(new Date(), "hh:mm:ss aa | MMM-dd-yyyy")}"`,
 });
