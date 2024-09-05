@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // Compiles to latest ECMAScript version
+    "module": "ESNext", // Uses the latest ES module system
+    "moduleResolution": "Node", // Ensures Node.js-style module resolution
+    "esModuleInterop": true, // ESM and CommonJS interop
+    "forceConsistentCasingInFileNames": true,
+    "strict": true, // Enables all strict type-checking options
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "lib": ["ESNext"], // Uses the latest ES library
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleDetection": "force"
+  },
+  "exclude": ["node_modules"],
+  "include": ["src/**/*"]
+}
