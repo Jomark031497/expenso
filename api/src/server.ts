@@ -5,9 +5,21 @@ import { env } from "./env";
 const main = async () => {
   const app = express();
 
-  app.listen(env.PORT, () => {
+  const server = app.listen(env.PORT, () => {
     logger.info(`Server started at http://localhost:${env.PORT}`);
   });
+
+  // Graceful shutdown
+  function shutdown(signal: string) {
+    logger.info(`${signal} signal received: closing HTTP server`);
+    server.close(() => {
+      logger.info("HTTP server closed");
+      process.exit(0);
+    });
+  }
+
+  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
 };
 
 main().catch((err) => {
