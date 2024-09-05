@@ -1,6 +1,6 @@
 import express from "express";
-import { logger } from "./utils/logger";
-import { env } from "./env";
+import { logger } from "./utils/logger.js";
+import { env } from "./env.js";
 
 const main = async () => {
   const app = express();
