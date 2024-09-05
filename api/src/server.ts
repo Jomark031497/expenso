@@ -9,7 +9,6 @@ const main = async () => {
     logger.info(`Server started at http://localhost:${env.PORT}`);
   });
 
-  // Graceful shutdown
   function shutdown(signal: string) {
     logger.info(`${signal} signal received: closing HTTP server`);
     server.close(() => {
