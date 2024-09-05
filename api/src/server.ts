@@ -1,11 +1,12 @@
 import express from "express";
 import { logger } from "./utils/logger";
+import { env } from "./env";
 
 const main = async () => {
   const app = express();
 
-  app.listen(process.env.PORT, () => {
-    logger.info(`Server started at http://localhost:${process.env.PORT}`);
+  app.listen(env.PORT, () => {
+    logger.info(`Server started at http://localhost:${env.PORT}`);
   });
 };
 
