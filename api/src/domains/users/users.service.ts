@@ -33,12 +33,14 @@ const getUserByEmail = async (email: User["email"]) => {
   });
 };
 
-const getUserByUsername = async (username: User["username"]) => {
+export const getUserByUsername = async (username: User["username"], includePassword: boolean = true) => {
   return await db.query.users.findFirst({
     where: (users, { eq }) => eq(users.username, username),
-    columns: {
-      password: false,
-    },
+    ...(!includePassword && {
+      columns: {
+        password: false,
+      },
+    }),
   });
 };
 
@@ -55,16 +57,14 @@ export const createUser = async (payload: NewUser) => {
 
   const hashedPassword = await new Argon2id().hash(payload.password);
 
-  await db
+  const query = await db
     .insert(users)
     .values({ ...payload, password: hashedPassword })
-    .returning({
-      id: users.id,
-      username: users.username,
-      email: users.email,
-    });
+    .returning();
 
-  return { message: "user updated succesfully" };
+  if (!query[0]) throw new AppError(400, "user creation failed");
+
+  return query[0];
 };
 
 export const updateUser = async (id: User["id"], payload: NewUser) => {
