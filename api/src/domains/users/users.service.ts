@@ -3,7 +3,7 @@ import type { NewUser, User } from "./users.schema.js";
 import { users } from "./users.schema.js";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
-import { Argon2id } from "oslo/password";
+import { hash } from "argon2";
 
 export const getUsers = async () => {
   return await db.query.users.findMany({
@@ -64,7 +64,7 @@ export const createUser = async (payload: NewUser) => {
 
   if (Object.keys(errors).length) throw new AppError(400, "user creation failed", errors);
 
-  const hashedPassword = await new Argon2id().hash(payload.password);
+  const hashedPassword = await hash(payload.password);
 
   const query = await db
     .insert(users)
