@@ -6,6 +6,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
   try {
     // Read session cookie from headers
     const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
+
     if (!sessionId) {
       res.locals.user = null;
       res.locals.session = null;
@@ -14,6 +15,11 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 
     // Validate session and user
     const { session, user } = await lucia.validateSession(sessionId);
+
+    logger.info({
+      session,
+      user,
+    });
 
     if (!user) {
       res.locals.user = null;

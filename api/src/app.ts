@@ -35,8 +35,20 @@ export const createApp = () => {
 
   app.use(errorHandler);
 
+  app.use(errorHandler);
+
   return app;
 };
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface Locals {
+      user: User | null;
+      session: Session | null;
+    }
+  }
+}
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
