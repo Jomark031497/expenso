@@ -9,7 +9,7 @@ import { verifyUserOrAdmin } from "../../middlewares/verifyUserOrAdmin.js";
 const router = Router();
 
 // Create a new user
-router.post("/", validateSchema(insertUserSchema), controller.createUserHandler);
+router.post("/", requireAuth, requireAdmin, validateSchema(insertUserSchema), controller.createUserHandler);
 
 // Get all users
 router.get("/", requireAuth, requireAdmin, controller.getUsersHandler);

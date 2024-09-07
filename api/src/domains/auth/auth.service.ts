@@ -12,7 +12,7 @@ export const signUpUser = async (payload: NewUser) => {
   const session = await lucia.createSession(user.id, {});
 
   return {
-    user,
+    user: excludeFields(user, ["password"]),
     session,
   };
 };
