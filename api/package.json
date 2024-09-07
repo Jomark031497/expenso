@@ -1,17 +1,16 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "REST API built with Node.js, TypeScript, and Express",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
-    "dev": "tsx watch --env-file=.env src/server.ts",
+    "dev": "NODE_ENV=development tsx watch --env-file=.env src/server.ts",
     "db:push": "node --import tsx --env-file=.env ./node_modules/drizzle-kit/bin.cjs push",
     "db:studio": "drizzle-kit studio",
-    "lint": "eslint ./src/**/*",
-    "format": "prettier ./src --write"
+    "lint": "eslint ./src/**/* --fix && prettier --write ./src/**/*"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +23,7 @@
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.9.0",
+    "pino-pretty": "^11.2.2",
     "prettier": "^3.3.3",
     "tsx": "^4.19.0",
     "typescript": "^5.5.4",
@@ -41,9 +41,11 @@
     "lucia": "^3.2.0",
     "oslo": "^1.2.1",
     "pino": "^9.4.0",
-    "pino-pretty": "^11.2.2",
     "postgres": "^3.4.4",
     "zod": "^3.23.8"
   },
-  "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1"
+  "engines": {
+    "node": "v22.6.0"
+  },
+  "packageManager": "pnpm@9.9.0"
 }
