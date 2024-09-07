@@ -1,47 +1,55 @@
 import { logger } from "./utils/logger.js";
-import { env } from "./config/env.js";
 import { createApp } from "./app.js";
-import { closeDbConnection } from "./db/dbInstance.js";
+import { closeDbConnection } from "./db/dbInstance.js"; // Import closeDbConnection
+import { env } from "./config/env.js";
 
 const main = async () => {
   const app = createApp();
 
   const server = app.listen(env.PORT, () => {
-    logger.info(`Server started at http://localhost:${env.PORT}`);
+    logger.info(`Server started at http://localhost:${env.PORT}`, { port: env.PORT });
   });
 
-  function shutdown(signal: string) {
+  // Graceful shutdown with a timeout and DB close
+  async function shutdown(signal: string) {
     logger.info(`${signal} signal received: closing HTTP server`);
 
-    // Set a timeout to force close after 30 seconds
-    const timeout = setTimeout(async () => {
+    // Set a timeout to forcefully exit if shutdown takes too long
+    const timeout = setTimeout(() => {
       logger.error("Force shutting down server due to timeout.");
-      await closeDbConnection();
       process.exit(1);
-    }, 30_000); // 30 seconds
+    }, 30_000); // 30 seconds timeout
 
+    // Close the server first
     server.close(async () => {
       clearTimeout(timeout);
       logger.info("HTTP server closed");
-      await closeDbConnection();
-      process.exit(0);
+
+      // Close the database connection
+      try {
+        await closeDbConnection();
+        logger.info("Database connection closed.");
+        process.exit(0);
+      } catch (err) {
+        logger.error("Error closing database connection:", err);
+        process.exit(1);
+      }
     });
   }
 
+  // Capture termination signals
   process.on("SIGINT", () => shutdown("SIGINT"));
   process.on("SIGTERM", () => shutdown("SIGTERM"));
 
   // Handle unhandled promise rejections
-  process.on("unhandledRejection", async (reason, promise) => {
+  process.on("unhandledRejection", (reason, promise) => {
     logger.error("Unhandled Rejection at:", promise, "reason:", reason);
-    await closeDbConnection();
     process.exit(1);
   });
 
   // Handle uncaught exceptions
-  process.on("uncaughtException", async (err) => {
+  process.on("uncaughtException", (err) => {
     logger.error("Uncaught Exception thrown:", err);
-    await closeDbConnection();
     process.exit(1);
   });
 };
