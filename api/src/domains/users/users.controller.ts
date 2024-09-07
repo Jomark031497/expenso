@@ -4,7 +4,7 @@ import * as usersService from "./users.service.js";
 export const getUsersHandler = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await usersService.getUsers();
-    return res.status(200).json({ data });
+    return res.status(200).json(data);
   } catch (error) {
     return next(error);
   }
@@ -13,7 +13,7 @@ export const getUsersHandler = async (_req: Request, res: Response, next: NextFu
 export const getUserByIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await usersService.getUser("id", req.params.id as string);
-    return res.status(200).json({ data });
+    return res.status(200).json(data);
   } catch (error) {
     return next(error);
   }
@@ -22,7 +22,7 @@ export const getUserByIdHandler = async (req: Request, res: Response, next: Next
 export const createUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await usersService.createUser(req.body);
-    return res.status(201).json({ data }); // 201 for resource creation
+    return res.status(201).json(data); // 201 for resource creation
   } catch (error) {
     return next(error);
   }
