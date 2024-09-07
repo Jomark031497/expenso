@@ -4,7 +4,7 @@ import * as usersService from "./users.service.js";
 export const getUsersHandler = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await usersService.getUsers();
-    return res.status(200).json(data);
+    return res.status(200).json({ data });
   } catch (error) {
     return next(error);
   }
@@ -12,8 +12,8 @@ export const getUsersHandler = async (_req: Request, res: Response, next: NextFu
 
 export const getUserByIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await usersService.getUser("id", <string>req.params.id);
-    return res.status(200).json(data);
+    const data = await usersService.getUser("id", req.params.id as string);
+    return res.status(200).json({ data });
   } catch (error) {
     return next(error);
   }
@@ -22,7 +22,7 @@ export const getUserByIdHandler = async (req: Request, res: Response, next: Next
 export const createUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await usersService.createUser(req.body);
-    return res.status(200).json(data);
+    return res.status(201).json({ data }); // 201 for resource creation
   } catch (error) {
     return next(error);
   }
@@ -30,8 +30,8 @@ export const createUserHandler = async (req: Request, res: Response, next: NextF
 
 export const updateUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await usersService.updateUser(<string>req.params.id, req.body);
-    return res.status(200).json(data);
+    const data = await usersService.updateUser(req.params.id as string, req.body);
+    return res.status(200).json({ data });
   } catch (error) {
     return next(error);
   }
@@ -39,8 +39,8 @@ export const updateUserHandler = async (req: Request, res: Response, next: NextF
 
 export const deleteUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await usersService.deleteUser(<string>req.params.id);
-    return res.status(200).json(data);
+    await usersService.deleteUser(req.params.id as string);
+    return res.status(204).send(); // 204 for no content on successful delete
   } catch (error) {
     return next(error);
   }
