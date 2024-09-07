@@ -4,6 +4,7 @@ import { logger } from "./utils/logger.js";
 const envSchema = z.object({
   PORT: z.string().transform(Number),
   DATABASE_URL: z.string().url(),
+  CLIENT_URL: z.string().url(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "target": "ESNext", // Compiles to latest ECMAScript version
-    "module": "NodeNext", // Uses the latest ES module system
-    "moduleResolution": "NodeNext", // Ensures Node.js-style module resolution
+    "module": "ESNext", // Uses the latest ES module system
+    "moduleResolution": "Node", // Ensures Node.js-style module resolution
     "esModuleInterop": true, // ESM and CommonJS interop
     "forceConsistentCasingInFileNames": true,
     "strict": true, // Enables all strict type-checking options
+    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "skipLibCheck": true,
     "allowJs": true,

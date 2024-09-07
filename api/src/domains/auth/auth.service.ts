@@ -31,7 +31,10 @@ export const signUpUser = async (payload: NewUser) => {
 };
 
 export const getAuthenticatedUser = async (id: User["id"]) => {
-  return await getUserById(id, false);
+  return await getUserById(id, {
+    includePassword: false,
+    returnError: true,
+  });
 };
 
 export const logoutUser = async (sessionId: string) => {

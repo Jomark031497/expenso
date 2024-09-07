@@ -13,15 +13,24 @@ export const getUsers = async () => {
   });
 };
 
-export const getUserById = async (id: User["id"], includePassword: boolean = true) => {
-  return await db.query.users.findFirst({
+export const getUserById = async (
+  id: User["id"],
+  options: { includePassword?: boolean; returnError?: boolean } = { includePassword: true, returnError: true },
+) => {
+  const user = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users.id, id),
-    ...(!includePassword && {
+    ...(!options.includePassword && {
       columns: {
         password: false,
       },
     }),
   });
+
+  if (!user && (options.returnError ?? true)) {
+    throw new AppError(404, "user not found");
+  }
+
+  return user;
 };
 
 const getUserByEmail = async (email: User["email"]) => {

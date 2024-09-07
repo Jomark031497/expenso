@@ -1,6 +1,10 @@
 import { createId } from "@paralleldrive/cuid2";
-import { pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+export const USER_ROLES = ["user", "admin"] as const;
+
+export const rolesEnum = pgEnum("roles", USER_ROLES);
 
 export const users = pgTable("users", {
   id: text("id")
@@ -10,6 +14,7 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 256 }).notNull().unique(),
   password: varchar("password", { length: 256 }).notNull(),
   fullName: varchar("full_name", { length: 256 }),
+  roles: rolesEnum("roles").default("user"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -35,5 +40,5 @@ export const insertUserSchema = createInsertSchema(users, {
 
 export const selectUserSchema = createSelectSchema(users);
 
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
+export type User = typeof users.$inferSelect; // return type when queried
+export type NewUser = typeof users.$inferInsert; // insert type
