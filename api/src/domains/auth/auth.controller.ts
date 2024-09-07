@@ -7,7 +7,8 @@ export const loginUserHandler = async (req: Request, res: Response, next: NextFu
   try {
     const data = await authService.loginUser(req.body);
 
-    return res.setHeader("Set-Cookie", lucia.createSessionCookie(data.session.id).serialize()).json(data.user);
+    const sessionCookie = lucia.createSessionCookie(data.session.id);
+    return res.status(200).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(data.user);
   } catch (error) {
     return next(error);
   }
@@ -16,7 +17,8 @@ export const loginUserHandler = async (req: Request, res: Response, next: NextFu
 export const signUpUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await authService.signUpUser(req.body);
-    return res.setHeader("Set-Cookie", lucia.createSessionCookie(data.session.id).serialize()).json(data.user);
+    const sessionCookie = lucia.createSessionCookie(data.session.id);
+    return res.status(201).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(data.user);
   } catch (error) {
     return next(error);
   }
