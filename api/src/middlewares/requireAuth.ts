@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { lucia } from "../lib/lucia.js";
 import { logger } from "../utils/logger.js"; // Assuming logger exists for logging
-import { logger } from "../utils/logger.js"; // Assuming logger exists for logging
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -13,8 +12,6 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
       return res.status(401).json({ message: "Unauthorized: No session found" });
     }
 
-    // Validate session and user
-    const { session, user } = await lucia.validateSession(sessionId);
     // Validate session and user
     const { session, user } = await lucia.validateSession(sessionId);
 
