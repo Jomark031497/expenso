@@ -7,7 +7,10 @@ import { createUser, getUser } from "../users/users.service.js";
 import type { Session } from "lucia";
 
 export const signUpUser = async (payload: NewUser) => {
-  const user = await createUser(payload);
+  const user = await createUser({
+    ...payload,
+    role: "user",
+  });
 
   const session = await lucia.createSession(user.id, {});
 
