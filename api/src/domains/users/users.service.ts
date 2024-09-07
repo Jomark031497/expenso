@@ -4,8 +4,8 @@ import { users } from "./users.schema.js";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
 import { Argon2id } from "oslo/password";
+import { excludeFields } from "../../utils/excludeFields.js";
 
-// Fetch all users, excluding password
 export const getUsers = async () => {
   return await db.query.users.findMany({
     columns: {
@@ -14,7 +14,6 @@ export const getUsers = async () => {
   });
 };
 
-// Generic function to find user by a specific field
 export const getUser = async (
   field: keyof User,
   value: string,
@@ -56,7 +55,7 @@ export const createUser = async (payload: NewUser) => {
 
   if (!query[0]) throw new AppError(400, "user creation failed");
 
-  return query[0];
+  return excludeFields(query[0], ["password"]);
 };
 
 export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
@@ -78,7 +77,6 @@ export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
   return { message: "user successfully updated" };
 };
 
-// Delete user by ID
 export const deleteUser = async (id: User["id"]) => {
   const existingUser = await getUser("id", id);
   if (!existingUser) throw new AppError(404, "delete user failed. userId not found");
