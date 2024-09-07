@@ -30,8 +30,14 @@ export const createUserHandler = async (req: Request, res: Response, next: NextF
 
 export const updateUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await usersService.updateUser(req.params.id as string, req.body);
-    return res.status(200).json({ data });
+    const updateData = req.body;
+
+    if (!Object.keys(updateData).length) {
+      return res.status(400).json({ message: "No data provided for update" });
+    }
+
+    const data = await usersService.updateUser(req.params.id as string, updateData);
+    return res.status(200).json(data);
   } catch (error) {
     return next(error);
   }
