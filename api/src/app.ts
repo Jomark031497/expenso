@@ -4,6 +4,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import type { Session, User } from "lucia";
 import cors from "cors";
 import { env } from "./config/env.js";
+import { csrf } from "./middlewares/csrf.js";
 
 export const createApp = () => {
   const app = express();
@@ -18,6 +19,7 @@ export const createApp = () => {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(csrf);
 
   initializeRoutes(app);
 
