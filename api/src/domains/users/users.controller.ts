@@ -12,7 +12,7 @@ export const getUsersHandler = async (_req: Request, res: Response, next: NextFu
 
 export const getUserByIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await usersService.getUserById(<string>req.params.id, {});
+    const data = await usersService.getUser("id", <string>req.params.id);
     return res.status(200).json(data);
   } catch (error) {
     return next(error);
