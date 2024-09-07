@@ -13,12 +13,13 @@ export const getUsers = async () => {
   });
 };
 
-export const getUserById = async (
-  id: User["id"],
+export const getUser = async (
+  field: keyof User,
+  value: string,
   options: { includePassword?: boolean; returnError?: boolean } = { includePassword: true, returnError: true },
 ) => {
   const user = await db.query.users.findFirst({
-    where: (users, { eq }) => eq(users.id, id),
+    where: (users, { eq }) => eq(users[field], value),
     ...(!options.includePassword && {
       columns: {
         password: false,
@@ -27,44 +28,15 @@ export const getUserById = async (
   });
 
   if (!user && (options.returnError ?? true)) {
-    throw new AppError(404, "user not found");
-  }
-
-  return user;
-};
-
-const getUserByEmail = async (email: User["email"]) => {
-  return await db.query.users.findFirst({
-    where: (users, { eq }) => eq(users.email, email),
-    columns: {
-      password: false,
-    },
-  });
-};
-
-export const getUserByUsername = async (
-  username: User["username"],
-  options: { includePassword?: boolean; returnError?: boolean } = { includePassword: true, returnError: true },
-) => {
-  const user = await db.query.users.findFirst({
-    where: (users, { eq }) => eq(users.username, username),
-    ...(!options.includePassword && {
-      columns: {
-        password: false,
-      },
-    }),
-  });
-
-  if (!user && (options.returnError ?? true)) {
-    throw new AppError(404, "user not found");
+    throw new AppError(404, `${field} not found`);
   }
 
   return user;
 };
 
 export const createUser = async (payload: NewUser) => {
-  const usernameExists = await getUserByUsername(payload.username);
-  const emailExists = await getUserByEmail(payload.email);
+  const usernameExists = await getUser("username", payload.username, { includePassword: false, returnError: false });
+  const emailExists = await getUser("email", payload.email, { includePassword: false, returnError: false });
 
   const errors: Record<string, unknown> = {};
 
@@ -86,14 +58,21 @@ export const createUser = async (payload: NewUser) => {
 };
 
 export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
-  const existingUser = await getUserById(id);
+  const existingUser = await getUser("id", id);
   if (!existingUser) throw new AppError(404, "update user failed. userId not found");
+
+  if (payload.password) {
+    payload.password = await new Argon2id().hash(payload.password);
+  }
+
+  if (payload.role && existingUser.role !== "admin") {
+    throw new AppError(403, "You are not authorized to change user roles.");
+  }
 
   await db
     .update(users)
     .set({
-      ...existingUser,
-      ...payload,
+      ...payload, // Only update provided fields
     })
     .where(eq(users.id, id))
     .returning();
@@ -102,7 +81,7 @@ export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
 };
 
 export const deleteUser = async (id: User["id"]) => {
-  const existingUser = await getUserById(id);
+  const existingUser = await getUser("id", id);
   if (!existingUser) throw new AppError(404, "delete user failed. userId not found");
 
   await db.delete(users).where(eq(users.id, id)).returning();
