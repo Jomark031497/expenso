@@ -2,17 +2,12 @@ import type { Request, Response, NextFunction } from "express";
 import * as authService from "./auth.service.js";
 import { lucia } from "../../lib/lucia.js";
 import { AppError } from "../../utils/appError.js";
-import { env } from "../../config/env.js";
 
 export const loginUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await authService.loginUser(req.body);
 
-    return res
-      .cookie(env.COOKIE_NAME, lucia.createSessionCookie(data.session.id).serialize(), {
-        httpOnly: true,
-      })
-      .json(data.user);
+    return res.setHeader("Set-Cookie", lucia.createSessionCookie(data.session.id).serialize()).json(data.user);
   } catch (error) {
     return next(error);
   }
@@ -21,11 +16,7 @@ export const loginUserHandler = async (req: Request, res: Response, next: NextFu
 export const signUpUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await authService.signUpUser(req.body);
-    return res
-      .cookie(env.COOKIE_NAME, lucia.createSessionCookie(data.session.id).serialize(), {
-        httpOnly: true,
-      })
-      .json(data.user);
+    return res.setHeader("Set-Cookie", lucia.createSessionCookie(data.session.id).serialize()).json(data.user);
   } catch (error) {
     return next(error);
   }
