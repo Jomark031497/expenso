@@ -9,4 +9,8 @@ export const initializeRoutes = (app: Express) => {
 
   app.use("/api/users", usersRouter);
   app.use("/api/auth", authRouter);
+
+  app.use("*", (req, res) => {
+    res.status(404).json({ message: `Route ${req.originalUrl} not found` });
+  });
 };
