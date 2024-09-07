@@ -3,7 +3,7 @@ import type { NewUser, User } from "./users.schema.js";
 import { users } from "./users.schema.js";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
-import { hash } from "argon2";
+import { Argon2id } from "oslo/password";
 
 export const getUsers = async () => {
   return await db.query.users.findMany({
@@ -42,15 +42,24 @@ const getUserByEmail = async (email: User["email"]) => {
   });
 };
 
-export const getUserByUsername = async (username: User["username"], includePassword: boolean = true) => {
-  return await db.query.users.findFirst({
+export const getUserByUsername = async (
+  username: User["username"],
+  options: { includePassword?: boolean; returnError?: boolean } = { includePassword: true, returnError: true },
+) => {
+  const user = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users.username, username),
-    ...(!includePassword && {
+    ...(!options.includePassword && {
       columns: {
         password: false,
       },
     }),
   });
+
+  if (!user && (options.returnError ?? true)) {
+    throw new AppError(404, "user not found");
+  }
+
+  return user;
 };
 
 export const createUser = async (payload: NewUser) => {
@@ -64,7 +73,7 @@ export const createUser = async (payload: NewUser) => {
 
   if (Object.keys(errors).length) throw new AppError(400, "user creation failed", errors);
 
-  const hashedPassword = await hash(payload.password);
+  const hashedPassword = await new Argon2id().hash(payload.password);
 
   const query = await db
     .insert(users)
@@ -76,7 +85,7 @@ export const createUser = async (payload: NewUser) => {
   return query[0];
 };
 
-export const updateUser = async (id: User["id"], payload: NewUser) => {
+export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
   const existingUser = await getUserById(id);
   if (!existingUser) throw new AppError(404, "update user failed. userId not found");
 
