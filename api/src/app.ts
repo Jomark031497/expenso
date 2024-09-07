@@ -5,6 +5,7 @@ import type { Session, User } from "lucia";
 import cors from "cors";
 import { env } from "./config/env.js";
 import { csrf } from "./middlewares/csrf.js";
+import { rateLimit } from "express-rate-limit";
 
 export const createApp = () => {
   const app = express();
@@ -14,6 +15,15 @@ export const createApp = () => {
       credentials: true,
       origin: env.CLIENT_URL,
       methods: ["GET", "POST", "PATCH", "DELETE"],
+    }),
+  );
+
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+      standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+      legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
     }),
   );
 
