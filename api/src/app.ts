@@ -49,13 +49,3 @@ declare global {
     }
   }
 }
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Locals {
-      user: User | null;
-      session: Session | null;
-    }
-  }
-}
