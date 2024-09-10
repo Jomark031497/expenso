@@ -1,0 +1,17 @@
+{
+  "name": "expense-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "pnpm prettier --write \"web/**/*.{ts,tsx,js,jsx,json,css,md}\" \"api/**/*.{ts,tsx,js,json,md}\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@9.9.0",
+  "devDependencies": {
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3"
+  }
+}
