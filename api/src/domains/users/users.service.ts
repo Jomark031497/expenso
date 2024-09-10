@@ -17,7 +17,7 @@ export const getUsers = async () => {
 export const getUser = async (
   field: keyof User,
   value: string,
-  options: { includePassword?: boolean; returnError?: boolean } = { includePassword: true, returnError: true },
+  options: { includePassword?: boolean; returnError?: boolean } = { includePassword: false, returnError: true },
 ) => {
   const user = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users[field], value),
@@ -48,19 +48,29 @@ export const createUser = async (payload: NewUser) => {
 
   const hashedPassword = await new Argon2id().hash(payload.password);
 
-  const query = await db
+  const [user] = await db
     .insert(users)
     .values({ ...payload, password: hashedPassword })
     .returning();
 
-  if (!query[0]) throw new AppError(400, "create user failed");
+  if (!user) throw new AppError(400, "create user failed");
 
-  return query[0];
+  return excludeFields(user, ["password"]);
 };
 
 export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
   const existingUser = await getUser("id", id);
   if (!existingUser) throw new AppError(404, "update user failed. userId not found");
+
+  if (payload.username) {
+    const usernameExists = await getUser("username", payload.username);
+    if (usernameExists) throw new AppError(400, "update user failed", { username: "username is already taken" });
+  }
+
+  if (payload.email) {
+    const emailExists = await getUser("email", payload.email);
+    if (emailExists) throw new AppError(400, "update user failed", { email: "email is already taken" });
+  }
 
   if (payload.password) {
     payload.password = await new Argon2id().hash(payload.password);

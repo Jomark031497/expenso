@@ -15,7 +15,7 @@ router.post("/", requireAuth, requireAdmin, validateSchema(insertUserSchema), co
 router.get("/", requireAuth, requireAdmin, controller.getUsersHandler);
 
 // Get a single user by ID
-router.get("/:id", controller.getUserByIdHandler);
+router.get("/:id", requireAuth, controller.getUserByIdHandler);
 
 // Update an existing user by ID
 router.patch(

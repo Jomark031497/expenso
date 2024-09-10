@@ -7,11 +7,11 @@
   "scripts": {
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
-    "dev": "tsx watch --env-file=.env src/server.ts",
-    "db:push": "node  --env-file=$ENV_FILE --import tsx ./node_modules/drizzle-kit/bin.cjs push",
-    "db:studio": "node --import tsx --env-file=.env ./node_modules/drizzle-kit/bin.cjs studio",
+    "dev": "NODE_ENV=development tsx watch --env-file=.env src/server.ts",
+    "db:push": "node --env-file=$ENV_FILE --import tsx ./node_modules/drizzle-kit/bin.cjs push",
+    "db:studio": "node --import tsx --env-file=$ENV_FILE ./node_modules/drizzle-kit/bin.cjs studio",
     "lint": "eslint ./src/**/* --fix && prettier --write ./src/**/*",
-    "test": "NODE_ENV=test node --import tsx --env-file=.env --test ./src/**/*.test.ts",
+    "test": "NODE_ENV=test node --import tsx --env-file=.env --test --experimental-test-coverage ./src/**/*.test.ts",
     "test:watch": "NODE_ENV=test node --import tsx --env-file=.env --test --watch ./src/**/*.test.ts"
   },
   "keywords": [],
