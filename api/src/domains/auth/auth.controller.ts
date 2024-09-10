@@ -1,14 +1,12 @@
 import type { Request, Response, NextFunction } from "express";
 import * as authService from "./auth.service.js";
-import { lucia } from "../../lib/lucia.js";
 import { AppError } from "../../utils/appError.js";
 
 export const loginUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await authService.loginUser(req.body);
+    const { sessionCookie, user } = await authService.loginUser(req.body);
 
-    const sessionCookie = lucia.createSessionCookie(data.session.id);
-    return res.status(200).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(data.user);
+    return res.status(200).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(user);
   } catch (error) {
     return next(error);
   }
@@ -16,9 +14,8 @@ export const loginUserHandler = async (req: Request, res: Response, next: NextFu
 
 export const signUpUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await authService.signUpUser(req.body);
-    const sessionCookie = lucia.createSessionCookie(data.session.id);
-    return res.status(201).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(data.user);
+    const { sessionCookie, user } = await authService.signUpUser(req.body);
+    return res.status(201).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(user);
   } catch (error) {
     return next(error);
   }

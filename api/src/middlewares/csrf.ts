@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { verifyRequestOrigin } from "lucia";
 
 export const csrf = (req: Request, res: Response, next: NextFunction) => {
-  if (req.method === "GET" || process.env.NODE_ENV === "development") {
+  if (req.method === "GET" || process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
     return next();
   }
   const originHeader = req.headers.origin ?? null;

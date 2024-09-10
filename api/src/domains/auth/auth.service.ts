@@ -13,10 +13,11 @@ export const signUpUser = async (payload: NewUser) => {
   });
 
   const session = await lucia.createSession(user.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
 
   return {
     user: excludeFields(user, ["password"]),
-    session,
+    sessionCookie,
   };
 };
 
@@ -37,10 +38,11 @@ export const loginUser = async (payload: Pick<User, "username" | "password">) =>
   if (!isPasswordValid) throw new AppError(404, "invalid username/password");
 
   const session = await lucia.createSession(user.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
 
   return {
     user: excludeFields(user, ["password"]),
-    session,
+    sessionCookie,
   };
 };
 

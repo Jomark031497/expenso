@@ -6,6 +6,7 @@ import cors from "cors";
 import { env } from "./config/env.js";
 import { csrf } from "./middlewares/csrf.js";
 import { rateLimit } from "express-rate-limit";
+import cookieParser from "cookie-parser";
 
 export const createApp = () => {
   const app = express();
@@ -29,6 +30,7 @@ export const createApp = () => {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
   app.use(csrf);
 
   initializeRoutes(app);
