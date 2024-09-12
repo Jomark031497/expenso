@@ -1,9 +1,47 @@
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { AuthContextProvider } from "./contexts/Auth";
+import { RootLayout } from "./components/layouts/RootLayout";
+import { Dashboard } from "./features/dashboard/components/Dashboard";
+import { Login } from "./features/auth/components/Login";
+import { SignUp } from "./features/auth/components/SignUp";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AuthContextProvider />,
+    children: [
+      {
+        element: <RootLayout />,
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+        ],
+      },
+      {
+        path: "auth",
+        children: [
+          {
+            index: true,
+            element: <Navigate to="/auth/login" />,
+          },
+          {
+            path: "login",
+            element: <Login />,
+          },
+          {
+            path: "sign-up",
+            element: <SignUp />,
+          },
+        ],
+      },
+    ],
+  },
+]);
+
 function App() {
-  return (
-    <>
-      <h1 className="text-3xl font-bold underline text-red-500">Hello world!</h1>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
