@@ -6,7 +6,8 @@
     "format": "pnpm prettier --write \"web/**/*.{ts,tsx,js,jsx,json,css,md}\" \"api/**/*.{ts,tsx,js,json,md}\"",
     "lint:web": "pnpm eslint --config web/eslint.config.js \"web/**/*.{ts,tsx,js,jsx}\"",
     "lint:api": "pnpm eslint --config api/eslint.config.js \"api/src/**/*.{ts,js}\"",
-    "lint": "pnpm lint:web && pnpm lint:api && pnpm format"
+    "lint": "pnpm lint:web && pnpm lint:api && pnpm format",
+    "dev": "pnpm -r dev"
   },
   "keywords": [],
   "author": "",
