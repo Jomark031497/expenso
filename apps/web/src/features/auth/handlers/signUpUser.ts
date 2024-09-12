@@ -1,6 +1,6 @@
-import { __SERVER_URL__ } from "../../../config/constants";
-import type { User } from "../../users/users.types";
-import type { SignUpUser } from "../auth.types";
+import { __SERVER_URL__ } from "@/config/constants";
+import type { SignUpUser } from "@/features/auth/auth.types";
+import type { User } from "@/features/users/users.types";
 
 export const signUpUser = async (payload: SignUpUser) => {
   const url = new URL("/api/auth/sign-up", __SERVER_URL__);

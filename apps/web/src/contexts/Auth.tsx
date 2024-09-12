@@ -1,26 +1,36 @@
-import { createContext, useState } from "react";
+import { getAuthenticatedUser } from "@/features/auth/handlers/getAuthenticatedUser";
+import type { User } from "@/features/users/users.types";
+import { createContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { User } from "../features/users/users.types";
 
 export interface AuthContextType {
   user: User | null;
+  handleSetUser: (payload: User) => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthContextProvider = () => {
-  const [user] = useState<User | null>({
-    id: "12345",
-    username: "doodles",
-    email: "doodles@gmail.com",
-    role: "admin",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  return (
-    <AuthContext.Provider value={{ user }}>
-      <Outlet />
-    </AuthContext.Provider>
-  );
+  const handleSetUser = (value: User) => setUser(value);
+
+  useEffect(() => {
+    const checkAuthenicated = async () => {
+      try {
+        const userData = await getAuthenticatedUser();
+        setUser(userData);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        // Do Nothing
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+
+    checkAuthenicated();
+  }, []);
+
+  return <AuthContext.Provider value={{ user, handleSetUser }}>{!isInitialLoading && <Outlet />}</AuthContext.Provider>;
 };
