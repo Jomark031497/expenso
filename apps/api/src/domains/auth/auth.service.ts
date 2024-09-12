@@ -31,6 +31,7 @@ export const getAuthenticatedUser = async (id: User["id"]) => {
 export const loginUser = async (payload: Pick<User, "username" | "password">) => {
   const user = await getUser("username", payload.username, {
     includePassword: true,
+    returnError: false,
   });
   if (!user) throw new AppError(404, "invalid username/password");
 

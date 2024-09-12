@@ -1,9 +1,12 @@
+import { AuthLayout } from "@/components/layouts/AuthLayout";
+import { RootLayout } from "@/components/layouts/RootLayout";
+import { AuthContextProvider } from "@/contexts/Auth";
+import { Login } from "@/features/auth/routes/Login";
+import { SignUp } from "@/features/auth/routes/SignUp";
+import { Dashboard } from "@/features/dashboard/components/Dashboard";
+import { AuthRoute } from "@/features/misc/components/AuthRoute";
+import { ProtectedRoute } from "@/features/misc/components/ProtectedRoute";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
-import { AuthContextProvider } from "./contexts/Auth";
-import { RootLayout } from "./components/layouts/RootLayout";
-import { Dashboard } from "./features/dashboard/components/Dashboard";
-import { Login } from "./features/auth/routes/Login";
-import { SignUp } from "./features/auth/routes/SignUp";
 
 const router = createBrowserRouter([
   {
@@ -14,25 +17,36 @@ const router = createBrowserRouter([
         element: <RootLayout />,
         children: [
           {
-            index: true,
-            element: <Dashboard />,
+            element: <ProtectedRoute />,
+            children: [
+              {
+                index: true,
+                element: <Dashboard />,
+              },
+            ],
           },
         ],
       },
       {
         path: "auth",
+        element: <AuthLayout />,
         children: [
           {
-            index: true,
-            element: <Navigate to="/auth/login" />,
-          },
-          {
-            path: "login",
-            element: <Login />,
-          },
-          {
-            path: "sign-up",
-            element: <SignUp />,
+            element: <AuthRoute />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/auth/login" />,
+              },
+              {
+                path: "login",
+                element: <Login />,
+              },
+              {
+                path: "sign-up",
+                element: <SignUp />,
+              },
+            ],
           },
         ],
       },

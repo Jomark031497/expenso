@@ -1,17 +1,12 @@
 import { __SERVER_URL__ } from "@/config/constants";
-import type { LoginUser } from "@/features/auth/auth.types";
 import type { User } from "@/features/users/users.types";
 
-export const loginUser = async (payload: LoginUser) => {
-  const url = new URL("/api/auth/login", __SERVER_URL__);
+export const getAuthenticatedUser = async () => {
+  const url = new URL("/api/auth/user", __SERVER_URL__);
 
   const response = await fetch(url, {
-    method: "POST",
+    method: "GET",
     credentials: "include",
-    body: JSON.stringify(payload),
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
 
   const data = await response.json();

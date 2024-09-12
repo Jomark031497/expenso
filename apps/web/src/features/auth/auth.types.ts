@@ -1,8 +1,4 @@
-import type { User } from "../users/users.types";
-
-export type LoginUser = {
-  password: string;
-} & Pick<User, "username">;
+import type { User } from "@/features/users/users.types";
 
 export interface SignUpUser extends Omit<User, "createdAt" | "updatedAt" | "role"> {
   password: string;
