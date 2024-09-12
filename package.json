@@ -7,7 +7,8 @@
     "lint:web": "pnpm --filter web lint",
     "lint:api": "pnpm --filter api lint",
     "lint": "pnpm lint:web && pnpm lint:api && pnpm format",
-    "dev": "pnpm -r dev"
+    "dev": "pnpm -r dev",
+    "server": "pnpm -r build && pnpm -r start"
   },
   "keywords": [],
   "author": "",
