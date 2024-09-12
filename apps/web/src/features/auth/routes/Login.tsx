@@ -55,35 +55,33 @@ export const Login = () => {
   };
 
   return (
-    <>
-      <div className="flex max-w-md flex-col gap-2 rounded border p-6">
-        <h1 className="text-2xl font-semibold">Login</h1>
-        <h2 className="mb-4 text-sm text-gray-500">Enter your credentials below to login to your account</h2>
+    <div className="flex w-full max-w-sm flex-col gap-2 rounded border p-6 shadow">
+      <h1 className="text-2xl font-semibold">Login</h1>
+      <h2 className="mb-4 text-sm text-gray-500">Enter your credentials below to login to your account</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <Input label="Username" {...register("username")} formError={errors.username} />
-          <Input label="Password" type="password" {...register("password")} formError={errors.password} />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <Input label="Username" {...register("username")} formError={errors.username} />
+        <Input label="Password" type="password" {...register("password")} formError={errors.password} />
 
-          <Link to="#" className="text-sm underline">
-            Forgot your Password?
+        <Link to="#" className="text-sm underline">
+          Forgot your Password?
+        </Link>
+
+        <Button type="submit" className="border-2 border-transparent bg-primary text-white hover:bg-primary/95">
+          Login
+        </Button>
+
+        <Button type="button" className="border-2 hover:bg-gray-100">
+          Login with Github
+        </Button>
+
+        <p className="self-center text-sm">
+          Don't have an account?{" "}
+          <Link to="/auth/sign-up" className="underline">
+            Sign Up
           </Link>
-
-          <Button type="submit" className="border-2 border-transparent bg-primary text-white hover:bg-primary/95">
-            Login
-          </Button>
-
-          <Button type="button" className="border-2 hover:bg-gray-100">
-            Login with Github
-          </Button>
-
-          <p className="self-center text-sm">
-            Don't have an account?{" "}
-            <Link to="/auth/sign-up" className="underline">
-              Sign Up
-            </Link>
-          </p>
-        </form>
-      </div>
-    </>
+        </p>
+      </form>
+    </div>
   );
 };
