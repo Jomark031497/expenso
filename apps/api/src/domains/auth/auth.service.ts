@@ -16,7 +16,7 @@ export const signUpUser = async (payload: NewUser) => {
   const sessionCookie = lucia.createSessionCookie(session.id);
 
   return {
-    user: excludeFields(user, ["password"]),
+    user: user,
     sessionCookie,
   };
 };
