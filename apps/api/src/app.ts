@@ -11,8 +11,6 @@ import cookieParser from "cookie-parser";
 export const createApp = () => {
   const app = express();
 
-  console.log("i should error man");
-
   app.use(
     cors({
       credentials: true,
