@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
     "dev": "NODE_ENV=development tsx watch --env-file=.env src/server.ts",
+    "lint": "eslint ./src/**/*.{ts,js}",
     "db:push": "node --env-file=$ENV_FILE --import tsx ./node_modules/drizzle-kit/bin.cjs push",
     "db:studio": "node --import tsx --env-file=$ENV_FILE ./node_modules/drizzle-kit/bin.cjs studio",
     "test": "NODE_ENV=test node --import tsx --env-file=.env --test --experimental-test-coverage ./src/**/*.test.ts",
