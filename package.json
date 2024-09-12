@@ -2,7 +2,6 @@
   "name": "expense-manager",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "format": "pnpm prettier --write \"web/**/*.{ts,tsx,js,jsx,json,css,md}\" \"api/**/*.{ts,tsx,js,json,md}\"",
     "lint:web": "pnpm eslint --config web/eslint.config.js \"web/**/*.{ts,tsx,js,jsx}\"",
