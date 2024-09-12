@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 export interface AuthContextType {
   user: User | null;
-  handleSetUser: (payload: User) => void;
+  handleSetUser: (payload: User | null) => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -14,7 +14,7 @@ export const AuthContextProvider = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  const handleSetUser = (value: User) => setUser(value);
+  const handleSetUser = (value: User | null) => setUser(value);
 
   useEffect(() => {
     const checkAuthenicated = async () => {

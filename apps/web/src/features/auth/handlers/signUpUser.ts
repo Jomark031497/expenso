@@ -1,5 +1,5 @@
 import { __SERVER_URL__ } from "@/config/constants";
-import type { SignUpUser } from "@/features/auth/auth.types";
+import type { SignUpUser } from "@/features/auth/routes/SignUp";
 import type { User } from "@/features/users/users.types";
 
 export const signUpUser = async (payload: SignUpUser) => {
