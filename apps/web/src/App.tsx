@@ -23,6 +23,10 @@ const router = createBrowserRouter([
                 index: true,
                 element: <Dashboard />,
               },
+              {
+                path: "*",
+                element: <p>404!</p>,
+              },
             ],
           },
         ],
