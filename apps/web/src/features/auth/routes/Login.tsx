@@ -67,7 +67,7 @@ export const Login = () => {
           Forgot your Password?
         </Link>
 
-        <Button type="submit" className="border-2 border-transparent bg-primary text-white hover:bg-primary/95">
+        <Button type="submit" className="bg-primary hover:bg-primary/95 border-2 border-transparent text-white">
           Login
         </Button>
 
