@@ -4,9 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#5d6aa2",
-        secondary: "#d2cbe1",
-        accent: "##65528e",
+        primary: "#4CAF50", // For buttons, links, headers
+        secondary: "#FFC107", // For secondary buttons, hover states, accents
+        success: "#00E676", // For positive balances, income, success messages
+        error: "#F44336", // For negative balances, expenses, error notifications
+        background: "#FAFAFA", // For the main background of the app
+        cardBg: "#FFFFFF", // For card backgrounds (expense/income cards)
+        textPrimary: "#212121", // For main text (headings, labels, etc.)
+        textSecondary: "#757575", // For secondary text (descriptions, placeholders)
+        inputBg: "#F5F5F5", // For input fields/forms background
+        borderColor: "#E0E0E0", // For borders (input fields, cards, dividers)
       },
     },
   },
