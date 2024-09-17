@@ -7,12 +7,9 @@ export const RootLayout = () => {
     <>
       <Navbar />
 
-      <div className="md:flex">
-        <main className="min-h-[100vh-64px] flex-1 overflow-auto px-4 md:h-screen">
-          <div className="md:h-16" />
-          <Outlet />
-        </main>
-      </div>
+      <main className="min-h-[calc(100vh-64px)] flex-1 overflow-auto px-4">
+        <Outlet />
+      </main>
 
       <Toaster position="bottom-center" />
     </>
