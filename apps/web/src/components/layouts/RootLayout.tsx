@@ -11,7 +11,7 @@ export const RootLayout = () => {
   return (
     <>
       <div id="root_layout" className="flex h-screen w-screen">
-        <Sidebar isOpen={isOpen} />
+        <Sidebar isOpen={isOpen} close={close} />
         <div className="flex-1">
           <Header onMenuClick={open} />
           <main className="min-h-[calc(100vh-64px)] p-4">
