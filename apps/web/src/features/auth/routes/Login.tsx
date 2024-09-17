@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { loginUser } from "@/features/auth/handlers/loginUser";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SubmitHandler } from "react-hook-form";
@@ -24,7 +23,7 @@ const loginSchema = z.object({
 export type LoginUser = z.infer<typeof loginSchema>;
 
 export const Login = () => {
-  const { handleSetUser } = useAuth();
+  const { handleLogin } = useAuth();
 
   const {
     register,
@@ -37,8 +36,7 @@ export const Login = () => {
 
   const onSubmit: SubmitHandler<LoginUser> = async (values) => {
     try {
-      const userData = await loginUser(values);
-      handleSetUser(userData);
+      await handleLogin(values);
     } catch (error) {
       if (error instanceof Error) {
         setError("username", {

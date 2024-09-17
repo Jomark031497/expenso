@@ -1,5 +1,9 @@
 import { getAuthenticatedUser } from "@/features/auth/handlers/getAuthenticatedUser";
+import { loginUser } from "@/features/auth/handlers/loginUser";
 import { logoutUser } from "@/features/auth/handlers/logoutUser";
+import { signUpUser } from "@/features/auth/handlers/signUpUser";
+import type { LoginUser } from "@/features/auth/routes/Login";
+import type { SignUpUser } from "@/features/auth/routes/SignUp";
 import type { User } from "@/features/users/users.types";
 import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -7,8 +11,9 @@ import { Outlet } from "react-router-dom";
 
 export interface AuthContextType {
   user: User | null;
-  handleSetUser: (payload: User | null) => void;
   handleLogout: () => Promise<void>;
+  handleLogin: (payload: LoginUser) => Promise<void>;
+  handleSignUp: (payload: SignUpUser) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -17,7 +22,31 @@ export const AuthContextProvider = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  const handleSetUser = (value: User | null) => setUser(value);
+  const handleLogin = async (payload: LoginUser) => {
+    try {
+      const userData = await loginUser(payload);
+      setUser(userData);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      } else {
+        throw new Error("Login failed. Something went wrong.");
+      }
+    }
+  };
+
+  const handleSignUp = async (payload: SignUpUser) => {
+    try {
+      const userData = await signUpUser(payload);
+      setUser(userData);
+    } catch (error) {
+      if (typeof error === "object") {
+        throw error;
+      } else {
+        throw { message: "Sign Up failed. Something went wrong.", errors: {} };
+      }
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -26,9 +55,9 @@ export const AuthContextProvider = () => {
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
-        return;
+      } else {
+        toast.error("Logout failed. Something went wrong");
       }
-      toast.error("Logout failed. Something went wrong");
     }
   };
 
@@ -49,7 +78,7 @@ export const AuthContextProvider = () => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, handleSetUser, handleLogout }}>
+    <AuthContext.Provider value={{ user, handleLogout, handleLogin, handleSignUp }}>
       {!isInitialLoading && <Outlet />}
     </AuthContext.Provider>
   );
