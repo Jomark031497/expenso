@@ -1,10 +1,15 @@
 import clsx from "clsx";
+import { FaWallet } from "react-icons/fa";
+import { GrTransaction } from "react-icons/gr";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { Link, NavLink } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
+  close: () => void;
 }
 
-export const Sidebar = ({ isOpen }: SidebarProps) => {
+export const Sidebar = ({ isOpen, close }: SidebarProps) => {
   return (
     <aside
       className={clsx(
@@ -12,7 +17,55 @@ export const Sidebar = ({ isOpen }: SidebarProps) => {
         isOpen ? "" : "-translate-x-full md:translate-x-0",
       )}
     >
-      sidebar!
+      <div className="flex h-16 items-center border-b px-4">
+        <Link
+          onClick={close}
+          to="/"
+          className="text-primary hover:text-primary/80 text-xl font-bold tracking-wider transition-all"
+        >
+          _expenso.
+        </Link>
+      </div>
+
+      <div className="p-4">
+        <ul className="flex flex-col gap-1 py-5">
+          {navLinks.map((navLink) => (
+            <li id={navLink.label} key={navLink.label}>
+              <NavLink
+                onClick={close}
+                to={navLink.path}
+                className={({ isActive }) =>
+                  clsx(
+                    "flex items-center gap-2 rounded p-2 font-semibold transition-all hover:bg-gray-200",
+                    isActive ? "bg-primary/20 hover:bg-primary/30 text-primary" : "text-textSecondary",
+                  )
+                }
+              >
+                <i className="text-xl">{navLink.icon}</i>
+                <span className="tracking-wide">{navLink.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
     </aside>
   );
 };
+
+const navLinks = [
+  {
+    label: "Dashboard",
+    path: "/",
+    icon: <LuLayoutDashboard />,
+  },
+  {
+    label: "Wallets",
+    path: "/wallets",
+    icon: <FaWallet />,
+  },
+  {
+    label: "Transactions",
+    path: "/transactions",
+    icon: <GrTransaction />,
+  },
+];
