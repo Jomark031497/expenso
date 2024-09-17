@@ -14,11 +14,14 @@ export const signUpUser = async (payload: SignUpUser) => {
     },
   });
 
-  if (!response.ok) throw new Error("sign up failed");
-
   const data = await response.json();
 
-  if (!data) throw new Error(data.message);
+  if (!response.ok || !data) {
+    throw {
+      message: data.message || "Sign Up failed",
+      errors: data.errors || {},
+    };
+  }
 
   return data as User;
 };

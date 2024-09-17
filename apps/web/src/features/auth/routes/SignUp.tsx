@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { signUpUser } from "@/features/auth/handlers/signUpUser";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import type { AppError } from "@/features/misc/misc.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -26,11 +26,12 @@ const signUpSchema = z.object({
 export type SignUpUser = z.infer<typeof signUpSchema>;
 
 export const SignUp = () => {
-  const { handleSetUser } = useAuth();
+  const { handleSignUp } = useAuth();
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<SignUpUser>({
     resolver: zodResolver(signUpSchema),
@@ -38,13 +39,21 @@ export const SignUp = () => {
 
   const onSubmit: SubmitHandler<SignUpUser> = async (values) => {
     try {
-      const userData = await signUpUser(values);
-      handleSetUser(userData);
+      await handleSignUp(values);
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
+      if (error && typeof error === "object") {
+        const appErrors = error as AppError;
+        toast.error(appErrors.message);
+
+        if (appErrors.errors) {
+          Object.keys(appErrors.errors).forEach((field) => {
+            setError(field as keyof SignUpUser, {
+              message: appErrors.errors[field] as string,
+            });
+          });
+        }
       } else {
-        toast.error("Sign Up failed. something went wrong");
+        toast.error("Sign Up failed. Something went wrong.");
       }
     }
   };

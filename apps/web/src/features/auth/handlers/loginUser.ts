@@ -1,5 +1,5 @@
 import { __SERVER_URL__ } from "@/config/constants";
-import type { LoginUser } from "@/features/auth/auth.types";
+import type { LoginUser } from "@/features/auth/routes/Login";
 import type { User } from "@/features/users/users.types";
 
 export const loginUser = async (payload: LoginUser) => {
