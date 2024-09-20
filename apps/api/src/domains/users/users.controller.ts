@@ -22,7 +22,7 @@ export const getUserByIdHandler = async (req: Request, res: Response, next: Next
 export const createUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await usersService.createUser(req.body);
-    return res.status(201).json(data); // 201 for resource creation
+    return res.status(201).json(data);
   } catch (error) {
     return next(error);
   }

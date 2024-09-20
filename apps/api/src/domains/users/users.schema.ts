@@ -19,6 +19,8 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+export const selectUserSchema = createSelectSchema(users);
+
 export const insertUserSchema = createInsertSchema(users, {
   username: (schema) =>
     schema.username
@@ -38,7 +40,8 @@ export const insertUserSchema = createInsertSchema(users, {
   fullName: (schema) => schema.fullName.max(256, "fullName must not exceed 256 characters"),
 });
 
-export const selectUserSchema = createSelectSchema(users);
+// New update schema
+export const updateUserSchema = insertUserSchema.partial().omit({ id: true, createdAt: true, updatedAt: true });
 
 export type User = typeof users.$inferSelect; // return type when queried
 export type NewUser = typeof users.$inferInsert; // insert type
