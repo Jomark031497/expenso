@@ -16,7 +16,7 @@ export const getWalletsHandler = async (_req: Request, res: Response, next: Next
 
 export const getWalletByIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await walletsService.getWalletById(req.params.id as string);
+    const data = await walletsService.getWalletById(req.params.id as string, {});
     return res.status(200).json(data);
   } catch (error) {
     return next(error);

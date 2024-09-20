@@ -3,6 +3,7 @@ import { numeric, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { users } from "../users/users.schema.js";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { transactions } from "../transactions/transactions.schema.js";
 
 export const WALLET_TYPE = ["cash", "debit_card", "credit_card"] as const;
 
@@ -17,17 +18,18 @@ export const wallets = pgTable("wallets", {
     .references(() => users.id),
   name: text("name").notNull(),
   type: walletTypeEnum("type").notNull(),
-  balance: numeric("balance", { precision: 12, scale: 2 }).default("0"),
+  balance: numeric("balance", { precision: 12, scale: 2 }).notNull().default("0"),
   description: text("description"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const walletsRelations = relations(wallets, ({ one }) => ({
+export const walletsRelations = relations(wallets, ({ one, many }) => ({
   user: one(users, {
     fields: [wallets.userId],
     references: [users.id],
   }),
+  transactions: many(transactions),
 }));
 
 export const insertWalletSchema = createInsertSchema(wallets, {
