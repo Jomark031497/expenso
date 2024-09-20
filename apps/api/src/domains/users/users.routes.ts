@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as controller from "./users.controller.js";
 import { validateSchema } from "../../middlewares/validateSchema.js";
-import { insertUserSchema, updateUserSchema } from "./users.schema.js";
+import { insertUserSchema } from "./users.schema.js";
 import { requireAuth } from "../../middlewares/requireAuth.js";
 import { requireAdmin } from "../../middlewares/requireAdmin.js";
 import { verifyUserOrAdmin } from "../../middlewares/verifyUserOrAdmin.js";
@@ -22,7 +22,7 @@ usersRouter.patch(
   "/:id",
   requireAuth,
   verifyUserOrAdmin,
-  validateSchema(updateUserSchema),
+  validateSchema(insertUserSchema.partial()),
   controller.updateUserHandler,
 );
 

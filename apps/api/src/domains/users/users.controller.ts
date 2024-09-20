@@ -31,7 +31,6 @@ export const createUserHandler = async (req: Request, res: Response, next: NextF
 export const updateUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const updateData = req.body;
-
     if (!Object.keys(updateData).length) {
       return res.status(400).json({ message: "No data provided for update" });
     }
