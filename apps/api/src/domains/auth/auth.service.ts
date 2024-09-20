@@ -23,7 +23,6 @@ export const signUpUser = async (payload: NewUser) => {
 
 export const getAuthenticatedUser = async (id: User["id"]) => {
   return await getUser("id", id, {
-    includePassword: false,
     returnError: true,
   });
 };

@@ -36,8 +36,8 @@ export const getUser = async (
 };
 
 export const createUser = async (payload: NewUser) => {
-  const usernameExists = await getUser("username", payload.username, { includePassword: false, returnError: false });
-  const emailExists = await getUser("email", payload.email, { includePassword: false, returnError: false });
+  const usernameExists = await getUser("username", payload.username, { returnError: false });
+  const emailExists = await getUser("email", payload.email, { returnError: false });
 
   const errors: Record<string, unknown> = {};
 
