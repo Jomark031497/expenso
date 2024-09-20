@@ -13,12 +13,6 @@ walletsRouter.get("/:id", requireAuth, controller.getWalletByIdHandler);
 
 walletsRouter.post("/", requireAuth, validateSchema(insertWalletSchema), controller.createWalletHandler);
 
-walletsRouter.patch(
-  "/:id",
-  requireAuth,
-  verifyUserOrAdmin,
-  validateSchema(insertWalletSchema.partial()),
-  controller.updateWalletHandler,
-);
+walletsRouter.patch("/:id", requireAuth, validateSchema(insertWalletSchema.partial()), controller.updateWalletHandler);
 
 walletsRouter.delete("/:id", requireAuth, verifyUserOrAdmin, controller.deleteWalletHandler);
