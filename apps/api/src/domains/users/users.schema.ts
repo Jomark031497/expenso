@@ -1,4 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
+import { relations } from "drizzle-orm";
 import { pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -18,6 +19,10 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  wallets: many(users),
+}));
 
 export const selectUserSchema = createSelectSchema(users);
 
@@ -39,9 +44,6 @@ export const insertUserSchema = createInsertSchema(users, {
       .max(256, "password must not exceed 256 characters"),
   fullName: (schema) => schema.fullName.max(256, "fullName must not exceed 256 characters"),
 });
-
-// New update schema
-export const updateUserSchema = insertUserSchema.partial().omit({ id: true, createdAt: true, updatedAt: true });
 
 export type User = typeof users.$inferSelect; // return type when queried
 export type NewUser = typeof users.$inferInsert; // insert type

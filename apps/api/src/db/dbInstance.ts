@@ -1,8 +1,9 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { env } from "../config/env.js";
-import * as users from "../domains/users/users.schema.js";
 import { logger } from "../utils/logger.js";
+import * as users from "../domains/users/users.schema.js";
+import * as wallets from "../domains/wallets/wallets.schema.js";
 
 const sql = postgres(env.DATABASE_URL, {
   max: 10, // Set max connections in the pool
@@ -12,6 +13,7 @@ const sql = postgres(env.DATABASE_URL, {
 export const db = drizzle(sql, {
   schema: {
     ...users,
+    ...wallets,
   },
 });
 
