@@ -1,8 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
-import { getUser } from "../users/users.service.js";
-import { getWalletById } from "../wallets/wallets.service.js";
 import type { NewTransaction } from "./transactions.schema.js";
 import { transactions, type Transaction } from "./transactions.schema.js";
 import { wallets } from "../wallets/wallets.schema.js";
@@ -10,6 +8,12 @@ import { wallets } from "../wallets/wallets.schema.js";
 export const getTransactions = async (userId: Transaction["userId"]) => {
   return await db.query.transactions.findMany({
     where: (transactions, { eq }) => eq(transactions.userId, userId),
+  });
+};
+
+export const getTransactionsByWalletId = async (walletId: Transaction["walletId"]) => {
+  return await db.query.transactions.findMany({
+    where: (transactions, { eq }) => eq(transactions.walletId, walletId),
   });
 };
 
@@ -25,58 +29,58 @@ export const getTransactionById = async (transactionId: Transaction["id"], optio
 };
 
 export const createTransaction = async (payload: NewTransaction) => {
-  if (payload.type === "income") {
-    return await db.transaction(async (tx) => {
-      await tx
-        .update(wallets)
-        .set({ balance: sql`${wallets.balance} + ${payload.amount}` })
-        .where(eq(wallets.id, payload.walletId));
+  return await db.transaction(async (tx) => {
+    const balance =
+      payload.type === "income"
+        ? sql`${wallets.balance} + ${payload.amount}`
+        : sql`${wallets.balance} - ${payload.amount}`;
+    await tx.update(wallets).set({ balance }).where(eq(wallets.id, payload.walletId));
 
-      const [transaction] = await tx.insert(transactions).values(payload).returning();
+    const [transaction] = await tx.insert(transactions).values(payload).returning();
 
-      return transaction;
-    });
-  } else if (payload.type === "expense") {
-    return await db.transaction(async (tx) => {
-      await tx
-        .update(wallets)
-        .set({ balance: sql`${wallets.balance} - ${payload.amount}` })
-        .where(eq(wallets.id, payload.walletId));
-
-      const [transaction] = await tx.insert(transactions).values(payload).returning();
-
-      return transaction;
-    });
-  } else {
-    throw new AppError(400, "invalid transaction type");
-  }
+    return transaction;
+  });
 };
 
 export const updateTransaction = async (transactionId: Transaction["id"], payload: Partial<NewTransaction>) => {
   const transaction = await getTransactionById(transactionId, { returnError: false });
   if (!transaction) throw new AppError(400, "update transaction failed", { transactionId: "transaction id not found" });
 
-  if (!payload.walletId) throw new AppError(400, "update transaction failed", { walletId: "wallet id not found" });
-  const wallet = await getWalletById(payload.walletId, { returnError: false });
-  if (!wallet) throw new AppError(400, "update transaction failed", { walletId: "wallet id not found" });
+  // prevent updating the user or wallet of a transaction
+  if (payload.walletId || payload.userId)
+    throw new AppError(400, "update transaction failed. it is forbidden to update userId or walletId");
 
-  if (!payload.userId) throw new AppError(400, "update transaction failed", { userId: "user id not found" });
-  const user = await getUser("id", payload.userId, { returnError: false });
-  if (!user) throw new AppError(400, "update transaction failed", { userId: "user id not found" });
-
-  if (payload.amount) {
-    // REVERT THE PAST TRANSACTION FIRST
-    // UPDATE VIA NEW PAYLOAD
-  } else {
-    const [updatedTransaction] = await db
+  return await db.transaction(async (tx) => {
+    // update the transaction
+    const [updatedTransaction] = await tx
       .update(transactions)
       .set(payload)
       .where(eq(transactions.id, transactionId))
       .returning();
-    if (!updatedTransaction) throw new AppError(400, "update transaction failed");
+
+    // update the balance if amount and type is included in the payload
+    if (payload.amount || payload.type) {
+      const newAmount = payload.amount ?? transaction.amount;
+
+      const newType = payload.type ?? transaction.type;
+
+      // revert the balance of the wallet
+      const balanceAdjustment =
+        transaction.type === "income"
+          ? sql`${wallets.balance}::numeric - ${transaction.amount}::numeric`
+          : sql`${wallets.balance}::numeric + ${transaction.amount}::numeric`;
+
+      // apply the updated balance
+      const updatedBalance =
+        newType === "income"
+          ? sql`${balanceAdjustment}::numeric + ${newAmount}::numeric`
+          : sql`${balanceAdjustment}::numeric - ${newAmount}::numeric`;
+
+      await tx.update(wallets).set({ balance: updatedBalance }).where(eq(wallets.id, transaction.walletId));
+    }
 
     return updatedTransaction;
-  }
+  });
 };
 
 export const deleteTransaction = async (transactionId: Transaction["id"]) => {
