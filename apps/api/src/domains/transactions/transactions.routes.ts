@@ -10,4 +10,6 @@ transactionsRouter.post("/", requireAuth, validateSchema(insertTransactionSchema
 
 transactionsRouter.get("/", requireAuth, controller.getTransactionsHandler);
 
+transactionsRouter.get("/wallets/:walletId", requireAuth, controller.getTransactionsByWalletIdHandler);
+
 transactionsRouter.patch("/:id", requireAuth, controller.updatedTransactionHandler);
