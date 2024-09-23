@@ -13,3 +13,5 @@ transactionsRouter.get("/", requireAuth, controller.getTransactionsHandler);
 transactionsRouter.get("/wallets/:walletId", requireAuth, controller.getTransactionsByWalletIdHandler);
 
 transactionsRouter.patch("/:id", requireAuth, controller.updatedTransactionHandler);
+
+transactionsRouter.delete("/:id", requireAuth, controller.deleteTransactionHandler);
