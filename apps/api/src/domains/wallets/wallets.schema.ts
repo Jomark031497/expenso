@@ -34,7 +34,7 @@ export const walletsRelations = relations(wallets, ({ one, many }) => ({
 
 export const insertWalletSchema = createInsertSchema(wallets, {
   name: (schema) =>
-    schema.name.trim().min(1, "Account name is required").max(100, "Account name must not exceed 100 characters"),
+    schema.name.trim().min(1, "Wallet name is required").max(100, "Wallet name must not exceed 100 characters"),
   type: (schema) => schema.type,
   balance: (schema) => schema.balance.min(0, "Balance cannot be negative"),
   description: (schema) => schema.description.max(500, "Description must not exceed 500 characters").optional(),
