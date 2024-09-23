@@ -87,7 +87,18 @@ export const deleteTransaction = async (transactionId: Transaction["id"]) => {
   const transaction = await getTransactionById(transactionId, { returnError: false });
   if (!transaction) throw new AppError(400, "delete transaction failed", { transactionId: "transaction id not found" });
 
-  await db.delete(transactions).where(eq(transactions.id, transactionId));
+  await db.transaction(async (tx) => {
+    // delete the transaction
+    await tx.delete(transactions).where(eq(transactions.id, transactionId));
+
+    // revert the balance of the wallet
+    const balanceAdjustment =
+      transaction.type === "income"
+        ? sql`${wallets.balance}::numeric - ${transaction.amount}::numeric`
+        : sql`${wallets.balance}::numeric + ${transaction.amount}::numeric`;
+
+    await tx.update(wallets).set({ balance: balanceAdjustment }).where(eq(wallets.id, transaction.walletId));
+  });
 
   return { message: "transaction deleted successfully" };
 };

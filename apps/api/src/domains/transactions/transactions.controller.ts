@@ -43,3 +43,12 @@ export const updatedTransactionHandler = async (req: Request, res: Response, nex
     return next(error);
   }
 };
+
+export const deleteTransactionHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await transactionsService.deleteTransaction(req.params.id as string);
+    return res.status(200).json(data);
+  } catch (error) {
+    return next(error);
+  }
+};
