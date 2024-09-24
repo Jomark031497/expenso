@@ -11,14 +11,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, formError, ...rest }, ref) => {
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <Field>
         <Label className="text-textSecondary text-sm/6 font-medium">{label}</Label>
         <HInput
           {...rest}
           ref={ref}
           className={clsx(
-            "focus:border-secondary mt-0.5 block w-full rounded-lg border-2 px-4 py-1.5 text-sm/6 outline-none transition-all",
+            "focus:border-secondary mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all",
             formError ? "border-error hover:border-error" : "hover:border-secondary border-gray-200",
           )}
         />

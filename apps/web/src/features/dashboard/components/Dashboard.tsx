@@ -1,13 +1,18 @@
 import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useToggle } from "@/features/misc/hooks/useToggle";
 import { CreateWallet } from "@/features/wallets/components/CreateWallet";
 import { useWallets } from "@/features/wallets/hooks/useWallets";
 import { toCurrency } from "@/utils/toCurrency";
+import { Navigate } from "react-router-dom";
 
 export const Dashboard = () => {
   const { data } = useWallets();
+  const { user } = useAuth();
 
   const { close, isOpen, open } = useToggle();
+
+  if (!user) return <Navigate to="/auth/login" />;
 
   return (
     <>
@@ -19,7 +24,7 @@ export const Dashboard = () => {
             Create Wallet
           </Button>
 
-          <CreateWallet isOpen={isOpen} onClose={close} />
+          <CreateWallet isOpen={isOpen} close={close} userId={user.id} />
         </div>
 
         <ul className="flex flex-col gap-2">
