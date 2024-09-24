@@ -10,7 +10,7 @@ export const RootLayout = () => {
 
   return (
     <>
-      <div id="root_layout" className="flex h-screen w-screen">
+      <div id="root_layout" className="flex h-screen">
         <Sidebar isOpen={isOpen} close={close} />
         <div className="flex-1">
           <Header onMenuClick={open} />
