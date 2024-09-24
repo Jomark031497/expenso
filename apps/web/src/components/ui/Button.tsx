@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { forwardRef } from "react";
+import { Button as HButton } from "@headlessui/react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -8,12 +9,16 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ children, ...rest }, ref) => {
   return (
-    <button
+    <HButton
       {...rest}
       ref={ref}
-      className={clsx("py rounded-md px-4 py-2 text-sm font-medium transition-all", rest.className)}
+      className={clsx(
+        "inline-flex items-center justify-center gap-2 rounded-md px-3 py-1.5 text-sm/6 font-semibold",
+        "shadow-inner shadow-white/10",
+        rest.className,
+      )}
     >
       {children}
-    </button>
+    </HButton>
   );
 });
