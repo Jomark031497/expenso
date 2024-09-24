@@ -1,4 +1,4 @@
-import { Modal } from "@/components/ui/Modal";
+import { Dialog } from "@/components/ui/Dialog";
 
 interface CreateWalletProps {
   isOpen: boolean;
@@ -7,8 +7,8 @@ interface CreateWalletProps {
 
 export const CreateWallet = ({ isOpen, onClose }: CreateWalletProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Dialog isOpen={isOpen} close={onClose} title="Create Wallet">
       <p>Yes?</p>
-    </Modal>
+    </Dialog>
   );
 };
