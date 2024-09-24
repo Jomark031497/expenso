@@ -2,6 +2,7 @@ import clsx from "clsx";
 import type { InputHTMLAttributes } from "react";
 import { forwardRef } from "react";
 import type { FieldError } from "react-hook-form";
+import { Description, Field, Input as HInput, Label } from "@headlessui/react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -10,20 +11,20 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, formError, ...rest }, ref) => {
   return (
-    <div>
-      <label className="flex flex-col gap-1 text-sm text-gray-500">
-        {label}
-        <input
+    <div className="w-full">
+      <Field>
+        <Label className="text-textSecondary text-sm/6 font-medium">{label}</Label>
+        <HInput
           {...rest}
           ref={ref}
           className={clsx(
-            "hover:border-primary/50 focus:border-primary active:border-primary rounded border-2 px-1.5 py-1.5 text-black outline-none transition-all",
-            formError && "border-red-700 hover:border-red-700 focus:border-red-700 active:border-red-700",
-            rest.className,
+            "focus:border-secondary mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all",
+            formError ? "border-error hover:border-error" : "hover:border-secondary border-gray-200",
           )}
         />
-      </label>
-      {formError && <p className="text-sm text-red-700">{formError.message}</p>}
+
+        {formError && <Description className="text-error text-xs">{formError.message}</Description>}
+      </Field>
     </div>
   );
 });
