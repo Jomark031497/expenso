@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
 import { wallets, type NewWallet, type Wallet } from "./wallets.schema.js";
-import { getUser } from "../users/users.service.js";
+import { transactions } from "../transactions/transactions.schema.js";
 
 export const getWallets = async (userId: Wallet["userId"]) => {
   return await db.query.wallets.findMany({
@@ -20,19 +20,32 @@ export const getWalletById = async (walletId: Wallet["id"], options: { returnErr
 };
 
 export const createWallet = async (payload: NewWallet) => {
-  const [wallet] = await db.insert(wallets).values(payload).returning();
+  return await db.transaction(async (tx) => {
+    const [wallet] = await tx.insert(wallets).values(payload).returning();
 
-  if (!wallet) throw new AppError(400, "create wallet failed");
-  return wallet;
+    if (!wallet) throw new AppError(400, "Database Error. Create wallet failed");
+
+    const [transaction] = await tx
+      .insert(transactions)
+      .values({
+        name: "Initial Balance",
+        type: wallet.balance < "0" ? "expense" : "income",
+        amount: wallet.balance,
+        walletId: wallet.id,
+        userId: payload.userId,
+        category: "initial balance",
+      })
+      .returning();
+
+    if (!transaction) throw new AppError(400, "Database Error. Create wallet failed");
+
+    return wallet;
+  });
 };
 
 export const updateWallet = async (walletId: Wallet["id"], payload: Partial<NewWallet>) => {
   const wallet = await getWalletById(walletId, { returnError: false });
   if (!wallet) throw new AppError(404, "update wallet failed", { walletId: "wallet id not found" });
-
-  if (!payload.userId) throw new AppError(400, "update wallet failed", { userId: "user id not found" });
-  const user = await getUser("id", payload.userId);
-  if (!user) throw new AppError(400, "update wallet failed", { userId: "user id not found" });
 
   const [updatedWallet] = await db.update(wallets).set(payload).where(eq(wallets.id, walletId)).returning();
 

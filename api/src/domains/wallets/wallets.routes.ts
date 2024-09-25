@@ -3,7 +3,6 @@ import * as controller from "./wallets.controller.js";
 import { requireAuth } from "../../middlewares/requireAuth.js";
 import { validateSchema } from "../../middlewares/validateSchema.js";
 import { insertWalletSchema } from "./wallets.schema.js";
-import { verifyUserOrAdmin } from "../../middlewares/verifyUserOrAdmin.js";
 
 export const walletsRouter = Router();
 
@@ -15,4 +14,4 @@ walletsRouter.post("/", requireAuth, validateSchema(insertWalletSchema), control
 
 walletsRouter.patch("/:id", requireAuth, validateSchema(insertWalletSchema.partial()), controller.updateWalletHandler);
 
-walletsRouter.delete("/:id", requireAuth, verifyUserOrAdmin, controller.deleteWalletHandler);
+walletsRouter.delete("/:id", requireAuth, controller.deleteWalletHandler);

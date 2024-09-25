@@ -3,7 +3,7 @@ export type Wallet = {
   userId: string;
   name: string;
   type: "cash" | "credit_card" | "debit_card";
-  balance: number;
+  balance: string;
   description?: string;
   createdAt: Date;
   updatedAt: Date;

@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#4CAF50", // For buttons, links, headers
+        primary: "#F57002", // For buttons, links, headers
+        primaryDark: "#ED5635",
         secondary: "#FFC107", // For secondary buttons, hover states, accents
         success: "#00E676", // For positive balances, income, success messages
         error: "#F44336", // For negative balances, expenses, error notifications
