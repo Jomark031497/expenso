@@ -17,7 +17,7 @@ export default {
         borderColor: "#E0E0E0", // For borders (input fields, cards, dividers)
       },
       fontFamily: {
-        sans: ["Montserrat", "sans-serif"],
+        sans: ["Roboto", "sans-serif"],
       },
     },
   },

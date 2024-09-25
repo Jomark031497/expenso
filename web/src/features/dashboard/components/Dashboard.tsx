@@ -30,7 +30,7 @@ export const Dashboard = () => {
           <CreateWallet isOpen={isOpen} close={close} userId={user.id} />
         </div>
 
-        <ul className="flex max-h-80 flex-col gap-2 overflow-y-auto rounded border p-4 shadow">
+        <ul className="flex max-h-80 flex-col gap-2 overflow-y-auto rounded border p-2 shadow">
           {wallets?.map((wallet) => (
             <li key={wallet.id}>
               <Link to={`/wallets/${wallet.id}`}>

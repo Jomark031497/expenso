@@ -9,7 +9,7 @@ interface WalletCardProps {
 
 export const WalletCard = ({ wallet }: WalletCardProps) => {
   return (
-    <div className="max-w-md flex-1 rounded bg-gradient-to-r from-primaryDark to-primary p-2 text-white">
+    <div className="from-primaryDark max-w-md flex-1 rounded bg-gradient-to-r to-primary p-2 text-white">
       <div className="flex items-center gap-2">
         <div className="rounded-full bg-white p-2 text-black">
           {wallet.type === "cash" ? (
@@ -21,15 +21,15 @@ export const WalletCard = ({ wallet }: WalletCardProps) => {
           )}
         </div>
         <div>
-          <p className="text-base font-semibold">{wallet.name}</p>
-          <p className="text-xs font-medium">{toFormattedTitleCase(wallet.type)}</p>
+          <p className="text-sm font-semibold">{wallet.name}</p>
+          <p className="font-sm text-xs">{toFormattedTitleCase(wallet.type)}</p>
         </div>
       </div>
 
       <p className="text-end text-xs font-medium">
         {wallet.type === "credit_card" ? "Outstanding Balance" : "Available Balance"}
       </p>
-      <p className="text-end text-base font-semibold">{toCurrency(parseInt(wallet.balance))}</p>
+      <p className="text-end text-sm font-semibold">{toCurrency(parseInt(wallet.balance))}</p>
     </div>
   );
 };
