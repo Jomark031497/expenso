@@ -21,7 +21,7 @@ export const Sidebar = ({ isOpen, close }: SidebarProps) => {
         <Link
           onClick={close}
           to="/"
-          className="text-primary hover:text-primary/80 text-xl font-bold tracking-wider transition-all"
+          className="text-xl font-bold tracking-wider text-primary transition-all hover:text-primary/80"
         >
           _expenso.
         </Link>
@@ -37,7 +37,7 @@ export const Sidebar = ({ isOpen, close }: SidebarProps) => {
                 className={({ isActive }) =>
                   clsx(
                     "flex items-center gap-2 rounded p-2 font-semibold transition-all hover:bg-gray-200",
-                    isActive ? "bg-primary/20 hover:bg-primary/30 text-primary" : "text-textSecondary",
+                    isActive ? "bg-primary/20 text-primary hover:bg-primary/30" : "text-textSecondary",
                   )
                 }
               >

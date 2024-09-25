@@ -9,7 +9,7 @@ interface WalletCardProps {
 
 export const WalletCard = ({ wallet }: WalletCardProps) => {
   return (
-    <div className="from-primaryDark max-w-md flex-1 rounded bg-gradient-to-r to-primary p-2 text-white">
+    <div className="max-w-md flex-1 rounded bg-gradient-to-r from-primaryDark to-primary p-2 text-white">
       <div className="flex items-center gap-2">
         <div className="rounded-full bg-white p-2 text-black">
           {wallet.type === "cash" ? (
