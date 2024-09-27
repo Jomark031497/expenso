@@ -6,7 +6,7 @@ import { SignUp } from "@/features/auth/routes/SignUp";
 import { Dashboard } from "@/features/dashboard/components/Dashboard";
 import { AuthRoute } from "@/features/misc/components/AuthRoute";
 import { ProtectedRoute } from "@/features/misc/components/ProtectedRoute";
-import { SingleWallet } from "@/features/wallets/routes/Wallet";
+import { SingleWallet } from "@/features/wallets/routes/SingleWallet";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([

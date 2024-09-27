@@ -25,7 +25,7 @@ export const SingleWallet = () => {
     },
   });
 
-  const handleDeleteWallet = async (id: Wallet["id"]) => {
+  const handleDeleteWallet = (id: Wallet["id"]) => {
     mutation.mutate(id);
   };
 
