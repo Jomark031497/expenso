@@ -21,7 +21,7 @@ export const Dashboard = () => {
     <div className="flex flex-col gap-8">
       <section id="wallets">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-textSecondary">Wallets</h2>
+          <h2 className="text-md font-semibold text-textSecondary">Wallets</h2>
 
           <button
             onClick={open}
@@ -33,15 +33,17 @@ export const Dashboard = () => {
           <CreateWallet isOpen={isOpen} close={close} userId={user.id} />
         </div>
 
-        <ul className="flex max-h-80 flex-col gap-2 overflow-y-auto rounded border-2 p-2 shadow">
-          {wallets?.map((wallet) => (
-            <li key={wallet.id}>
-              <Link to={`/wallets/${wallet.id}`}>
-                <WalletCard wallet={wallet} />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="rounded border-2 py-2 shadow">
+          <ul className="flex max-h-80 flex-col gap-1.5 overflow-y-auto px-2">
+            {wallets?.map((wallet) => (
+              <li key={wallet.id}>
+                <Link to={`/wallets/${wallet.id}`}>
+                  <WalletCard wallet={wallet} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <section id="recent-transactions">
