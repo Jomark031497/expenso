@@ -38,7 +38,7 @@ export const SingleWallet = () => {
                 className="group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition-all hover:bg-primary/20"
               >
                 <FaRegEdit className="text-base" />
-                Edit
+                Update
               </button>
             </MenuItem>
             <MenuItem>

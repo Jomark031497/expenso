@@ -3,8 +3,6 @@ import { Dialog } from "@/components/ui/Dialog";
 import { deleteWallet } from "@/features/wallets/handlers/deleteWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 import { queryClient } from "@/lib/queryClient";
-import { toCurrency } from "@/utils/toCurrency";
-import { toFormattedTitleCase } from "@/utils/toFormattedTitleCase";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -34,16 +32,18 @@ export const DeleteWallet = ({ wallet, isOpen, close }: DeleteWalletProps) => {
 
   return (
     <Dialog close={close} isOpen={isOpen} title="Delete Wallet">
-      <p>Are you sure you want to delete wallet:</p>
+      <form onSubmit={handleDeleteWallet} className="flex flex-col gap-4">
+        <p className="text-center">Are you sure you want to delete wallet: </p>
+        <p className="text-center text-sm font-semibold">{wallet.name}</p>
 
-      <ul>
-        <li>{wallet.name}</li>
-        <li>{toFormattedTitleCase(wallet.type)}</li>
-        <li>{wallet.description}</li>
-        <li>{toCurrency(parseInt(wallet.balance))}</li>
-      </ul>
+        <p className="rounded bg-error/20 p-2 text-center text-sm italic text-error">
+          You cannot undo this action. All transactions related to this wallet will also be deleted
+        </p>
 
-      <Button onClick={handleDeleteWallet}>Delete</Button>
+        <Button onClick={handleDeleteWallet} className="w-20 self-center bg-error font-semibold text-white">
+          Delete
+        </Button>
+      </form>
     </Dialog>
   );
 };
