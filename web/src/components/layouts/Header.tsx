@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           id="dropdown_menu"
           ref={menuRef}
           className={clsx(
-            "absolute right-0 mt-1 flex w-56 origin-top-right flex-col gap-2 rounded-md border border-borderColor bg-white p-2 transition-all",
+            "z-100 absolute right-0 mt-1 flex w-56 origin-top-right flex-col gap-2 rounded-md border border-borderColor bg-white p-2 transition-all",
             isOpen ? "scale-100 transform opacity-100" : "pointer-events-none scale-95 transform opacity-0",
           )}
         >
