@@ -3,7 +3,7 @@ import { RootLayout } from "@/components/layouts/RootLayout";
 import { AuthContextProvider } from "@/contexts/Auth";
 import { Login } from "@/features/auth/routes/Login";
 import { SignUp } from "@/features/auth/routes/SignUp";
-import { Dashboard } from "@/features/dashboard/components/Dashboard";
+import { Dashboard } from "@/features/dashboard/routes/Dashboard";
 import { AuthRoute } from "@/features/misc/components/AuthRoute";
 import { ProtectedRoute } from "@/features/misc/components/ProtectedRoute";
 import { SingleWallet } from "@/features/wallets/routes/SingleWallet";

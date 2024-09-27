@@ -5,17 +5,36 @@ import type { NewTransaction } from "./transactions.schema.js";
 import { transactions, type Transaction } from "./transactions.schema.js";
 import { wallets } from "../wallets/wallets.schema.js";
 
-export const getTransactions = async (userId: Transaction["userId"]) => {
-  return await db.query.transactions.findMany({
-    where: (transactions, { eq }) => eq(transactions.userId, userId),
-    with: {
-      wallet: {
-        columns: {
-          name: true,
-          type: true,
+export const getTransactions = async (userId: Transaction["userId"], options: Record<string, unknown>) => {
+  const pageSize = options?.pageSize ? parseInt(options.pageSize as string, 10) : 5;
+  const page = options?.page ? parseInt(options.page as string) : 1;
+
+  return await db.transaction(async (tx) => {
+    const transactionsData = await tx.query.transactions.findMany({
+      where: (transactions, { eq }) => eq(transactions.userId, userId),
+      orderBy: (transactions, { desc }) => desc(transactions.createdAt),
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      with: {
+        wallet: {
+          columns: {
+            name: true,
+            type: true,
+          },
         },
       },
-    },
+    });
+
+    const count = await tx
+      .select({ count: sql`count(*)` })
+      .from(transactions)
+      .where(eq(transactions.userId, userId))
+      .then((result) => Number(result[0]?.count));
+
+    return {
+      data: transactionsData,
+      count,
+    };
   });
 };
 

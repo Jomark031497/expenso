@@ -12,12 +12,12 @@ export const createTransactionHandler = async (req: Request, res: Response, next
   }
 };
 
-export const getTransactionsHandler = async (_req: Request, res: Response, next: NextFunction) => {
+export const getTransactionsHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = res.locals.user;
     if (!user) throw new AppError(403, "forbidden");
 
-    const data = await transactionsService.getTransactions(user.id);
+    const data = await transactionsService.getTransactions(user.id, req.query);
 
     return res.status(200).json(data);
   } catch (error) {
