@@ -15,7 +15,7 @@ import { z } from "zod";
 interface UpdateWalletProps {
   isOpen: boolean;
   close: () => void;
-  walletData: Wallet;
+  wallet: Wallet;
 }
 
 const updateWalletSchema = z.object({
@@ -29,7 +29,7 @@ const updateWalletSchema = z.object({
 
 export type NewWallet = z.infer<typeof updateWalletSchema>;
 
-export const UpdateWallet = ({ isOpen, close, walletData }: UpdateWalletProps) => {
+export const UpdateWallet = ({ isOpen, close, wallet: walletData }: UpdateWalletProps) => {
   const {
     handleSubmit,
     register,
