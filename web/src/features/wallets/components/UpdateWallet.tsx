@@ -85,7 +85,7 @@ export const UpdateWallet = ({ isOpen, close, wallet: walletData }: UpdateWallet
 
         <Input label="Description" {...register("description")} formError={errors.description} />
 
-        <Button type="submit" disabled={isPending} className="mt-2 w-full max-w-xs self-center bg-primary text-white">
+        <Button type="submit" disabled={isPending} className="mt-2 w-20 self-center bg-primary text-white">
           Create
         </Button>
       </form>
