@@ -5,12 +5,13 @@ import { FaMoneyBillWave, FaCreditCard, FaMoneyCheck } from "react-icons/fa";
 
 interface WalletCardProps {
   wallet: Wallet;
+  showDescription?: boolean;
 }
 
-export const WalletCard = ({ wallet }: WalletCardProps) => {
+export const WalletCard = ({ wallet, showDescription = false }: WalletCardProps) => {
   return (
-    <div className="from-primaryDark max-w-md flex-1 rounded bg-gradient-to-r to-primary p-2 text-white">
-      <div className="flex items-center gap-2">
+    <div className="relative max-w-md flex-1 rounded bg-gradient-to-r from-primaryDark to-primary p-2 text-white">
+      <div className="flex flex-1 items-center gap-2">
         <div className="rounded-full bg-white p-2 text-black">
           {wallet.type === "cash" ? (
             <FaMoneyBillWave />
@@ -23,6 +24,7 @@ export const WalletCard = ({ wallet }: WalletCardProps) => {
         <div>
           <p className="text-sm font-semibold">{wallet.name}</p>
           <p className="font-sm text-xs">{toFormattedTitleCase(wallet.type)}</p>
+          {showDescription && wallet.description && <p className="font-sm text-xs italic">{wallet.description}</p>}
         </div>
       </div>
 
