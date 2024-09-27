@@ -28,7 +28,11 @@ export const Dialog = ({ title, close, isOpen, children }: DialogProps) => {
             "relative w-full max-w-lg space-y-4 rounded bg-white duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0",
           )}
         >
-          <button onClick={close} className="absolute right-3 top-3 rounded-full p-1 text-2xl hover:bg-gray-100">
+          <button
+            onClick={close}
+            autoFocus
+            className="absolute right-3 top-3 rounded-full p-1 text-2xl hover:bg-gray-100"
+          >
             <IoMdClose />
           </button>
 

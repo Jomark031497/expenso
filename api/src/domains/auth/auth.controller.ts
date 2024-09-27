@@ -6,7 +6,10 @@ export const loginUserHandler = async (req: Request, res: Response, next: NextFu
   try {
     const { sessionCookie, user } = await authService.loginUser(req.body);
 
-    return res.status(200).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(user);
+    return res
+      .status(200)
+      .cookie(sessionCookie.name, sessionCookie.value, { ...sessionCookie.attributes, maxAge: 7 * 24 * 60 * 60 * 1000 })
+      .json(user);
   } catch (error) {
     return next(error);
   }
@@ -15,7 +18,10 @@ export const loginUserHandler = async (req: Request, res: Response, next: NextFu
 export const signUpUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { sessionCookie, user } = await authService.signUpUser(req.body);
-    return res.status(201).cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes).json(user);
+    return res
+      .status(201)
+      .cookie(sessionCookie.name, sessionCookie.value, { ...sessionCookie.attributes, maxAge: 7 * 24 * 60 * 60 * 1000 })
+      .json(user);
   } catch (error) {
     return next(error);
   }

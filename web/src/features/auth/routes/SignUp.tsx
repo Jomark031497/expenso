@@ -68,7 +68,7 @@ export const SignUp = () => {
         <Input label="Email" {...register("email")} formError={errors.email} />
         <Input label="Password" type="password" {...register("password")} formError={errors.password} />
 
-        <Button type="submit" className="bg-primary hover:bg-primary/95 border-2 border-transparent text-white">
+        <Button type="submit" className="border-2 border-transparent bg-primary text-white hover:bg-primary/95">
           Sign Up
         </Button>
 

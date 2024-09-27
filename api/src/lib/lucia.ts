@@ -3,13 +3,11 @@ import { db } from "../db/dbInstance.js";
 import { sessionTable } from "../domains/auth/auth.schema.js";
 import type { User } from "../domains/users/users.schema.js";
 import { users } from "../domains/users/users.schema.js";
-import { Lucia, TimeSpan } from "lucia";
+import { Lucia } from "lucia";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, users);
 
 export const lucia = new Lucia(adapter, {
-  sessionExpiresIn: new TimeSpan(1, "w"),
-
   sessionCookie: {
     attributes: {
       secure: process.env.NODE_ENV === "production",

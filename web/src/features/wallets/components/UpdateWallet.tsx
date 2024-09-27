@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { createWallet } from "@/features/wallets/handlers/createWallet";
+import { updateWallet } from "@/features/wallets/handlers/updateWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 import { queryClient } from "@/lib/queryClient";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,13 +12,13 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
-interface CreateWalletProps {
+interface UpdateWalletProps {
   isOpen: boolean;
   close: () => void;
-  userId: Wallet["userId"];
+  wallet: Wallet;
 }
 
-const createWalletSchema = z.object({
+const updateWalletSchema = z.object({
   name: z.string().min(3),
   type: z.enum(["cash", "credit_card", "debit_card"]),
   balance: z.string().refine((val) => /^[0-9,]+(\.[0-9]{1,2})?$/.test(val), {
@@ -27,35 +27,37 @@ const createWalletSchema = z.object({
   description: z.string().optional(),
 });
 
-export type NewWallet = z.infer<typeof createWalletSchema>;
+export type NewWallet = z.infer<typeof updateWalletSchema>;
 
-export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
+export const UpdateWallet = ({ isOpen, close, wallet: walletData }: UpdateWalletProps) => {
   const {
     handleSubmit,
     register,
     reset,
     formState: { errors },
   } = useForm<NewWallet>({
-    resolver: zodResolver(createWalletSchema),
+    resolver: zodResolver(updateWalletSchema),
+    defaultValues: {
+      ...walletData,
+    },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (payload: NewWallet) =>
-      await createWallet({
+      await updateWallet(walletData.id, {
         ...payload,
         balance: payload.balance.replace(/,/g, ""), // Strip commas before submitting
-        userId,
       }),
     onSuccess: () => {
       reset();
-      queryClient.invalidateQueries({ queryKey: ["wallets"] });
+      queryClient.invalidateQueries({ queryKey: ["wallet"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      toast.success("wallet successfully created");
+      toast.success("wallet successfully updated");
       close();
     },
     onError: (err) => {
       if (err instanceof Error) return toast.error(err.message);
-      return toast.error("Something went wrong. Create Wallet Failed");
+      return toast.error("Something went wrong. Update Wallet Failed");
     },
   });
 
@@ -64,7 +66,7 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
   };
 
   return (
-    <Dialog isOpen={isOpen} close={close} title="Create Wallet">
+    <Dialog isOpen={isOpen} close={close} title="Update Wallet">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <Input label="Name" {...register("name")} formError={errors.name} />
         <Select label="Type" formError={errors.type} {...register("type")}>
@@ -73,7 +75,13 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
           <option value="credit_card">Credit Card</option>
         </Select>
 
-        <Input label="Balance" {...register("balance")} formError={errors.balance} />
+        <Input
+          label="Balance"
+          disabled
+          className="bg-gray-100 hover:border-transparent"
+          {...register("balance")}
+          formError={errors.balance}
+        />
 
         <Input label="Description" {...register("description")} formError={errors.description} />
 

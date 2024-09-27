@@ -55,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         <button
           ref={buttonRef}
           onClick={handleUserButtonClick}
-          className="bg-primary text-secondary rounded-full border p-2 text-2xl"
+          className="rounded-full border bg-primary p-2 text-2xl text-secondary"
         >
           <FaUserTie />
         </button>
@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           id="dropdown_menu"
           ref={menuRef}
           className={clsx(
-            "border-borderColor absolute right-0 mt-1 flex w-56 origin-top-right flex-col gap-2 rounded-md border bg-white p-2 transition-all",
+            "absolute right-0 mt-1 flex w-56 origin-top-right flex-col gap-2 rounded-md border border-borderColor bg-white p-2 transition-all",
             isOpen ? "scale-100 transform opacity-100" : "pointer-events-none scale-95 transform opacity-0",
           )}
         >
@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                   className={({ isActive }) =>
                     clsx(
                       "flex items-center gap-2 rounded p-2 font-semibold transition-all hover:bg-gray-200",
-                      isActive ? "bg-primary/20 hover:bg-primary/30 text-primary" : "text-textSecondary",
+                      isActive ? "bg-primary/20 text-primary hover:bg-primary/30" : "text-textSecondary",
                     )
                   }
                 >
@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           <hr />
 
           <div>
-            <Button onClick={handleLogout} className="bg-error/10 text-error hover:bg-error/20 w-full">
+            <Button onClick={handleLogout} className="w-full bg-error/10 text-error hover:bg-error/20">
               Logout
             </Button>
           </div>

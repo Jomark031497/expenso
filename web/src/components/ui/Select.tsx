@@ -13,14 +13,14 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ label, formError, children, ...rest }, ref) => {
   return (
     <div className="relative w-full">
-      <label className="text-textSecondary text-sm/6 font-medium">
+      <label className="text-sm/6 font-medium text-textSecondary">
         {label}
         <select
           {...rest}
           ref={ref}
           className={clsx(
-            "text-textPrimary mt-1 block w-full appearance-none rounded border-2 bg-white px-4 py-1.5",
-            formError ? "border-error hover:border-error" : "hover:border-secondary border-gray-200",
+            "mt-1 block w-full appearance-none rounded border-2 bg-white px-4 py-1.5 text-textPrimary outline-none focus:border-primary",
+            formError ? "border-error hover:border-error" : "border-gray-200 hover:border-primary",
           )}
         >
           {children}

@@ -8,6 +8,14 @@ import { wallets } from "../wallets/wallets.schema.js";
 export const getTransactions = async (userId: Transaction["userId"]) => {
   return await db.query.transactions.findMany({
     where: (transactions, { eq }) => eq(transactions.userId, userId),
+    with: {
+      wallet: {
+        columns: {
+          name: true,
+          type: true,
+        },
+      },
+    },
   });
 };
 
