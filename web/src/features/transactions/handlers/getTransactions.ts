@@ -1,8 +1,12 @@
 import { __SERVER_URL__ } from "@/config/constants";
+import type { RequestQueryOptions } from "@/features/misc/misc.types";
 import type { Transaction } from "@/features/transactions/transactions.types";
 
-export const getTransactions = async () => {
+export const getTransactions = async (queryOptions: RequestQueryOptions) => {
   const url = new URL("/api/transactions", __SERVER_URL__);
+
+  queryOptions?.page && url.searchParams.set("page", queryOptions.page.toString());
+  queryOptions?.pageSize && url.searchParams.set("pageSize", queryOptions.pageSize.toString());
 
   const response = await fetch(url, {
     method: "GET",
@@ -13,5 +17,5 @@ export const getTransactions = async () => {
 
   if (!response.ok) throw new Error(data.message);
 
-  return data as Transaction[];
+  return data as { count: number; data: Transaction[] };
 };

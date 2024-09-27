@@ -23,6 +23,7 @@ export default tseslint.config(
       "no-console": "error",
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-empty-object-type": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
     },
   },
 );

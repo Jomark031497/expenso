@@ -10,7 +10,7 @@ interface TransactionCardProps {
 
 export const TransactionCard = ({ transaction }: TransactionCardProps) => {
   return (
-    <div className="grid grid-cols-3 border-2 border-dotted bg-white p-2 shadow">
+    <div className="grid grid-cols-3 border-2 border-dotted border-gray-300 bg-white p-2 shadow">
       <p className="col-span-2 text-sm font-semibold">{transaction.name}</p>
       <p
         className={clsx(
@@ -20,10 +20,10 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
       >
         {toCurrency(parseInt(transaction.amount))}
       </p>
-      <p className="col-span-2 text-sm italic">{toFormattedTitleCase(transaction.category)}</p>
-      <p className="col-span-1 text-end text-sm">{toFormattedDate(transaction.date)}</p>
-      <p className="col-span-2 text-sm">{transaction.wallet.name}</p>
-      <p className="col-span-1 text-end text-sm">{toFormattedTitleCase(transaction.wallet.type)}</p>
+      <p className="col-span-2 text-xs italic">{toFormattedTitleCase(transaction.category)}</p>
+      <p className="col-span-1 text-end text-xs">{toFormattedDate(transaction.date)}</p>
+      <p className="col-span-2 text-xs">{transaction.wallet.name}</p>
+      <p className="col-span-1 text-end text-xs">{toFormattedTitleCase(transaction.wallet.type)}</p>
     </div>
   );
 };
