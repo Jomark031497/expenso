@@ -35,7 +35,7 @@ export const transactions = pgTable("transactions", {
   type: transactionTypeEnum("type").notNull(),
   description: text("description"),
   category: transactionCategoryEnum("category").notNull(), // New category column
-  date: timestamp("date").notNull().defaultNow(),
+  date: timestamp("date", { mode: "string" }).notNull().defaultNow(),
   walletId: text("wallet_id")
     .notNull()
     .references(() => wallets.id, { onDelete: "cascade" }),

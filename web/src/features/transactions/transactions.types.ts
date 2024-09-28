@@ -1,5 +1,7 @@
 import type { Wallet } from "@/features/wallets/wallets.types";
 
+export const TRANSACTION_TYPES = ["income", "expense", "transfer"] as const;
+
 export type Transaction = {
   id: string;
   userId: string;

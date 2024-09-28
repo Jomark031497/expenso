@@ -7,25 +7,28 @@ import { Description, Field, Input as HInput, Label } from "@headlessui/react";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   formError?: FieldError;
+  containerClassName?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, formError, ...rest }, ref) => {
-  return (
-    <div className="w-full">
-      <Field>
-        <Label className="text-sm/6 font-medium text-textSecondary">{label}</Label>
-        <HInput
-          {...rest}
-          ref={ref}
-          className={clsx(
-            "mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all focus:border-primary",
-            formError ? "border-error hover:border-error" : "border-gray-200 hover:border-primary",
-            rest.className,
-          )}
-        />
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, formError, containerClassName, ...rest }, ref) => {
+    return (
+      <div className={clsx("w-full", containerClassName)}>
+        <Field>
+          <Label className="text-sm/6 font-medium text-textSecondary">{label}</Label>
+          <HInput
+            {...rest}
+            ref={ref}
+            className={clsx(
+              "mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all focus:border-primary",
+              formError ? "border-error hover:border-error" : "border-gray-200 hover:border-primary",
+              rest.className,
+            )}
+          />
 
-        {formError && <Description className="text-xs text-error">{formError.message}</Description>}
-      </Field>
-    </div>
-  );
-});
+          {formError && <Description className="text-xs text-error">{formError.message}</Description>}
+        </Field>
+      </div>
+    );
+  },
+);
