@@ -8,28 +8,31 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   formError?: FieldError;
   children: ReactNode;
+  containerClassName?: string;
 }
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(({ label, formError, children, ...rest }, ref) => {
-  return (
-    <div className="relative w-full">
-      <label className="text-sm/6 font-medium text-textSecondary">
-        {label}
-        <select
-          {...rest}
-          ref={ref}
-          className={clsx(
-            "mt-1 block w-full appearance-none rounded border-2 bg-white px-4 py-1.5 text-textPrimary outline-none focus:border-primary",
-            formError ? "border-error hover:border-error" : "border-gray-200 hover:border-primary",
-          )}
-        >
-          {children}
-        </select>
-        <FaChevronDown className="group pointer-events-none absolute right-2.5 top-10 size-4" aria-hidden="true" />
-      </label>
-    </div>
-  );
-});
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  ({ label, formError, children, containerClassName, ...rest }, ref) => {
+    return (
+      <div className={clsx("relative w-full", containerClassName)}>
+        <label className="text-sm/6 font-medium text-textSecondary">
+          {label}
+          <select
+            {...rest}
+            ref={ref}
+            className={clsx(
+              "mt-1 block w-full appearance-none rounded border-2 bg-white px-4 py-1.5 text-textPrimary outline-none focus:border-primary",
+              formError ? "border-error hover:border-error" : "border-gray-200 hover:border-primary",
+            )}
+          >
+            {children}
+          </select>
+          <FaChevronDown className="group pointer-events-none absolute right-2.5 top-10 size-4" aria-hidden="true" />
+        </label>
+      </div>
+    );
+  },
+);
 
 // <div className="w-full max-w-md">
 //   <Field>

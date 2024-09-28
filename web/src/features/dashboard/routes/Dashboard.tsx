@@ -8,6 +8,7 @@ import { WalletCard } from "@/features/wallets/components/WalletCard";
 import { TransactionCard } from "@/features/transactions/components/TransactionCard";
 import { Pagination } from "@/features/misc/components/Pagination";
 import { usePagination } from "@/features/misc/hooks/usePagination";
+import { CreateTransaction } from "@/features/transactions/components/CreateTransaction";
 
 export const Dashboard = () => {
   const { data: wallets } = useWallets();
@@ -15,7 +16,8 @@ export const Dashboard = () => {
   const { data: transactions } = useTransactions(pagination);
   const { user } = useAuth();
 
-  const { close, isOpen, open } = useToggle();
+  const { close: closeCreateWallet, isOpen: isCreateWalletOpen, open: openCreateWallet } = useToggle();
+  const { close: closeCreateTransaction, isOpen: isCreateTransactionOpen, open: openCreateTransaction } = useToggle();
 
   if (!user) return <Navigate to="/auth/login" />;
 
@@ -26,13 +28,13 @@ export const Dashboard = () => {
           <h2 className="text-md font-semibold text-textSecondary">Wallets</h2>
 
           <button
-            onClick={open}
+            onClick={openCreateWallet}
             className="rounded border border-primary p-2 py-1.5 text-xs font-semibold text-primary outline-none"
           >
             Create Wallet
           </button>
 
-          <CreateWallet isOpen={isOpen} close={close} userId={user.id} />
+          <CreateWallet isOpen={isCreateWalletOpen} close={closeCreateWallet} userId={user.id} />
         </div>
 
         <div className="rounded border-2 py-2 shadow">
@@ -53,13 +55,13 @@ export const Dashboard = () => {
           <h2 className="text-md font-semibold text-textSecondary">Recent Transactions</h2>
 
           <button
-            onClick={open}
+            onClick={openCreateTransaction}
             className="rounded border border-primary p-2 py-1.5 text-xs font-semibold text-primary outline-none"
           >
             Create Transaction
           </button>
 
-          <CreateWallet isOpen={isOpen} close={close} userId={user.id} />
+          <CreateTransaction isOpen={isCreateTransactionOpen} onClose={closeCreateTransaction} userId={user.id} />
         </div>
         <div className="rounded border-2 py-2 shadow">
           <Pagination
