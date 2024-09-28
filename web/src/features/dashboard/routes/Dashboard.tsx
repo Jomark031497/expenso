@@ -6,15 +6,12 @@ import { Link, Navigate } from "react-router-dom";
 import { useTransactions } from "@/features/transactions/hooks/useTransactions";
 import { WalletCard } from "@/features/wallets/components/WalletCard";
 import { TransactionCard } from "@/features/transactions/components/TransactionCard";
-import { useState } from "react";
-import { Pagination } from "@/components/ui/Pagination";
+import { Pagination } from "@/features/misc/components/Pagination";
+import { usePagination } from "@/features/misc/hooks/usePagination";
 
 export const Dashboard = () => {
   const { data: wallets } = useWallets();
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 2,
-  });
+  const { pagination, onPaginationChange } = usePagination();
   const { data: transactions } = useTransactions(pagination);
   const { user } = useAuth();
 
@@ -66,10 +63,9 @@ export const Dashboard = () => {
         </div>
         <div className="rounded border-2 py-2 shadow">
           <Pagination
-            currentPage={pagination.page}
-            pageSize={pagination.pageSize}
+            pagination={pagination}
             totalCount={transactions?.count ?? 0}
-            setPagination={setPagination}
+            onPaginationChange={onPaginationChange}
           />
           <ul className="flex flex-col gap-2 px-2">
             {transactions?.data.map((transaction) => (
