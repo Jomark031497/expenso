@@ -3,6 +3,7 @@ import { toCurrency } from "@/utils/toCurrency";
 import { toFormattedDate } from "@/utils/toFormattedDate";
 import { toFormattedTitleCase } from "@/utils/toFormattedTitleCase";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -10,7 +11,10 @@ interface TransactionCardProps {
 
 export const TransactionCard = ({ transaction }: TransactionCardProps) => {
   return (
-    <div className="grid grid-cols-3 border-2 border-dotted border-gray-300 bg-white p-2 shadow">
+    <Link
+      to={`/transactions/${transaction.id}`}
+      className="grid grid-cols-3 border-2 border-dotted border-gray-300 bg-white p-2 shadow"
+    >
       <p className="col-span-2 text-sm font-semibold">{transaction.name}</p>
       <p
         className={clsx(
@@ -24,6 +28,6 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
       <p className="col-span-1 text-end text-xs">{toFormattedDate(transaction.date)}</p>
       <p className="col-span-2 text-xs">{transaction.wallet.name}</p>
       <p className="col-span-1 text-end text-xs">{toFormattedTitleCase(transaction.wallet.type)}</p>
-    </div>
+    </Link>
   );
 };

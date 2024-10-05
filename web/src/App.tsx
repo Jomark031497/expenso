@@ -6,6 +6,7 @@ import { SignUp } from "@/features/auth/routes/SignUp";
 import { Dashboard } from "@/features/dashboard/routes/Dashboard";
 import { AuthRoute } from "@/features/misc/components/AuthRoute";
 import { ProtectedRoute } from "@/features/misc/components/ProtectedRoute";
+import { SingleTransaction } from "@/features/transactions/routes/SingleTransaction";
 import { SingleWallet } from "@/features/wallets/routes/SingleWallet";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 
@@ -34,6 +35,19 @@ const router = createBrowserRouter([
                   {
                     path: ":walletId",
                     element: <SingleWallet />,
+                  },
+                ],
+              },
+              {
+                path: "transactions",
+                children: [
+                  {
+                    index: true,
+                    element: <>Transactions</>,
+                  },
+                  {
+                    path: ":transactionId",
+                    element: <SingleTransaction />,
                   },
                 ],
               },

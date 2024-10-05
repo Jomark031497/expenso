@@ -8,10 +8,15 @@ import { FaChevronDown } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useTransactionsByWallet } from "@/features/transactions/hooks/useTransactionsByWallet";
+import { usePagination } from "@/features/misc/hooks/usePagination";
+import { RecentTransactions } from "@/features/transactions/components/RecentTransactions";
 
 export const SingleWallet = () => {
   const { walletId } = useParams();
   const { data: wallet } = useWallet(walletId as string);
+  const { onPaginationChange, pagination } = usePagination();
+  const { data: transactions } = useTransactionsByWallet(walletId as string, pagination);
 
   const { close: closeUpdateDialog, open: openUpdateDialog, isOpen: isUpdateDialogOpen } = useToggle();
   const { close: closeDeleteDialog, open: openDeleteDialog, isOpen: isDeleteDialogOpen } = useToggle();
@@ -57,9 +62,17 @@ export const SingleWallet = () => {
         </Menu>
       </div>
 
-      <section>
+      <section id="wallet" className="mb-8">
         <WalletCard wallet={wallet} showDescription />
       </section>
+
+      <RecentTransactions
+        onPaginationChange={onPaginationChange}
+        pagination={pagination}
+        userId={wallet.userId}
+        transactions={transactions}
+        defaultWalletId={wallet.id}
+      />
     </>
   );
 };

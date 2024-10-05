@@ -2,65 +2,63 @@ import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { createTransaction } from "@/features/transactions/handlers/createTransaction";
+import { updateTransaction } from "@/features/transactions/handlers/updateTransaction";
+import { createTransactionSchema, TRANSACTION_CATEGORIES } from "@/features/transactions/transactions.schema";
 import type { NewTransaction, Transaction } from "@/features/transactions/transactions.types";
 import { TRANSACTION_TYPES } from "@/features/transactions/transactions.types";
-import type { User } from "@/features/users/users.types";
 import { useWallets } from "@/features/wallets/hooks/useWallets";
 import { queryClient } from "@/lib/queryClient";
 import { toFormattedTitleCase } from "@/utils/toFormattedTitleCase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import clsx from "clsx";
+import DatePicker from "react-datepicker";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import DatePicker from "react-datepicker";
 
-import "react-datepicker/dist/react-datepicker.css";
-import clsx from "clsx";
-import { createTransactionSchema, TRANSACTION_CATEGORIES } from "@/features/transactions/transactions.schema";
-
-interface CreateTransactionProps {
-  userId: User["id"];
+interface UpdateTransactionProps {
+  transaction: Transaction;
   onClose: () => void;
   isOpen: boolean;
-  defaultWalletId?: Transaction["walletId"];
 }
 
-export const CreateTransaction = ({ userId, onClose, isOpen, defaultWalletId }: CreateTransactionProps) => {
+export const UpdateTransaction = ({ transaction, onClose, isOpen }: UpdateTransactionProps) => {
+  const { data: wallets } = useWallets();
+
   const {
     register,
+    control,
     handleSubmit,
     reset,
-    control,
+
     formState: { errors },
   } = useForm<NewTransaction>({
     resolver: zodResolver(createTransactionSchema),
-    defaultValues: { userId, date: new Date(), amount: "0.00", walletId: defaultWalletId },
+    defaultValues: {
+      ...transaction,
+      date: new Date(transaction.date),
+      description: transaction.description ?? "",
+    },
   });
 
-  const { data: wallets } = useWallets();
-
-  const { isPending, mutate } = useMutation({
-    mutationFn: async (values: NewTransaction) =>
-      await createTransaction({
-        ...values,
-        amount: values.amount.replace(/,/g, ""), // Strip commas before submitting
-      }),
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (payload: NewTransaction) => {
+      await updateTransaction(transaction.id, {
+        ...payload,
+        amount: payload.amount.replace(/,/g, ""), // Strip commas before submitting
+        userId: transaction.userId,
+      });
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      queryClient.invalidateQueries({ queryKey: ["wallets"] });
+      toast.success("Transaction updated");
       queryClient.invalidateQueries({ queryKey: ["transaction"] });
-      queryClient.invalidateQueries({ queryKey: ["wallet"] });
-      queryClient.invalidateQueries({ queryKey: ["walletTransactions"] });
-
-      toast.success("Transaction created successfully");
       reset();
       onClose();
     },
     onError: (err) => {
       if (err instanceof Error) return toast.error(err.message);
-      return toast.error("Something went wrong. Create Transactin Failed");
+      return toast.error("Something went wrong. Update Transaction Failed");
     },
   });
 
@@ -69,7 +67,7 @@ export const CreateTransaction = ({ userId, onClose, isOpen, defaultWalletId }: 
   };
 
   return (
-    <Dialog close={onClose} isOpen={isOpen} title="Create Transaction">
+    <Dialog close={onClose} isOpen={isOpen} title="Update Transaction">
       <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-4 gap-2">
         <Input label="Name" {...register("name")} formError={errors.name} containerClassName="col-span-4" />
 
@@ -131,7 +129,7 @@ export const CreateTransaction = ({ userId, onClose, isOpen, defaultWalletId }: 
           disabled={isPending}
           className="col-span-4 mx-auto mt-2 bg-primary px-10 font-semibold text-white"
         >
-          Create
+          Update
         </Button>
       </form>
     </Dialog>

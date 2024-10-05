@@ -3,31 +3,20 @@ import { Dialog } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { updateWallet } from "@/features/wallets/handlers/updateWallet";
-import type { Wallet } from "@/features/wallets/wallets.types";
+import { createWalletSchema } from "@/features/wallets/wallets.schema";
+import type { NewWallet, Wallet } from "@/features/wallets/wallets.types";
 import { queryClient } from "@/lib/queryClient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { z } from "zod";
 
 interface UpdateWalletProps {
   isOpen: boolean;
   close: () => void;
   wallet: Wallet;
 }
-
-const updateWalletSchema = z.object({
-  name: z.string().min(3),
-  type: z.enum(["cash", "credit_card", "debit_card"]),
-  balance: z.string().refine((val) => /^[0-9,]+(\.[0-9]{1,2})?$/.test(val), {
-    message: "Balance must be a number with optional commas and up to 2 decimal places",
-  }),
-  description: z.string().optional(),
-});
-
-export type NewWallet = z.infer<typeof updateWalletSchema>;
 
 export const UpdateWallet = ({ isOpen, close, wallet: walletData }: UpdateWalletProps) => {
   const {
@@ -36,7 +25,7 @@ export const UpdateWallet = ({ isOpen, close, wallet: walletData }: UpdateWallet
     reset,
     formState: { errors },
   } = useForm<NewWallet>({
-    resolver: zodResolver(updateWalletSchema),
+    resolver: zodResolver(createWalletSchema),
     defaultValues: {
       ...walletData,
     },

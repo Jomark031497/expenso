@@ -1,3 +1,6 @@
+import type { createWalletSchema } from "@/features/wallets/wallets.schema";
+import type { z } from "zod";
+
 export type Wallet = {
   id: string;
   userId: string;
@@ -8,3 +11,5 @@ export type Wallet = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type NewWallet = z.infer<typeof createWalletSchema>;

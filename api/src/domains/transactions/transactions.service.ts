@@ -38,15 +38,53 @@ export const getTransactions = async (userId: Transaction["userId"], options: Re
   });
 };
 
-export const getTransactionsByWalletId = async (walletId: Transaction["walletId"]) => {
-  return await db.query.transactions.findMany({
-    where: (transactions, { eq }) => eq(transactions.walletId, walletId),
+export const getTransactionsByWalletId = async (
+  walletId: Transaction["walletId"],
+  options: Record<string, unknown>,
+) => {
+  const pageSize = options?.pageSize ? parseInt(options.pageSize as string, 10) : 5;
+  const page = options?.page ? parseInt(options.page as string) : 1;
+
+  return await db.transaction(async (tx) => {
+    const transactionsData = await tx.query.transactions.findMany({
+      where: (transactions, { eq }) => eq(transactions.walletId, walletId),
+      orderBy: (transactions, { desc }) => desc(transactions.createdAt),
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      with: {
+        wallet: {
+          columns: {
+            name: true,
+            type: true,
+          },
+        },
+      },
+    });
+
+    const count = await tx
+      .select({ count: sql`count(*)` })
+      .from(transactions)
+      .where(eq(transactions.walletId, walletId))
+      .then((result) => Number(result[0]?.count));
+
+    return {
+      data: transactionsData,
+      count,
+    };
   });
 };
 
 export const getTransactionById = async (transactionId: Transaction["id"], options: { returnError?: boolean }) => {
   const transaction = await db.query.transactions.findFirst({
     where: (transactions, { eq }) => eq(transactions.id, transactionId),
+    with: {
+      wallet: {
+        columns: {
+          name: true,
+          type: true,
+        },
+      },
+    },
   });
 
   if (options.returnError && !transaction)
@@ -72,10 +110,6 @@ export const createTransaction = async (payload: NewTransaction) => {
 export const updateTransaction = async (transactionId: Transaction["id"], payload: Partial<NewTransaction>) => {
   const transaction = await getTransactionById(transactionId, { returnError: false });
   if (!transaction) throw new AppError(400, "update transaction failed", { transactionId: "transaction id not found" });
-
-  // prevent updating the user or wallet of a transaction
-  if (payload.walletId || payload.userId)
-    throw new AppError(400, "update transaction failed. it is forbidden to update userId or walletId");
 
   return await db.transaction(async (tx) => {
     // update the transaction

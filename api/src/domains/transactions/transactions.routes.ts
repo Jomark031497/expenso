@@ -8,6 +8,8 @@ export const transactionsRouter = Router();
 
 transactionsRouter.post("/", requireAuth, validateSchema(insertTransactionSchema), controller.createTransactionHandler);
 
+transactionsRouter.get("/:id", requireAuth, controller.getTransactionByIdHandler);
+
 transactionsRouter.get("/", requireAuth, controller.getTransactionsHandler);
 
 transactionsRouter.get("/wallets/:walletId", requireAuth, controller.getTransactionsByWalletIdHandler);
