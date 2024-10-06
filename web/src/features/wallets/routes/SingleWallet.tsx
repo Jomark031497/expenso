@@ -1,27 +1,29 @@
 import { useToggle } from "@/features/misc/hooks/useToggle";
-import { DeleteWallet } from "@/features/wallets/components/DeleteWallet";
-import { UpdateWallet } from "@/features/wallets/components/UpdateWallet";
-import { WalletCard } from "@/features/wallets/components/WalletCard";
-import { useWallet } from "@/features/wallets/hooks/useWallet";
+import { WalletCard, WalletCardSkeleton } from "@/features/wallets/components/WalletCard";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import { FaChevronDown } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { useTransactionsByWallet } from "@/features/transactions/hooks/useTransactionsByWallet";
-import { usePagination } from "@/features/misc/hooks/usePagination";
 import { RecentTransactions } from "@/features/transactions/components/RecentTransactions";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { lazily } from "react-lazily";
+
+const { UpdateWallet } = lazily(() => import("@/features/wallets/components/UpdateWallet"));
+const { DeleteWallet } = lazily(() => import("@/features/wallets/components/DeleteWallet"));
 
 export const SingleWallet = () => {
-  const { walletId } = useParams();
-  const { data: wallet } = useWallet(walletId as string);
-  const { onPaginationChange, pagination } = usePagination();
-  const { data: transactions } = useTransactionsByWallet(walletId as string, pagination);
+  const { walletId: walletIdParams } = useParams();
+  const walletId = walletIdParams as string;
+
+  const { user } = useAuth();
 
   const { close: closeUpdateDialog, open: openUpdateDialog, isOpen: isUpdateDialogOpen } = useToggle();
   const { close: closeDeleteDialog, open: openDeleteDialog, isOpen: isDeleteDialogOpen } = useToggle();
 
-  if (!wallet) return <>Wallet not found</>;
+  if (!user) return <Navigate to="/auth/login" />;
 
   return (
     <>
@@ -57,22 +59,33 @@ export const SingleWallet = () => {
             </MenuItem>
           </MenuItems>
 
-          <UpdateWallet close={closeUpdateDialog} isOpen={isUpdateDialogOpen} wallet={wallet} />
-          <DeleteWallet close={closeDeleteDialog} isOpen={isDeleteDialogOpen} wallet={wallet} />
+          <ErrorBoundary fallback={<>Update Wallet failed</>}>
+            <Suspense fallback={<>Loading Update Wallet...</>}>
+              <UpdateWallet close={closeUpdateDialog} isOpen={isUpdateDialogOpen} walletId={walletId} />
+            </Suspense>
+          </ErrorBoundary>
+
+          <ErrorBoundary fallback={<>Delete Wallet failed</>}>
+            <Suspense fallback={<>Loading Delete Wallet...</>}>
+              <DeleteWallet close={closeDeleteDialog} isOpen={isDeleteDialogOpen} walletId={walletId} />
+            </Suspense>
+          </ErrorBoundary>
         </Menu>
       </div>
 
       <section id="wallet" className="mb-8">
-        <WalletCard wallet={wallet} showDescription />
+        <ErrorBoundary fallback={<>Unable to load Wallet</>}>
+          <Suspense fallback={<WalletCardSkeleton />}>
+            <WalletCard walletId={walletId} showDescription />
+          </Suspense>
+        </ErrorBoundary>
       </section>
 
-      <RecentTransactions
-        onPaginationChange={onPaginationChange}
-        pagination={pagination}
-        userId={wallet.userId}
-        transactions={transactions}
-        defaultWalletId={wallet.id}
-      />
+      <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
+        <Suspense fallback={<>Loading Transactions...</>}>
+          <RecentTransactions userId={user.id} defaultWalletId={walletId} />
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 };

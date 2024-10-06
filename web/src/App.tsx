@@ -1,7 +1,6 @@
 import { AuthLayout } from "@/components/layouts/AuthLayout";
 import { RootLayout } from "@/components/layouts/RootLayout";
 import { AuthContextProvider } from "@/contexts/Auth";
-import { Dashboard } from "@/features/dashboard/routes/Dashboard";
 import { AuthRoute } from "@/features/misc/components/AuthRoute";
 import { ProtectedRoute } from "@/features/misc/components/ProtectedRoute";
 import { Wallets } from "@/features/wallets/routes/Wallets";
@@ -11,6 +10,7 @@ import { SignUp } from "@/features/auth/routes/SignUp";
 import { SingleTransaction } from "@/features/transactions/routes/SingleTransaction";
 import { TransactionsList } from "@/features/transactions/routes/TransactionsList";
 import { SingleWallet } from "@/features/wallets/routes/SingleWallet";
+import { Dashboard } from "@/features/misc/routes/Dashboard";
 
 const router = createBrowserRouter([
   {
