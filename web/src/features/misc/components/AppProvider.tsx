@@ -7,6 +7,7 @@ import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/500.css";
 import "@fontsource/poppins/600.css";
 import "@fontsource/poppins/700.css";
+import { ErrorBoundary } from "react-error-boundary";
 
 interface AppProviderProps {
   children: ReactNode;
@@ -14,9 +15,11 @@ interface AppProviderProps {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
-      {children}
-    </QueryClientProvider>
+    <ErrorBoundary fallback={<>Something went wrong with the app</>}>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        {children}
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
