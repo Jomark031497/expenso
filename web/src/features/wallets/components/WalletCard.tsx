@@ -1,14 +1,17 @@
+import { useWallet } from "@/features/wallets/hooks/useWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 import { toCurrency } from "@/utils/toCurrency";
 import { toFormattedTitleCase } from "@/utils/toFormattedTitleCase";
 import { FaMoneyBillWave, FaCreditCard, FaMoneyCheck } from "react-icons/fa";
 
 interface WalletCardProps {
-  wallet: Wallet;
   showDescription?: boolean;
+  walletId: Wallet["id"];
 }
 
-export const WalletCard = ({ wallet, showDescription = false }: WalletCardProps) => {
+export const WalletCard = ({ walletId, showDescription = false }: WalletCardProps) => {
+  const { data: wallet } = useWallet(walletId as string);
+
   return (
     <div className="relative max-w-md flex-1 rounded bg-gradient-to-r from-primaryDark to-primary p-2 text-white">
       <div className="flex flex-1 items-center gap-2">
@@ -37,5 +40,5 @@ export const WalletCard = ({ wallet, showDescription = false }: WalletCardProps)
 };
 
 export const WalletCardSkeleton = () => {
-  return <li role="status" className="min-h-[88px] flex-1 animate-pulse rounded bg-gray-300"></li>;
+  return <div role="status" className="min-h-[88px] flex-1 animate-pulse rounded bg-gray-300"></div>;
 };

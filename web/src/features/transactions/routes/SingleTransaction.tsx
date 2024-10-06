@@ -1,12 +1,16 @@
 import { useToggle } from "@/features/misc/hooks/useToggle";
-import { DeleteTransaction } from "@/features/transactions/components/DeleteTransaction";
-import { TransactionCard } from "@/features/transactions/components/TransactionCard";
-import { UpdateTransaction } from "@/features/transactions/components/UpdateTransaction";
 import { useSingleTransaction } from "@/features/transactions/hooks/useSingleTransaction";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { FaChevronDown, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { lazily } from "react-lazily";
 import { useParams } from "react-router-dom";
+
+const { TransactionCard } = lazily(() => import("@/features/transactions/components/TransactionCard"));
+const { UpdateTransaction } = lazily(() => import("@/features/transactions/components/UpdateTransaction"));
+const { DeleteTransaction } = lazily(() => import("@/features/transactions/components/DeleteTransaction"));
 
 export const SingleTransaction = () => {
   const { transactionId } = useParams();
@@ -52,14 +56,26 @@ export const SingleTransaction = () => {
             </MenuItem>
           </MenuItems>
 
-          <UpdateTransaction isOpen={isUpdateDialogOpen} onClose={closeUpdateDialog} transaction={transaction} />
+          <ErrorBoundary fallback={<>Unable to load Update Transaction Dialog</>}>
+            <Suspense fallback={<>Loading Update Transaction Dialog</>}>
+              <UpdateTransaction isOpen={isUpdateDialogOpen} onClose={closeUpdateDialog} transaction={transaction} />
+            </Suspense>
+          </ErrorBoundary>
 
-          <DeleteTransaction onClose={closeDeleteDialog} isOpen={isDeleteDialogOpen} transaction={transaction} />
+          <ErrorBoundary fallback={<>Unable to load Delete Transaction Dialog</>}>
+            <Suspense fallback={<>Loading Delete Transaction Dialog</>}>
+              <DeleteTransaction onClose={closeDeleteDialog} isOpen={isDeleteDialogOpen} transaction={transaction} />
+            </Suspense>
+          </ErrorBoundary>
         </Menu>
       </div>
 
       <section>
-        <TransactionCard transaction={transaction} />
+        <ErrorBoundary fallback={<>Unable to load Transaction Card</>}>
+          <Suspense fallback={<>Loading Transaction Card</>}>
+            <TransactionCard transaction={transaction} />
+          </Suspense>
+        </ErrorBoundary>
       </section>
     </>
   );

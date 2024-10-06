@@ -1,30 +1,22 @@
 import { Pagination } from "@/features/misc/components/Pagination";
-import { type PaginationChangeType } from "@/features/misc/hooks/usePagination";
+import { usePagination } from "@/features/misc/hooks/usePagination";
 import { useToggle } from "@/features/misc/hooks/useToggle";
-import type { PaginationState } from "@/features/misc/misc.types";
 import { CreateTransaction } from "@/features/transactions/components/CreateTransaction";
-import { TransactionCard } from "@/features/transactions/components/TransactionCard";
-import type { Transaction } from "@/features/transactions/transactions.types";
+import { useTransactions } from "@/features/transactions/hooks/useTransactions";
 import type { User } from "@/features/users/users.types";
+import { lazily } from "react-lazily";
+
+const { TransactionCard } = lazily(() => import("@/features/transactions/components/TransactionCard"));
 
 interface RecentTransactionProps {
   userId: User["id"];
-  transactions?: {
-    data: Transaction[];
-    count: number;
-  };
-  pagination: PaginationState;
-  onPaginationChange: PaginationChangeType;
   defaultWalletId?: string;
 }
 
-export const RecentTransactions = ({
-  userId,
-  transactions,
-  pagination,
-  onPaginationChange,
-  defaultWalletId,
-}: RecentTransactionProps) => {
+export const RecentTransactions = ({ userId, defaultWalletId }: RecentTransactionProps) => {
+  const { pagination, onPaginationChange } = usePagination();
+  const { data: transactions } = useTransactions(pagination, defaultWalletId);
+
   const { close, isOpen, open } = useToggle();
 
   return (

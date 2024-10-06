@@ -18,7 +18,7 @@ export const WalletsList = () => {
         {wallets.map((wallet) => (
           <li key={wallet.id}>
             <Link to={`/wallets/${wallet.id}`}>
-              <WalletCard wallet={wallet} />
+              <WalletCard walletId={wallet.id} />
             </Link>
           </li>
         ))}

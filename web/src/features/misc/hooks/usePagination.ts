@@ -1,5 +1,5 @@
 import type { PaginationState } from "@/features/misc/misc.types";
-import { useState } from "react";
+import { startTransition, useState } from "react";
 
 type UsePaginationProps = Partial<PaginationState>;
 export type PaginationChangeType = (value: UsePaginationProps) => void;
@@ -11,10 +11,12 @@ export const usePagination = ({ page = 1, pageSize = 5 }: UsePaginationProps = {
   });
 
   const onPaginationChange = (value: Partial<PaginationState>) => {
-    setPagination((prev) => ({
-      ...prev,
-      ...value,
-    }));
+    startTransition(() => {
+      setPagination((prev) => ({
+        ...prev,
+        ...value,
+      }));
+    });
   };
 
   return {

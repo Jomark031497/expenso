@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { deleteWallet } from "@/features/wallets/handlers/deleteWallet";
+import { useWallet } from "@/features/wallets/hooks/useWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 import { queryClient } from "@/lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
@@ -8,12 +9,14 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 interface DeleteWalletProps {
-  wallet: Wallet;
+  walletId: Wallet["id"];
   close: () => void;
   isOpen: boolean;
 }
 
-export const DeleteWallet = ({ wallet, isOpen, close }: DeleteWalletProps) => {
+export const DeleteWallet = ({ walletId, isOpen, close }: DeleteWalletProps) => {
+  const { data: wallet } = useWallet(walletId);
+
   const navigate = useNavigate();
 
   const mutation = useMutation({

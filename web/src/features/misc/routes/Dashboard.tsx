@@ -1,7 +1,5 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { Suspense } from "react";
-// import { useTransactions } from "@/features/transactions/hooks/useTransactions";
-// import { usePagination } from "@/features/misc/hooks/usePagination";
 import { lazily } from "react-lazily";
 import { useToggle } from "@/features/misc/hooks/useToggle";
 import { CreateWallet } from "@/features/wallets/components/CreateWallet";
@@ -10,13 +8,10 @@ import { Navigate } from "react-router-dom";
 import { WalletListLoadingSkeleton } from "@/features/wallets/components/WalletsList";
 
 const { WalletsList } = lazily(() => import("@/features/wallets/components/WalletsList"));
-// const { RecentTransactions } = lazily(() => import("@/features/transactions/components/RecentTransactions"));
+const { RecentTransactions } = lazily(() => import("@/features/transactions/components/RecentTransactions"));
 
 export const Dashboard = () => {
   const { user } = useAuth();
-
-  // const { pagination, onPaginationChange } = usePagination();
-  // const { data: transactions } = useTransactions(pagination);
 
   const { close: closeCreateWallet, isOpen: isCreateWalletOpen, open: openCreateWallet } = useToggle();
 
@@ -45,14 +40,11 @@ export const Dashboard = () => {
         </ErrorBoundary>
       </section>
 
-      {/* <Suspense fallback={<>Loading Transactions...</>}>
-        <RecentTransactions
-          transactions={transactions}
-          userId={user.id}
-          pagination={pagination}
-          onPaginationChange={onPaginationChange}
-        />
-      </Suspense> */}
+      <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
+        <Suspense fallback={<>Loading Transactions...</>}>
+          <RecentTransactions userId={user.id} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };

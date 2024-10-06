@@ -3,6 +3,7 @@ import { Dialog } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { updateWallet } from "@/features/wallets/handlers/updateWallet";
+import { useWallet } from "@/features/wallets/hooks/useWallet";
 import { createWalletSchema } from "@/features/wallets/wallets.schema";
 import type { NewWallet, Wallet } from "@/features/wallets/wallets.types";
 import { queryClient } from "@/lib/queryClient";
@@ -15,10 +16,12 @@ import toast from "react-hot-toast";
 interface UpdateWalletProps {
   isOpen: boolean;
   close: () => void;
-  wallet: Wallet;
+  walletId: Wallet["id"];
 }
 
-export const UpdateWallet = ({ isOpen, close, wallet: walletData }: UpdateWalletProps) => {
+export const UpdateWallet = ({ isOpen, close, walletId }: UpdateWalletProps) => {
+  const { data: wallet } = useWallet(walletId);
+
   const {
     handleSubmit,
     register,
@@ -27,13 +30,13 @@ export const UpdateWallet = ({ isOpen, close, wallet: walletData }: UpdateWallet
   } = useForm<NewWallet>({
     resolver: zodResolver(createWalletSchema),
     defaultValues: {
-      ...walletData,
+      ...wallet,
     },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (payload: NewWallet) =>
-      await updateWallet(walletData.id, {
+      await updateWallet(wallet.id, {
         ...payload,
         balance: payload.balance.replace(/,/g, ""), // Strip commas before submitting
       }),
