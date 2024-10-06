@@ -35,3 +35,7 @@ export const WalletCard = ({ wallet, showDescription = false }: WalletCardProps)
     </div>
   );
 };
+
+export const WalletCardSkeleton = () => {
+  return <li role="status" className="min-h-[88px] flex-1 animate-pulse rounded bg-gray-300"></li>;
+};
