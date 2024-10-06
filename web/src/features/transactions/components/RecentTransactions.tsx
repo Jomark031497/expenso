@@ -1,5 +1,5 @@
 import { Pagination } from "@/features/misc/components/Pagination";
-import type { PaginationChangeType } from "@/features/misc/hooks/usePagination";
+import { type PaginationChangeType } from "@/features/misc/hooks/usePagination";
 import { useToggle } from "@/features/misc/hooks/useToggle";
 import type { PaginationState } from "@/features/misc/misc.types";
 import { CreateTransaction } from "@/features/transactions/components/CreateTransaction";
