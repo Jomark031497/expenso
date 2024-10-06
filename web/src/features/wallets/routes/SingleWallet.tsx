@@ -21,7 +21,7 @@ export const SingleWallet = () => {
   const { close: closeUpdateDialog, open: openUpdateDialog, isOpen: isUpdateDialogOpen } = useToggle();
   const { close: closeDeleteDialog, open: openDeleteDialog, isOpen: isDeleteDialogOpen } = useToggle();
 
-  if (!wallet) return <p>wallet data not found</p>;
+  if (!wallet) return <>Wallet not found</>;
 
   return (
     <>
