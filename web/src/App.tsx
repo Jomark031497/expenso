@@ -7,7 +7,9 @@ import { Dashboard } from "@/features/dashboard/routes/Dashboard";
 import { AuthRoute } from "@/features/misc/components/AuthRoute";
 import { ProtectedRoute } from "@/features/misc/components/ProtectedRoute";
 import { SingleTransaction } from "@/features/transactions/routes/SingleTransaction";
+import { TransactionsList } from "@/features/transactions/routes/TransactionsList";
 import { SingleWallet } from "@/features/wallets/routes/SingleWallet";
+import { Wallets } from "@/features/wallets/routes/Wallets";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
                 children: [
                   {
                     index: true,
-                    element: <>Wallets</>,
+                    element: <Wallets />,
                   },
                   {
                     path: ":walletId",
@@ -43,7 +45,7 @@ const router = createBrowserRouter([
                 children: [
                   {
                     index: true,
-                    element: <>Transactions</>,
+                    element: <TransactionsList />,
                   },
                   {
                     path: ":transactionId",
