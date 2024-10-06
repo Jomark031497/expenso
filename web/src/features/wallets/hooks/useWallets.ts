@@ -1,9 +1,9 @@
 import { getWallets } from "@/features/wallets/handlers/getWallets";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const useWallets = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["wallets"],
-    queryFn: getWallets,
+    queryFn: async () => getWallets(),
   });
 };
