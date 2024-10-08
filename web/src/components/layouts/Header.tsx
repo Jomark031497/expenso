@@ -1,106 +1,112 @@
-import React, { useEffect, useRef } from "react";
-import { useToggle } from "@/features/misc/hooks/useToggle";
-import clsx from "clsx";
-import { FaLock, FaUser, FaUserTie } from "react-icons/fa";
+import { Menu, MenuButton, MenuItems, MenuItem, MenuSeparator, Button } from "@headlessui/react";
+import React from "react";
 import { HiMenuAlt1 } from "react-icons/hi";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { MdSettings } from "react-icons/md";
-import { Button } from "@/components/ui/Button";
+import { FaUser, FaLock, FaWallet } from "react-icons/fa";
+import { GrTransaction } from "react-icons/gr";
+import { LuLayoutDashboard } from "react-icons/lu";
+import clsx from "clsx";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
-interface HeaderProps {
-  onMenuClick: () => void;
-}
+interface HeaderProps {}
 
-export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+export const Header: React.FC<HeaderProps> = () => {
   const { handleLogout } = useAuth();
 
-  const { isOpen, close, open } = useToggle();
-  const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent): void => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        close();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [close]);
-
-  const handleUserButtonClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    if (isOpen) {
-      close();
-    } else {
-      open();
-    }
-  };
-
   return (
-    <header className="flex h-16 items-center justify-between px-4 md:justify-end">
-      <button onClick={onMenuClick} className="text-3xl md:hidden">
-        <HiMenuAlt1 />
-      </button>
-      <div className="relative">
-        <button
-          ref={buttonRef}
-          onClick={handleUserButtonClick}
-          className="rounded-full border bg-primary p-2 text-2xl text-secondary"
+    <>
+      <header className="fixed flex h-16 w-full max-w-md items-center justify-between border-b px-4 shadow-inner">
+        <Link
+          onClick={close}
+          to="/"
+          className="text-xl font-bold tracking-wider text-primary transition-all hover:text-primary/80"
         >
-          <FaUserTie />
-        </button>
-        <div
-          id="dropdown_menu"
-          ref={menuRef}
-          className={clsx(
-            "z-100 absolute right-0 mt-1 flex w-56 origin-top-right flex-col gap-2 rounded-md border border-borderColor bg-white p-2 transition-all",
-            isOpen ? "scale-100 transform opacity-100" : "pointer-events-none scale-95 transform opacity-0",
-          )}
-        >
-          <ul className="flex w-full flex-col gap-1 self-start">
-            {userNavLinks.map((navLink) => (
-              <li id={navLink.label} key={navLink.label}>
+          _expenso.
+        </Link>
+
+        <Menu>
+          <MenuButton className="data-[active]:text-primary">
+            <HiMenuAlt1 className="size-8" />
+          </MenuButton>
+
+          <MenuItems
+            transition
+            anchor="bottom end"
+            className="flex w-52 origin-top-right flex-col gap-1 rounded bg-white p-4 text-textSecondary shadow transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] data-[closed]:scale-95 data-[closed]:opacity-0"
+          >
+            {navLinks.map((item) => (
+              <MenuItem key={item.label}>
                 <NavLink
-                  onClick={close}
-                  to={navLink.path}
+                  to={item.path}
                   className={({ isActive }) =>
                     clsx(
-                      "flex items-center gap-2 rounded p-2 font-semibold transition-all hover:bg-gray-200",
-                      isActive ? "bg-primary/20 text-primary hover:bg-primary/30" : "text-textSecondary",
+                      "flex items-center gap-2 rounded p-1.5 text-sm font-semibold transition duration-100 ease-in-out",
+                      isActive ? "bg-primary text-white data-[focus]:bg-primary" : "data-[focus]:bg-primary/30",
                     )
                   }
                 >
-                  <i className="text-xl">{navLink.icon}</i>
-                  <span className="tracking-wide">{navLink.label}</span>
+                  <i>{item.icon}</i>
+                  {item.label}
                 </NavLink>
-              </li>
+              </MenuItem>
             ))}
-          </ul>
 
-          <hr />
+            <MenuSeparator className="my-1 h-px bg-gray-200" />
 
-          <div>
-            <Button onClick={handleLogout} className="w-full bg-error/10 text-error hover:bg-error/20">
-              Logout
-            </Button>
-          </div>
-        </div>
-      </div>
-    </header>
+            {userOptionsLinks.map((item) => (
+              <MenuItem key={item.label}>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    clsx(
+                      "flex items-center gap-2 rounded p-1.5 text-sm font-semibold transition duration-100 ease-in-out",
+                      isActive ? "bg-primary text-white data-[focus]:bg-primary" : "data-[focus]:bg-primary/30",
+                    )
+                  }
+                >
+                  <i>{item.icon}</i>
+                  {item.label}
+                </NavLink>
+              </MenuItem>
+            ))}
+
+            <MenuItem>
+              <Button
+                onClick={handleLogout}
+                className="w-full rounded bg-error/10 p-1.5 text-sm text-error hover:bg-error/20"
+              >
+                Logout
+              </Button>
+            </MenuItem>
+          </MenuItems>
+        </Menu>
+      </header>
+
+      <div id="header-offset" className="h-16" />
+    </>
   );
 };
 
-const userNavLinks = [
+const navLinks = [
+  {
+    label: "Dashboard",
+    path: "/",
+    icon: <LuLayoutDashboard />,
+  },
+  {
+    label: "Wallets",
+    path: "/wallets",
+    icon: <FaWallet />,
+  },
+  {
+    label: "Transactions",
+    path: "/transactions",
+    icon: <GrTransaction />,
+  },
+];
+
+const userOptionsLinks = [
   {
     label: "Profile",
     path: "/user/profile",

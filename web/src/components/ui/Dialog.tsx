@@ -25,7 +25,7 @@ export const Dialog = ({ title, close, isOpen, children }: DialogProps) => {
         <DialogPanel
           transition
           className={clsx(
-            "relative w-full max-w-lg space-y-4 rounded bg-white duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0",
+            "relative w-full max-w-sm space-y-4 rounded bg-white duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0",
           )}
         >
           <button
