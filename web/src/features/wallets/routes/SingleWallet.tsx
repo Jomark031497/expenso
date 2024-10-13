@@ -40,7 +40,7 @@ export const SingleWallet = () => {
 
       <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
         <Suspense fallback={<>Loading Transactions...</>}>
-          <RecentTransactions userId={user.id} defaultWalletId={walletId} />
+          <RecentTransactions defaultWalletId={walletId} />
         </Suspense>
       </ErrorBoundary>
     </>

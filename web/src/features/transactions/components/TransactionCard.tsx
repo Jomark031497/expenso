@@ -31,3 +31,7 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
     </Link>
   );
 };
+
+export const TransactionCardSkeleton = () => {
+  return <div role="status" className="min-h-[72px] animate-pulse border-2 bg-gray-300 p-2"></div>;
+};

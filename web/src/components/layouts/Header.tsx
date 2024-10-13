@@ -1,5 +1,4 @@
 import { Menu, MenuButton, MenuItems, MenuItem, MenuSeparator, Button } from "@headlessui/react";
-import React from "react";
 import { HiMenuAlt1 } from "react-icons/hi";
 import { Link, NavLink } from "react-router-dom";
 import { MdSettings } from "react-icons/md";
@@ -9,9 +8,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import clsx from "clsx";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
-interface HeaderProps {}
-
-export const Header: React.FC<HeaderProps> = () => {
+export const Header = () => {
   const { handleLogout } = useAuth();
 
   return (

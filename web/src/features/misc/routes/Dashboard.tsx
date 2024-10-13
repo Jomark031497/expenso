@@ -11,8 +11,11 @@ import { FaChevronDown } from "react-icons/fa";
 import { timeRangeOptions } from "@/features/transactions/transactions.data";
 
 const { WalletsList, WalletListLoadingSkeleton } = lazily(() => import("@/features/wallets/components/WalletsList"));
-const { RecentTransactions } = lazily(() => import("@/features/transactions/components/RecentTransactions"));
+const { RecentTransactions, RecentTransactionsSkeleton } = lazily(
+  () => import("@/features/transactions/components/RecentTransactions"),
+);
 const { UserSummary } = lazily(() => import("@/features/users/components/UserSummary"));
+const { CreateTransaction } = lazily(() => import("@/features/transactions/components/CreateTransaction"));
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -20,6 +23,11 @@ export const Dashboard = () => {
   const [timeRangeType, setTimeRangeType] = useState<TimeRangeType>("thisMonth");
 
   const { close: closeCreateWallet, isOpen: isCreateWalletOpen, open: openCreateWallet } = useToggle();
+  const {
+    close: closeCreateTransaction,
+    isOpen: isOpenCreateTransactionOpen,
+    open: openCreateTransaction,
+  } = useToggle();
 
   if (!user) return <Navigate to="/auth/login" />;
 
@@ -83,11 +91,22 @@ export const Dashboard = () => {
         </ErrorBoundary>
       </section>
 
-      <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
-        <Suspense fallback={<>Loading Transactions...</>}>
-          <RecentTransactions userId={user.id} />
-        </Suspense>
-      </ErrorBoundary>
+      <section id="recent-transactions">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-md font-semibold text-textSecondary">Recent Transactions</h2>
+
+          <Button variant="outlined" onClick={openCreateTransaction}>
+            Create Transaction
+          </Button>
+        </div>
+
+        <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
+          <Suspense fallback={<RecentTransactionsSkeleton />}>
+            <RecentTransactions />
+            <CreateTransaction isOpen={isOpenCreateTransactionOpen} onClose={closeCreateTransaction} userId={user.id} />
+          </Suspense>
+        </ErrorBoundary>
+      </section>
     </div>
   );
 };

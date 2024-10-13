@@ -6,7 +6,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const useTransactions = (queryOptions: RequestQueryOptions, walletId?: Wallet["id"]) => {
   return useSuspenseQuery({
-    queryKey: ["transactions", queryOptions.page, queryOptions.pageSize, walletId],
+    queryKey: ["transactions", queryOptions, walletId],
     queryFn: async () => {
       if (!walletId) {
         return await getTransactions(queryOptions);
