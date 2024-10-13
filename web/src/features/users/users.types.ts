@@ -7,3 +7,14 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type TimeRangeType =
+  | "today"
+  | "yesterday"
+  | "last7days"
+  | "last30days"
+  | "thisMonth"
+  | "lastMonth"
+  | "thisYear"
+  | "lastYear";
+// | "custom";

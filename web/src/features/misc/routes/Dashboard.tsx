@@ -6,6 +6,7 @@ import { CreateWallet } from "@/features/wallets/components/CreateWallet";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navigate } from "react-router-dom";
 import { WalletListLoadingSkeleton } from "@/features/wallets/components/WalletsList";
+import { UserSummary } from "@/features/users/components/UserSummary";
 
 const { WalletsList } = lazily(() => import("@/features/wallets/components/WalletsList"));
 const { RecentTransactions } = lazily(() => import("@/features/transactions/components/RecentTransactions"));
@@ -39,6 +40,12 @@ export const Dashboard = () => {
           </Suspense>
         </ErrorBoundary>
       </section>
+
+      <ErrorBoundary fallback={<>Unable to load User Summary</>}>
+        <Suspense fallback={<>Loading User Summary...</>}>
+          <UserSummary />
+        </Suspense>
+      </ErrorBoundary>
 
       <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
         <Suspense fallback={<>Loading Transactions...</>}>

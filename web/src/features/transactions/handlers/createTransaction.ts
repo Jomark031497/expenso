@@ -1,6 +1,5 @@
 import { __SERVER_URL__ } from "@/config/constants";
-import type { NewTransaction } from "@/features/transactions/components/CreateTransaction";
-import type { Transaction } from "@/features/transactions/transactions.types";
+import type { NewTransaction, Transaction } from "@/features/transactions/transactions.types";
 
 export const createTransaction = async (payload: NewTransaction) => {
   const url = new URL("/api/transactions", __SERVER_URL__);

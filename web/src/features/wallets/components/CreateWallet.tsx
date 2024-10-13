@@ -39,6 +39,8 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
       reset();
       queryClient.invalidateQueries({ queryKey: ["wallets"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["userSummary"] });
+
       toast.success("wallet successfully created");
       close();
     },

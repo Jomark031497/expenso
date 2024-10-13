@@ -11,7 +11,7 @@ export type Transaction = {
   amount: string;
   type: "income" | "expense" | "transfer";
   description?: string;
-  date: Date;
+  date: string;
   walletId: string;
   createdAt: Date;
   updatedAt: Date;

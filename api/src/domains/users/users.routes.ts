@@ -11,6 +11,9 @@ export const usersRouter = Router();
 // Get all users
 usersRouter.get("/", requireAuth, requireAdmin, controller.getUsersHandler);
 
+// Get user summary
+usersRouter.get("/summary", requireAuth, controller.getUserSummary);
+
 // Get a single user by ID
 usersRouter.get("/:id", requireAuth, verifyUserOrAdmin, controller.getUserByIdHandler);
 

@@ -1,10 +1,12 @@
-import { eq } from "drizzle-orm";
+import { and, eq, gte, lte, sql } from "drizzle-orm";
 import type { NewUser, User } from "./users.schema.js";
 import { users } from "./users.schema.js";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
 import { Argon2id } from "oslo/password";
 import { excludeFields } from "../../utils/excludeFields.js";
+import { getTimeRange, type TimeRangeType } from "../../utils/getTimeRange.js";
+import { transactions } from "../transactions/transactions.schema.js";
 
 export const getUsers = async () => {
   return await db.query.users.findMany({
@@ -100,4 +102,35 @@ export const deleteUser = async (id: User["id"]) => {
   await db.delete(users).where(eq(users.id, id)).returning();
 
   return { message: "user deleted successfully" };
+};
+
+export const getUserSummary = async (userId: User["id"], timeRangeType: TimeRangeType) => {
+  const timeRange = getTimeRange(timeRangeType);
+
+  const [transactionSummary] = await db
+    .select({
+      totalIncome: sql`SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END)`,
+      totalExpenses: sql`SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END)`,
+    })
+    .from(transactions)
+    .where(
+      and(
+        eq(transactions.userId, userId),
+        gte(transactions.date, timeRange.startDate.toISOString()),
+        lte(transactions.date, timeRange.endDate.toISOString()),
+      ),
+    )
+    .execute();
+
+  if (!transactionSummary) throw new AppError(400, "unable to query transactionSummary");
+
+  const income = (transactionSummary.totalIncome as string) || "0";
+  const expenses = (transactionSummary.totalExpenses as string) || "0";
+
+  return {
+    income,
+    expenses,
+    balance: parseInt(income) - parseInt(expenses),
+    timeRange,
+  };
 };
