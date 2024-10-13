@@ -1,5 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import * as usersService from "./users.service.js";
+import { AppError } from "../../utils/appError.js";
+import type { TimeRangeType } from "../../utils/getTimeRange.js";
 
 export const getUsersHandler = async (_req: Request, res: Response, next: NextFunction) => {
   try {
@@ -46,6 +48,22 @@ export const deleteUserHandler = async (req: Request, res: Response, next: NextF
   try {
     await usersService.deleteUser(req.params.id as string);
     return res.status(204).send(); // 204 for no content on successful delete
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getUserSummary = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = res.locals.user;
+    if (!user) throw new AppError(403, "Forbidden");
+
+    const { timeRangeType } = req.query;
+
+    if (!timeRangeType) throw new AppError(400, "Please provide a timeRangeType");
+
+    const data = await usersService.getUserSummary(user.id, timeRangeType as TimeRangeType);
+    return res.status(200).json(data);
   } catch (error) {
     return next(error);
   }

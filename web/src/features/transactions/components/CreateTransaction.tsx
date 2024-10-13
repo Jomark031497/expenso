@@ -53,6 +53,7 @@ export const CreateTransaction = ({ userId, onClose, isOpen, defaultWalletId }: 
       queryClient.invalidateQueries({ queryKey: ["transaction"] });
       queryClient.invalidateQueries({ queryKey: ["wallet"] });
       queryClient.invalidateQueries({ queryKey: ["walletTransactions"] });
+      queryClient.invalidateQueries({ queryKey: ["userSummary"] });
 
       toast.success("Transaction created successfully");
       reset();

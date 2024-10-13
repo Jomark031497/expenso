@@ -34,6 +34,7 @@ export const createWallet = async (payload: NewWallet) => {
         walletId: wallet.id,
         userId: payload.userId,
         category: "initial balance",
+        date: new Date().toISOString(),
       })
       .returning();
 
