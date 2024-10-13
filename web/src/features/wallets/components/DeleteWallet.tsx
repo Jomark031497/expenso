@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { deleteWallet } from "@/features/wallets/handlers/deleteWallet";
-import { useWallet } from "@/features/wallets/hooks/useWallet";
+import { useSingleWallet } from "@/features/wallets/hooks/useSingleWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 import { queryClient } from "@/lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ interface DeleteWalletProps {
 }
 
 export const DeleteWallet = ({ walletId, isOpen, close }: DeleteWalletProps) => {
-  const { data: wallet } = useWallet(walletId);
+  const { data: wallet } = useSingleWallet(walletId);
 
   const navigate = useNavigate();
 

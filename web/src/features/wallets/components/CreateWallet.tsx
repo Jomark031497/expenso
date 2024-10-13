@@ -26,6 +26,7 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
     formState: { errors },
   } = useForm<NewWallet>({
     resolver: zodResolver(createWalletSchema),
+    defaultValues: { balance: "0.00" },
   });
 
   const { mutate, isPending } = useMutation({
@@ -50,15 +51,18 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
     },
   });
 
-  const onSubmit: SubmitHandler<NewWallet> = async (values) => {
-    mutate(values);
-  };
+  const onSubmit: SubmitHandler<NewWallet> = (values) => mutate(values);
 
   return (
     <Dialog isOpen={isOpen} close={close} title="Create Wallet">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <Input label="Name" {...register("name")} formError={errors.name} />
-        <Select label="Type" formError={errors.type} {...register("type")}>
+        <Input
+          label="Name *"
+          {...register("name")}
+          formError={errors.name}
+          placeholder="ex. Acme Credit Card, Acme Savings"
+        />
+        <Select label="Type *" formError={errors.type} {...register("type")}>
           <option value="cash">Cash</option>
           <option value="debit_card">Debit Card</option>
           <option value="credit_card">Credit Card</option>
@@ -66,9 +70,14 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
 
         <Input label="Balance" {...register("balance")} formError={errors.balance} />
 
-        <Input label="Description" {...register("description")} formError={errors.description} />
+        <Input
+          label="Description"
+          {...register("description")}
+          formError={errors.description}
+          placeholder="ex. My main credit card, Emergency funds"
+        />
 
-        <Button type="submit" disabled={isPending} className="mt-2 w-full max-w-xs self-center bg-primary text-white">
+        <Button type="submit" disabled={isPending} className="self-center bg-primary text-white">
           Create
         </Button>
       </form>

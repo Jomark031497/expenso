@@ -1,4 +1,4 @@
-import { useWallet } from "@/features/wallets/hooks/useWallet";
+import { useSingleWallet } from "@/features/wallets/hooks/useSingleWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 import { toCurrency } from "@/utils/toCurrency";
 import { toFormattedTitleCase } from "@/utils/toFormattedTitleCase";
@@ -6,12 +6,10 @@ import { FaMoneyBillWave, FaCreditCard, FaMoneyCheck } from "react-icons/fa";
 
 interface WalletCardProps {
   showDescription?: boolean;
-  walletId: Wallet["id"];
+  wallet: Wallet;
 }
 
-export const WalletCard = ({ walletId, showDescription = false }: WalletCardProps) => {
-  const { data: wallet } = useWallet(walletId as string);
-
+export const WalletCard = ({ wallet, showDescription = false }: WalletCardProps) => {
   return (
     <div className="relative max-w-md flex-1 rounded bg-gradient-to-r from-primaryDark to-primary p-2 text-white">
       <div className="flex flex-1 items-center gap-2">

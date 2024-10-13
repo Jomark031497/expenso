@@ -16,9 +16,6 @@ export default {
         inputBg: "#F5F5F5", // For input fields/forms background
         borderColor: "#E0E0E0", // For borders (input fields, cards, dividers)
       },
-      fontFamily: {
-        sans: ["Poppins", "sans-serif"],
-      },
     },
   },
   plugins: [],

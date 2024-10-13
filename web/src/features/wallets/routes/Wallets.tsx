@@ -1,8 +1,9 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { WalletListLoadingSkeleton, WalletsList } from "@/features/wallets/components/WalletsList";
 import { Suspense } from "react";
+import { lazily } from "react-lazily";
 import { Navigate } from "react-router-dom";
 
+const { WalletsList } = lazily(() => import("@/features/wallets/components/WalletsList"));
 export const Wallets = () => {
   const { user } = useAuth();
 
@@ -11,7 +12,7 @@ export const Wallets = () => {
   return (
     <>
       <p>This is wallets</p>
-      <Suspense fallback={<WalletListLoadingSkeleton />}>
+      <Suspense fallback={<p>Loading Wallets List...</p>}>
         <WalletsList />
       </Suspense>
     </>

@@ -3,7 +3,7 @@ import { Dialog } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { updateWallet } from "@/features/wallets/handlers/updateWallet";
-import { useWallet } from "@/features/wallets/hooks/useWallet";
+import { useSingleWallet } from "@/features/wallets/hooks/useSingleWallet";
 import { createWalletSchema } from "@/features/wallets/wallets.schema";
 import type { NewWallet, Wallet } from "@/features/wallets/wallets.types";
 import { queryClient } from "@/lib/queryClient";
@@ -20,7 +20,7 @@ interface UpdateWalletProps {
 }
 
 export const UpdateWallet = ({ isOpen, close, walletId }: UpdateWalletProps) => {
-  const { data: wallet } = useWallet(walletId);
+  const { data: wallet } = useSingleWallet(walletId);
 
   const {
     handleSubmit,
