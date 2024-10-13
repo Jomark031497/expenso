@@ -15,10 +15,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...rest}
         ref={ref}
         className={clsx(
-          "rounded bg-primary/10 px-3 py-1.5 text-xs font-semibold transition-all",
+          "rounded px-3 py-1.5 text-xs font-semibold transition-all",
           variant === "contained"
             ? "border border-primary bg-primary text-white hover:bg-primaryDark"
-            : "border border-primary text-primary shadow-sm hover:shadow-sm hover:shadow-primary",
+            : "border border-primary bg-primary/10 text-primary shadow-sm hover:shadow-sm hover:shadow-primary",
           rest.className,
         )}
       >
