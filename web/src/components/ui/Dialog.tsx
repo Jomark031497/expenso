@@ -36,7 +36,7 @@ export const Dialog = ({ title, close, isOpen, children }: DialogProps) => {
             <IoMdClose />
           </button>
 
-          {title && <DialogTitle className="px-4 text-lg font-bold">{title}</DialogTitle>}
+          {title && <DialogTitle className="px-4 text-lg font-bold text-textSecondary">{title}</DialogTitle>}
 
           <div className="p-4">{children}</div>
         </DialogPanel>

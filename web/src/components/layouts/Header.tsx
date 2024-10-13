@@ -17,11 +17,7 @@ export const Header: React.FC<HeaderProps> = () => {
   return (
     <>
       <header className="fixed flex h-16 w-full max-w-md items-center justify-between border-b px-4 shadow-inner">
-        <Link
-          onClick={close}
-          to="/"
-          className="text-xl font-bold tracking-wider text-primary transition-all hover:text-primary/80"
-        >
+        <Link to="/" className="text-xl font-bold tracking-wider text-primary transition-all hover:text-primary/80">
           _expenso.
         </Link>
 

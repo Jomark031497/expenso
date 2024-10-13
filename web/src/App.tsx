@@ -28,7 +28,10 @@ const router = createBrowserRouter([
                 path: "wallets",
                 children: [
                   { index: true, element: <Wallets /> },
-                  { path: ":walletId", element: <SingleWallet /> },
+                  {
+                    path: ":walletId",
+                    element: <SingleWallet />,
+                  },
                 ],
               },
               {

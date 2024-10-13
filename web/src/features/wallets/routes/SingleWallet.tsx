@@ -1,35 +1,69 @@
 import { useToggle } from "@/features/misc/hooks/useToggle";
-import { WalletCard, WalletCardSkeleton } from "@/features/wallets/components/WalletCard";
+import { WalletCard } from "@/features/wallets/components/WalletCard";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import { FaChevronDown } from "react-icons/fa";
 import { Navigate, useParams } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { RecentTransactions } from "@/features/transactions/components/RecentTransactions";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { lazily } from "react-lazily";
+import { useSingleWallet } from "@/features/wallets/hooks/useSingleWallet";
+import type { Wallet } from "@/features/wallets/wallets.types";
+import { DeleteWallet } from "@/features/wallets/components/DeleteWallet";
+import { UpdateWallet } from "@/features/wallets/components/UpdateWallet";
 
-const { UpdateWallet } = lazily(() => import("@/features/wallets/components/UpdateWallet"));
-const { DeleteWallet } = lazily(() => import("@/features/wallets/components/DeleteWallet"));
+const { RecentTransactions } = lazily(() => import("@/features/transactions/components/RecentTransactions"));
 
 export const SingleWallet = () => {
   const { walletId: walletIdParams } = useParams();
-  const walletId = walletIdParams as string;
+  const walletId = walletIdParams ?? "";
 
   const { user } = useAuth();
-
-  const { close: closeUpdateDialog, open: openUpdateDialog, isOpen: isUpdateDialogOpen } = useToggle();
-  const { close: closeDeleteDialog, open: openDeleteDialog, isOpen: isDeleteDialogOpen } = useToggle();
 
   if (!user) return <Navigate to="/auth/login" />;
 
   return (
     <>
-      <div className="mb-2 flex justify-end">
+      <ErrorBoundary fallback={<>Unable to load Wallet Info</>}>
+        <Suspense
+          fallback={
+            <div>
+              <p>Loading wallet info</p>
+            </div>
+          }
+        >
+          <WalletInfo walletId={walletId} />
+        </Suspense>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
+        <Suspense fallback={<>Loading Transactions...</>}>
+          <RecentTransactions userId={user.id} defaultWalletId={walletId} />
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  );
+};
+
+interface WalletInfoProps {
+  walletId: Wallet["id"];
+}
+
+const WalletInfo = ({ walletId }: WalletInfoProps) => {
+  const { data: wallet } = useSingleWallet(walletId);
+
+  const { close: closeUpdateDialog, open: openUpdateDialog, isOpen: isUpdateDialogOpen } = useToggle();
+  const { close: closeDeleteDialog, open: openDeleteDialog, isOpen: isDeleteDialogOpen } = useToggle();
+
+  return (
+    <section id="wallet" className="mb-8">
+      <div className="mb-2 flex items-center justify-between">
+        <h2 className="text-md font-semibold text-textSecondary">Wallet Info</h2>
+
         <Menu>
-          <MenuButton className="flex items-center gap-2 rounded border border-primary px-3 py-1.5 text-sm font-semibold text-primary">
+          <MenuButton className="flex items-center gap-2 rounded border border-primary px-3 py-1.5 text-xs font-semibold text-primary">
             Options
             <FaChevronDown className="fill-primary" />
           </MenuButton>
@@ -58,34 +92,13 @@ export const SingleWallet = () => {
               </button>
             </MenuItem>
           </MenuItems>
-
-          <ErrorBoundary fallback={<>Update Wallet failed</>}>
-            <Suspense fallback={<>Loading Update Wallet...</>}>
-              <UpdateWallet close={closeUpdateDialog} isOpen={isUpdateDialogOpen} walletId={walletId} />
-            </Suspense>
-          </ErrorBoundary>
-
-          <ErrorBoundary fallback={<>Delete Wallet failed</>}>
-            <Suspense fallback={<>Loading Delete Wallet...</>}>
-              <DeleteWallet close={closeDeleteDialog} isOpen={isDeleteDialogOpen} walletId={walletId} />
-            </Suspense>
-          </ErrorBoundary>
         </Menu>
+
+        <UpdateWallet close={closeUpdateDialog} isOpen={isUpdateDialogOpen} walletId={walletId} />
+        <DeleteWallet close={closeDeleteDialog} isOpen={isDeleteDialogOpen} walletId={walletId} />
       </div>
 
-      <section id="wallet" className="mb-8">
-        <ErrorBoundary fallback={<>Unable to load Wallet</>}>
-          <Suspense fallback={<WalletCardSkeleton />}>
-            <WalletCard walletId={walletId} showDescription />
-          </Suspense>
-        </ErrorBoundary>
-      </section>
-
-      <ErrorBoundary fallback={<>Unable to load Transactions List</>}>
-        <Suspense fallback={<>Loading Transactions...</>}>
-          <RecentTransactions userId={user.id} defaultWalletId={walletId} />
-        </Suspense>
-      </ErrorBoundary>
-    </>
+      <WalletCard wallet={wallet} showDescription />
+    </section>
   );
 };

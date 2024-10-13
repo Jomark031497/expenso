@@ -5,20 +5,25 @@ import { Button as HButton } from "@headlessui/react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
+  variant?: "contained" | "outlined";
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ children, ...rest }, ref) => {
-  return (
-    <HButton
-      {...rest}
-      ref={ref}
-      className={clsx(
-        "inline-flex items-center justify-center gap-2 rounded px-3 py-1.5",
-        "shadow-inner shadow-white/10",
-        rest.className,
-      )}
-    >
-      {children}
-    </HButton>
-  );
-});
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, variant = "contained", ...rest }, ref) => {
+    return (
+      <HButton
+        {...rest}
+        ref={ref}
+        className={clsx(
+          "rounded bg-primary/10 px-3 py-1.5 text-xs font-semibold transition-all",
+          variant === "contained"
+            ? "border border-primary bg-primary text-white hover:bg-primaryDark"
+            : "border border-primary text-primary shadow-sm hover:shadow-sm hover:shadow-primary",
+          rest.className,
+        )}
+      >
+        {children}
+      </HButton>
+    );
+  },
+);
