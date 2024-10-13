@@ -65,12 +65,8 @@ export const Login = () => {
           Forgot your Password?
         </Link>
 
-        <Button type="submit" className="border-2 border-transparent bg-primary text-white hover:bg-primary/95">
+        <Button type="submit" variant="contained">
           Login
-        </Button>
-
-        <Button type="button" className="border-2 hover:bg-gray-100">
-          Login with Github
         </Button>
 
         <p className="self-center text-sm">
