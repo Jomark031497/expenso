@@ -10,7 +10,7 @@ interface AppProviderProps {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <ErrorBoundary fallback={<>Something went wrong with the app</>}>
+    <ErrorBoundary fallback={<ErrorFallback />}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
         {children}
@@ -18,3 +18,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     </ErrorBoundary>
   );
 };
+
+const ErrorFallback = () => (
+  <div role="alert">
+    <h2>Oops! Something went wrong.</h2>
+    <p>We're sorry for the inconvenience. Please try refreshing the page or contact support if the problem persists.</p>
+  </div>
+);
