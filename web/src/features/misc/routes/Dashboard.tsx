@@ -1,5 +1,5 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { lazily } from "react-lazily";
 import { useToggle } from "@/features/misc/hooks/useToggle";
 import { ErrorBoundary } from "react-error-boundary";
@@ -8,7 +8,7 @@ import { CreateWallet } from "@/features/wallets/components/CreateWallet";
 import { Button } from "@/components/ui/Button";
 import type { TimeRangeType } from "@/features/users/users.types";
 import { FaChevronDown } from "react-icons/fa";
-import { timeRangeOptions } from "@/features/transactions/transactions.data";
+import { useTimeRangeType } from "@/features/wallets/hooks/useTimeRangeType";
 
 const { WalletsList, WalletListLoadingSkeleton } = lazily(() => import("@/features/wallets/components/WalletsList"));
 const { RecentTransactions, RecentTransactionsSkeleton } = lazily(
@@ -20,7 +20,7 @@ const { CreateTransaction } = lazily(() => import("@/features/transactions/compo
 export const Dashboard = () => {
   const { user } = useAuth();
 
-  const [timeRangeType, setTimeRangeType] = useState<TimeRangeType>("thisMonth");
+  const { setTimeRangeType, timeRangeOptions, timeRangeType } = useTimeRangeType();
 
   const { close: closeCreateWallet, isOpen: isCreateWalletOpen, open: openCreateWallet } = useToggle();
   const {

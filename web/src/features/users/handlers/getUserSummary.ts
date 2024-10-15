@@ -1,10 +1,12 @@
 import { __SERVER_URL__ } from "@/config/constants";
 import type { TimeRangeType } from "@/features/users/users.types";
+import type { Wallet } from "@/features/wallets/wallets.types";
 
-export const getUserSummary = async (timeRangeType: TimeRangeType) => {
+export const getUserSummary = async (timeRangeType: TimeRangeType, walletId?: Wallet["id"]) => {
   const url = new URL("/api/users/summary", __SERVER_URL__);
 
   url.searchParams.set("timeRangeType", timeRangeType);
+  walletId && url.searchParams.set("wallet_id", walletId);
 
   const response = await fetch(url, {
     method: "GET",

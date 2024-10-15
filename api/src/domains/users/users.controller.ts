@@ -58,11 +58,11 @@ export const getUserSummary = async (req: Request, res: Response, next: NextFunc
     const user = res.locals.user;
     if (!user) throw new AppError(403, "Forbidden");
 
-    const { timeRangeType } = req.query;
+    const { timeRangeType, wallet_id } = req.query;
 
     if (!timeRangeType) throw new AppError(400, "Please provide a timeRangeType");
 
-    const data = await usersService.getUserSummary(user.id, timeRangeType as TimeRangeType);
+    const data = await usersService.getUserSummary(user.id, timeRangeType as TimeRangeType, wallet_id as string);
     return res.status(200).json(data);
   } catch (error) {
     return next(error);

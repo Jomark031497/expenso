@@ -7,6 +7,7 @@ import { Argon2id } from "oslo/password";
 import { excludeFields } from "../../utils/excludeFields.js";
 import { getTimeRange, type TimeRangeType } from "../../utils/getTimeRange.js";
 import { transactions } from "../transactions/transactions.schema.js";
+import type { Wallet } from "../wallets/wallets.schema.js";
 
 export const getUsers = async () => {
   return await db.query.users.findMany({
@@ -104,7 +105,7 @@ export const deleteUser = async (id: User["id"]) => {
   return { message: "user deleted successfully" };
 };
 
-export const getUserSummary = async (userId: User["id"], timeRangeType: TimeRangeType) => {
+export const getUserSummary = async (userId: User["id"], timeRangeType: TimeRangeType, walletId?: Wallet["id"]) => {
   const timeRange = getTimeRange(timeRangeType);
 
   const [transactionSummary] = await db
@@ -118,6 +119,7 @@ export const getUserSummary = async (userId: User["id"], timeRangeType: TimeRang
         eq(transactions.userId, userId),
         gte(transactions.date, timeRange.startDate.toISOString()),
         lte(transactions.date, timeRange.endDate.toISOString()),
+        walletId ? eq(transactions.walletId, walletId) : undefined,
       ),
     )
     .execute();
