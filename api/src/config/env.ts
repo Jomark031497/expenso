@@ -6,6 +6,9 @@ const envSchema = z.object({
   DATABASE_URL: z.string().url(),
   CLIENT_URL: z.string().url(),
   BASE_URL: z.string().url(),
+  SECRET_KEY: z.string(),
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -15,4 +18,4 @@ if (!parsedEnv.success) {
   process.exit(1);
 }
 
-export const env = parsedEnv.data;
+export const envs = parsedEnv.data;

@@ -14,15 +14,16 @@
     "test:watch": "NODE_ENV=test node --import tsx --env-file=.env --test --watch ./src/**/*.test.ts"
   },
   "dependencies": {
-    "@lucia-auth/adapter-drizzle": "^1.1.0",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "@paralleldrive/cuid2": "^2.2.2",
+    "arctic": "^1.9.2",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "drizzle-orm": "^0.33.0",
     "drizzle-zod": "^0.5.1",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
-    "lucia": "^3.2.0",
     "oslo": "^1.2.1",
     "pino": "^9.4.0",
     "postgres": "^3.4.4",

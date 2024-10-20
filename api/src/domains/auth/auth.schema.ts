@@ -20,3 +20,5 @@ export const sessionTable = pgTable(
     };
   },
 );
+
+export type Session = typeof sessionTable.$inferSelect;
