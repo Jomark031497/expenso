@@ -1,9 +1,8 @@
 import express from "express";
 import { initializeRoutes } from "./routes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import type { Session, User } from "lucia";
 import cors from "cors";
-import { env } from "./config/env.js";
+import { envs } from "./config/env.js";
 import { csrf } from "./middlewares/csrf.js";
 import { rateLimit } from "express-rate-limit";
 
@@ -13,7 +12,7 @@ export const createApp = () => {
   app.use(
     cors({
       credentials: true,
-      origin: env.CLIENT_URL,
+      origin: envs.CLIENT_URL,
       methods: ["GET", "POST", "PATCH", "DELETE"],
     }),
   );
@@ -39,13 +38,3 @@ export const createApp = () => {
 
   return app;
 };
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Locals {
-      user: User | null;
-      session: Session | null;
-    }
-  }
-}

@@ -1,13 +1,13 @@
 import { logger } from "./utils/logger.js";
 import { createApp } from "./app.js";
 import { closeDbConnection } from "./db/dbInstance.js"; // Import closeDbConnection
-import { env } from "./config/env.js";
+import { envs } from "./config/env.js";
 
 const main = async () => {
   const app = createApp();
 
-  const server = app.listen(env.PORT, () => {
-    logger.info(`Server started at http://localhost:${env.PORT}`, { port: env.PORT });
+  const server = app.listen(envs.PORT, () => {
+    logger.info(`Server started at http://localhost:${envs.PORT}`, { port: envs.PORT });
   });
 
   // Graceful shutdown with a timeout and DB close

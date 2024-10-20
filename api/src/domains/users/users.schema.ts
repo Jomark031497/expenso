@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
-import { pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, smallint, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const USER_ROLES = ["user", "admin"] as const;
@@ -10,10 +10,12 @@ export const rolesEnum = pgEnum("roles", USER_ROLES);
 export const users = pgTable("users", {
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => createId()),
+    .$defaultFn(() => createId())
+    .notNull(),
+  githubId: smallint("github_id").unique(),
   username: varchar("username", { length: 256 }).notNull().unique(),
-  email: varchar("email", { length: 256 }).notNull().unique(),
-  password: varchar("password", { length: 256 }).notNull(),
+  email: varchar("email", { length: 256 }).unique(),
+  password: varchar("password", { length: 256 }),
   fullName: varchar("full_name", { length: 256 }),
   role: rolesEnum("role").default("user"),
   createdAt: timestamp("created_at").notNull().defaultNow(),

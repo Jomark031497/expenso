@@ -20,15 +20,10 @@ export const getUsers = async () => {
 export const getUser = async (
   field: keyof User,
   value: string,
-  options: { includePassword?: boolean; returnError?: boolean } = { includePassword: false, returnError: true },
+  options: { includePassword?: boolean; returnError?: boolean } = { returnError: true },
 ) => {
   const user = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users[field], value),
-    ...(!options.includePassword && {
-      columns: {
-        password: false,
-      },
-    }),
   });
 
   if (!user && (options.returnError ?? true)) {

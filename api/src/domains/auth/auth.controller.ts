@@ -1,15 +1,22 @@
 import type { Request, Response, NextFunction } from "express";
 import * as authService from "./auth.service.js";
 import { AppError } from "../../utils/appError.js";
+import {
+  createSession,
+  deleteSessionTokenCookie,
+  generateSessionToken,
+  setSessionTokenCookie,
+} from "../../lib/sessions.js";
 
 export const loginUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { sessionCookie, user } = await authService.loginUser(req.body);
+    const user = await authService.loginUser(req.body);
 
-    return res
-      .status(200)
-      .cookie(sessionCookie.name, sessionCookie.value, { ...sessionCookie.attributes, maxAge: 7 * 24 * 60 * 60 * 1000 })
-      .json(user);
+    const token = generateSessionToken();
+    const session = await createSession(token, user.id);
+    setSessionTokenCookie(res, token, session.expiresAt);
+
+    return res.status(200).json(user);
   } catch (error) {
     return next(error);
   }
@@ -17,11 +24,13 @@ export const loginUserHandler = async (req: Request, res: Response, next: NextFu
 
 export const signUpUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { sessionCookie, user } = await authService.signUpUser(req.body);
-    return res
-      .status(201)
-      .cookie(sessionCookie.name, sessionCookie.value, { ...sessionCookie.attributes, maxAge: 7 * 24 * 60 * 60 * 1000 })
-      .json(user);
+    const user = await authService.signUpUser(req.body);
+
+    const token = generateSessionToken();
+    const session = await createSession(token, user.id);
+    setSessionTokenCookie(res, token, session.expiresAt);
+
+    return res.status(201).json(user);
   } catch (error) {
     return next(error);
   }
@@ -43,10 +52,11 @@ export const getAuthenticatedUserHandler = async (_req: Request, res: Response, 
 export const logoutUserHandler = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const session = res.locals.session;
+
     if (!session) throw new AppError(403, "forbidden: no session found");
 
-    const data = await authService.logoutUser(session.id);
-    return res.status(200).json(data);
+    deleteSessionTokenCookie(res);
+    return res.status(200).json({ message: "logout success" });
   } catch (error) {
     return next(error);
   }
