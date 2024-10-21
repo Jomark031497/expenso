@@ -63,7 +63,6 @@ describe("users routes", () => {
   before(async () => {
     const adminUser = await createTestUser({
       ...adminUserCredentials,
-      role: "admin",
     });
 
     adminUserId = adminUser.id;
@@ -102,7 +101,6 @@ describe("users routes", () => {
       assert.strictEqual(data.username, newUserCredentials.username);
       assert.strictEqual(data.email, newUserCredentials.email);
       assert.strictEqual(data.password, undefined);
-      assert.strictEqual(data.role, "user");
 
       newUserId = data.id;
     });

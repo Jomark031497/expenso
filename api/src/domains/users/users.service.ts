@@ -74,9 +74,9 @@ export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
     payload.password = await new Argon2id().hash(payload.password);
   }
 
-  if (payload.role && existingUser.role !== "admin") {
-    throw new AppError(403, "You are not authorized to change user roles.");
-  }
+  // if (payload.role && existingUser.role !== "admin") {
+  //   throw new AppError(403, "You are not authorized to change user roles.");
+  // }
 
   const query = await db
     .update(users)

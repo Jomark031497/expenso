@@ -5,10 +5,7 @@ import type { NewUser, User } from "../users/users.schema.js";
 import { createUser, getUser } from "../users/users.service.js";
 
 export const signUpUser = async (payload: NewUser) => {
-  const user = await createUser({
-    ...payload,
-    role: "user",
-  });
+  const user = await createUser(payload);
 
   return user;
 };
