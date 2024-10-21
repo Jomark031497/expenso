@@ -33,13 +33,19 @@ describe("users routes", () => {
   let adminUserId: string;
 
   const createTestUser = async (payload: NewUser) => {
-    const hashedPassword = await new Argon2id().hash(payload.password);
+    let hashedPassword;
+
+    if (payload.password) {
+      hashedPassword = await new Argon2id().hash(payload.password);
+    }
 
     const [user] = await db
       .insert(users)
       .values({
         ...payload,
-        password: hashedPassword,
+        ...(payload.password && {
+          password: hashedPassword,
+        }),
       })
       .returning();
     if (!user) throw new Error("user create failed");

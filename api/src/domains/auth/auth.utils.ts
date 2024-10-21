@@ -1,10 +1,41 @@
 import { eq } from "drizzle-orm";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import { sha256 } from "@oslojs/crypto/sha2";
-import { sessionTable, type Session } from "../domains/auth/auth.schema.js";
-import { users, type User } from "../domains/users/users.schema.js";
-import { db } from "../db/dbInstance.js";
 import type { Response } from "express";
+import { Discord, GitHub } from "arctic";
+import { envs } from "../../config/env.js";
+import { db } from "../../db/dbInstance.js";
+import type { User } from "../users/users.schema.js";
+import { users } from "../users/users.schema.js";
+import type { Session } from "./auth.schema.js";
+import { sessionTable } from "./auth.schema.js";
+
+export interface GitHubUser {
+  id: number;
+  login: string;
+  email?: string;
+}
+
+export interface DiscordUser {
+  id: string;
+  username: string;
+  email: string;
+}
+
+export const github = new GitHub(envs.GITHUB_CLIENT_ID, envs.GITHUB_CLIENT_SECRET);
+export const discord = new Discord(
+  envs.DISCORD_CLIENT_ID,
+  envs.DISCORD_CLIENT_SECRET,
+  `${envs.BASE_URL}/api/auth/login/discord/callback`,
+);
+
+export const cookieOptions = {
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  httpOnly: true,
+  maxAge: 60 * 10, // 10 min
+  sameSite: "lax",
+};
 
 export function setSessionTokenCookie(response: Response, token: string, expiresAt: Date): void {
   response.cookie("session", token, {

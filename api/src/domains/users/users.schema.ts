@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const users = pgTable("users", {
@@ -8,9 +8,11 @@ export const users = pgTable("users", {
     .primaryKey()
     .$defaultFn(() => createId())
     .notNull(),
+  githubId: integer("github_id").unique(),
+  discordId: varchar("discord_id").unique(),
   username: varchar("username", { length: 256 }).notNull().unique(),
-  email: varchar("email", { length: 256 }).unique().notNull(),
-  password: varchar("password", { length: 256 }).notNull(),
+  email: varchar("email", { length: 256 }).unique(),
+  password: varchar("password", { length: 256 }),
   fullName: varchar("full_name", { length: 256 }),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

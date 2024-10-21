@@ -19,7 +19,7 @@ export const getUsers = async () => {
 
 export const getUser = async (
   field: keyof User,
-  value: string,
+  value: string | number,
   options: { includePassword?: boolean; returnError?: boolean } = { returnError: true },
 ) => {
   const user = await db.query.users.findFirst({
@@ -34,21 +34,33 @@ export const getUser = async (
 };
 
 export const createUser = async (payload: NewUser) => {
-  const usernameExists = await getUser("username", payload.username, { returnError: false });
-  const emailExists = await getUser("email", payload.email, { returnError: false });
-
   const errors: Record<string, unknown> = {};
+
+  const usernameExists = await getUser("username", payload.username, { returnError: false });
+  let emailExists;
+  let hashedPassword;
+
+  if (payload.email) {
+    emailExists = await getUser("email", payload.email, { returnError: false });
+  }
 
   if (usernameExists) errors.username = "username is already taken";
   if (emailExists) errors.email = "email is already taken";
 
   if (Object.keys(errors).length) throw new AppError(400, "user creation failed", errors);
 
-  const hashedPassword = await new Argon2id().hash(payload.password);
+  if (payload.password) {
+    hashedPassword = await new Argon2id().hash(payload.password);
+  }
 
   const [user] = await db
     .insert(users)
-    .values({ ...payload, password: hashedPassword })
+    .values({
+      ...payload,
+      ...(hashedPassword && {
+        password: hashedPassword,
+      }),
+    })
     .returning();
 
   if (!user) throw new AppError(400, "create user failed");
