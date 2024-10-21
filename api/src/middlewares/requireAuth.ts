@@ -1,10 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
-import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "../lib/sessions.js";
 import { parseCookies } from "oslo/cookie";
+import { validateSessionToken, deleteSessionTokenCookie, setSessionTokenCookie } from "../domains/auth/auth.utils.js";
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const cookies = parseCookies(req.headers.cookie ?? "");
-  const token = cookies.get("session") ?? "";
+  const token = parseCookies(req.headers.cookie ?? "").get("session") ?? "";
 
   const { session, user } = await validateSessionToken(token);
 

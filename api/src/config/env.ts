@@ -9,6 +9,8 @@ const envSchema = z.object({
   SECRET_KEY: z.string(),
   GITHUB_CLIENT_ID: z.string(),
   GITHUB_CLIENT_SECRET: z.string(),
+  DISCORD_CLIENT_ID: z.string(),
+  DISCORD_CLIENT_SECRET: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
