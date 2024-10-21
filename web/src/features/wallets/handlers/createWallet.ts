@@ -1,6 +1,5 @@
 import { __SERVER_URL__ } from "@/config/constants";
-import type { NewWallet } from "@/features/wallets/components/CreateWallet";
-import type { Wallet } from "@/features/wallets/wallets.types";
+import type { NewWallet, Wallet } from "@/features/wallets/wallets.types";
 
 export const createWallet = async (payload: NewWallet & { userId: Wallet["userId"] }) => {
   const url = new URL("/api/wallets", __SERVER_URL__);

@@ -2,7 +2,6 @@ import { eq } from "drizzle-orm";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
 import { wallets, type NewWallet, type Wallet } from "./wallets.schema.js";
-import { transactions } from "../transactions/transactions.schema.js";
 
 export const getWallets = async (userId: Wallet["userId"]) => {
   return await db.query.wallets.findMany({
@@ -20,28 +19,8 @@ export const getWalletById = async (walletId: Wallet["id"], options: { returnErr
 };
 
 export const createWallet = async (payload: NewWallet) => {
-  return await db.transaction(async (tx) => {
-    const [wallet] = await tx.insert(wallets).values(payload).returning();
-
-    if (!wallet) throw new AppError(400, "Database Error. Create wallet failed");
-
-    const [transaction] = await tx
-      .insert(transactions)
-      .values({
-        name: "Initial Balance",
-        type: wallet.balance < "0" ? "expense" : "income",
-        amount: wallet.balance,
-        walletId: wallet.id,
-        userId: payload.userId,
-        category: "initial balance",
-        date: new Date().toISOString(),
-      })
-      .returning();
-
-    if (!transaction) throw new AppError(400, "Database Error. Create wallet failed");
-
-    return wallet;
-  });
+  const [wallet] = await db.insert(wallets).values(payload).returning();
+  return wallet;
 };
 
 export const updateWallet = async (walletId: Wallet["id"], payload: Partial<NewWallet>) => {

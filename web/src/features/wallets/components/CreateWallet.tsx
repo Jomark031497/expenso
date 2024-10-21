@@ -33,7 +33,6 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
     mutationFn: async (payload: NewWallet) =>
       await createWallet({
         ...payload,
-        balance: payload.balance.replace(/,/g, ""), // Strip commas before submitting
         userId,
       }),
     onSuccess: () => {
@@ -67,8 +66,6 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
           <option value="debit_card">Debit Card</option>
           <option value="credit_card">Credit Card</option>
         </Select>
-
-        <Input label="Balance" {...register("balance")} formError={errors.balance} />
 
         <Input
           label="Description"
