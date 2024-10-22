@@ -23,6 +23,7 @@
     "drizzle-zod": "^0.5.1",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
+    "helmet": "^8.0.0",
     "oslo": "^1.2.1",
     "pino": "^9.4.0",
     "postgres": "^3.4.4",
