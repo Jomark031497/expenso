@@ -17,7 +17,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noUncheckedIndexedAccess": true,
-    "moduleDetection": "force"
+    "moduleDetection": "force",
+    "typeRoots": ["./src/types/**"]
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*"]

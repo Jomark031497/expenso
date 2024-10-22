@@ -23,19 +23,19 @@ export interface DiscordUser {
 }
 
 export const github = new GitHub(envs.GITHUB_CLIENT_ID, envs.GITHUB_CLIENT_SECRET);
+
 export const discord = new Discord(
   envs.DISCORD_CLIENT_ID,
   envs.DISCORD_CLIENT_SECRET,
   `${envs.BASE_URL}/api/auth/login/discord/callback`,
 );
 
-export const cookieOptions = {
-  secure: process.env.NODE_ENV === "production",
-  path: "/",
-  httpOnly: true,
-  maxAge: 60 * 10, // 10 min
-  sameSite: "lax",
-};
+export async function createSessionAndSetCookie(res: Response, userId: User["id"]) {
+  const token = generateSessionToken();
+  const session = await createSession(token, userId);
+  setSessionTokenCookie(res, token, session.expiresAt);
+  return { token, session };
+}
 
 export function setSessionTokenCookie(response: Response, token: string, expiresAt: Date): void {
   response.cookie("session", token, {

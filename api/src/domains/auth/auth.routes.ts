@@ -6,6 +6,7 @@ import { requireAuth } from "../../middlewares/requireAuth.js";
 
 export const authRouter = Router();
 
+// regular username/password routes
 authRouter.post("/sign-up", validateSchema(insertUserSchema), controller.signUpUserHandler);
 authRouter.post(
   "/login",

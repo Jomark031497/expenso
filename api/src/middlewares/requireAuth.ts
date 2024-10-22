@@ -9,7 +9,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 
   if (session === null) {
     deleteSessionTokenCookie(res);
-    return res.status(401).end();
+    return res.status(401).json({ message: "unauthorized" });
   }
 
   setSessionTokenCookie(res, token, session.expiresAt);

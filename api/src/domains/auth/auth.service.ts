@@ -6,7 +6,6 @@ import { createUser, getUser } from "../users/users.service.js";
 
 export const signUpUser = async (payload: NewUser) => {
   const user = await createUser(payload);
-
   return user;
 };
 
