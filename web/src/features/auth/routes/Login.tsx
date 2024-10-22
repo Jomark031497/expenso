@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { __SERVER_URL__ } from "@/config/constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SubmitHandler } from "react-hook-form";
@@ -52,6 +53,25 @@ export const Login = () => {
     }
   };
 
+  const loginWithOAuth = async (provider: "discord" | "github") => {
+    try {
+      const url = new URL(`/api/auth/login/${provider}`, __SERVER_URL__);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      window.location.href = data.url;
+    } catch (error) {
+      if (error instanceof Error) {
+        return toast.error(error.message);
+      }
+      return toast.error(`Login with ${provider} failed. please contact administrator`);
+    }
+  };
+
   return (
     <div className="flex w-full max-w-sm flex-col gap-2 rounded border p-6 shadow">
       <h1 className="text-2xl font-semibold">Login</h1>
@@ -76,6 +96,18 @@ export const Login = () => {
           </Link>
         </p>
       </form>
+
+      <hr />
+
+      <div className="flex flex-col gap-4">
+        <Button onClick={() => loginWithOAuth("github")} variant="outlined">
+          Login using Github
+        </Button>
+
+        <Button onClick={() => loginWithOAuth("discord")} variant="outlined">
+          Login using Discord
+        </Button>
+      </div>
     </div>
   );
 };
