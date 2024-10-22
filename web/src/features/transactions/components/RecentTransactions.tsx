@@ -17,6 +17,8 @@ export const RecentTransactions = ({ defaultWalletId }: RecentTransactionProps) 
 
   const { data: transactions } = useTransactions(pagination, defaultWalletId);
 
+  if (!transactions.count) return <p className="text-center text-sm italic">You have no transactions yet</p>;
+
   return (
     <div className="rounded border-2 py-2 shadow">
       <Pagination
