@@ -15,18 +15,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={clsx("w-full", containerClassName)}>
         <Field>
-          <Label className="text-sm/6 font-medium text-textSecondary">{label}</Label>
+          <Label className="text-textSecondary text-sm/6 font-medium">{label}</Label>
           <HInput
             {...rest}
             ref={ref}
             className={clsx(
-              "mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all focus:border-primary",
-              formError ? "border-error hover:border-error" : "border-gray-200 hover:border-primary",
+              "focus:border-primary mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all",
+              formError ? "border-error hover:border-error" : "hover:border-primary border-gray-200",
               rest.className,
             )}
           />
 
-          {formError && <Description className="text-xs text-error">{formError.message}</Description>}
+          {formError && <Description className="text-error text-xs">{formError.message}</Description>}
         </Field>
       </div>
     );

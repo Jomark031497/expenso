@@ -39,11 +39,11 @@ export const DeleteWallet = ({ walletId, isOpen, close }: DeleteWalletProps) => 
         <p className="text-center">Are you sure you want to delete wallet: </p>
         <p className="text-center text-sm font-semibold">{wallet.name}</p>
 
-        <p className="rounded bg-error/20 p-2 text-center text-sm italic text-error">
+        <p className="bg-error/20 text-error rounded p-2 text-center text-sm italic">
           You cannot undo this action. All transactions related to this wallet will also be deleted
         </p>
 
-        <Button onClick={handleDeleteWallet} className="w-20 self-center bg-error font-semibold text-white">
+        <Button onClick={handleDeleteWallet} className="bg-error w-20 self-center font-semibold text-white">
           Delete
         </Button>
       </form>

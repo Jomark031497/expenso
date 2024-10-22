@@ -20,7 +20,9 @@ export const getUsers = async () => {
 export const getUser = async (
   field: keyof User,
   value: string | number,
-  options: { includePassword?: boolean; returnError?: boolean } = { returnError: true },
+  options: { includePassword?: boolean; returnError?: boolean } = {
+    returnError: true,
+  },
 ) => {
   const user = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users[field], value),
@@ -36,7 +38,9 @@ export const getUser = async (
 export const createUser = async (payload: NewUser) => {
   const errors: Record<string, unknown> = {};
 
-  const usernameExists = await getUser("username", payload.username, { returnError: false });
+  const usernameExists = await getUser("username", payload.username, {
+    returnError: false,
+  });
   let emailExists;
   let hashedPassword;
 
@@ -74,12 +78,18 @@ export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
 
   if (payload.username) {
     const usernameExists = await getUser("username", payload.username);
-    if (usernameExists) throw new AppError(400, "update user failed", { username: "username is already taken" });
+    if (usernameExists)
+      throw new AppError(400, "update user failed", {
+        username: "username is already taken",
+      });
   }
 
   if (payload.email) {
     const emailExists = await getUser("email", payload.email);
-    if (emailExists) throw new AppError(400, "update user failed", { email: "email is already taken" });
+    if (emailExists)
+      throw new AppError(400, "update user failed", {
+        email: "email is already taken",
+      });
   }
 
   if (payload.password) {

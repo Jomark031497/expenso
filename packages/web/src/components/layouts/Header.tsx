@@ -13,8 +13,8 @@ export const Header = () => {
 
   return (
     <>
-      <header className="fixed flex h-16 w-full max-w-md items-center justify-between border-b bg-background px-4 shadow-inner">
-        <Link to="/" className="text-xl font-bold tracking-wider text-primary transition-all hover:text-primary/80">
+      <header className="bg-background fixed flex h-16 w-full max-w-md items-center justify-between border-b px-4 shadow-inner">
+        <Link to="/" className="text-primary hover:text-primary/80 text-xl font-bold tracking-wider transition-all">
           _expenso.
         </Link>
 
@@ -26,7 +26,7 @@ export const Header = () => {
           <MenuItems
             transition
             anchor="bottom end"
-            className="flex w-52 origin-top-right flex-col gap-1 rounded bg-white p-4 text-textSecondary shadow transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] data-[closed]:scale-95 data-[closed]:opacity-0"
+            className="text-textSecondary flex w-52 origin-top-right flex-col gap-1 rounded bg-white p-4 shadow transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] data-[closed]:scale-95 data-[closed]:opacity-0"
           >
             {navLinks.map((item) => (
               <MenuItem key={item.label}>
@@ -35,7 +35,7 @@ export const Header = () => {
                   className={({ isActive }) =>
                     clsx(
                       "flex items-center gap-2 rounded p-1.5 text-sm font-semibold transition duration-100 ease-in-out",
-                      isActive ? "bg-primary text-white data-[focus]:bg-primary" : "data-[focus]:bg-primary/30",
+                      isActive ? "bg-primary data-[focus]:bg-primary text-white" : "data-[focus]:bg-primary/30",
                     )
                   }
                 >
@@ -54,7 +54,7 @@ export const Header = () => {
                   className={({ isActive }) =>
                     clsx(
                       "flex items-center gap-2 rounded p-1.5 text-sm font-semibold transition duration-100 ease-in-out",
-                      isActive ? "bg-primary text-white data-[focus]:bg-primary" : "data-[focus]:bg-primary/30",
+                      isActive ? "bg-primary data-[focus]:bg-primary text-white" : "data-[focus]:bg-primary/30",
                     )
                   }
                 >
@@ -67,7 +67,7 @@ export const Header = () => {
             <MenuItem>
               <Button
                 onClick={handleLogout}
-                className="w-full rounded bg-error/10 p-1.5 text-sm text-error hover:bg-error/20"
+                className="bg-error/10 text-error hover:bg-error/20 w-full rounded p-1.5 text-sm"
               >
                 Logout
               </Button>

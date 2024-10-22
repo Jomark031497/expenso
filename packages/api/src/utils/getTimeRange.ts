@@ -46,11 +46,17 @@ export const getTimeRange = (rangeType: TimeRangeType): TimeRange => {
     case "last7days":
       return { startDate: startOfDay(subDays(now, 6)), endDate: endOfDay(now) };
     case "last30days":
-      return { startDate: startOfDay(subDays(now, 29)), endDate: endOfDay(now) };
+      return {
+        startDate: startOfDay(subDays(now, 29)),
+        endDate: endOfDay(now),
+      };
     case "thisMonth":
       return { startDate: startOfMonth(now), endDate: endOfMonth(now) };
     case "lastMonth":
-      return { startDate: startOfMonth(lastMonth), endDate: endOfMonth(lastMonth) };
+      return {
+        startDate: startOfMonth(lastMonth),
+        endDate: endOfMonth(lastMonth),
+      };
     case "thisYear":
       return { startDate: startOfYear(now), endDate: endOfYear(now) };
     case "lastYear":

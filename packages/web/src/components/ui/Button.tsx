@@ -17,8 +17,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={clsx(
           "rounded px-3 py-1.5 text-xs font-semibold transition-all",
           variant === "contained"
-            ? "border border-primary bg-primary text-white hover:bg-primaryDark"
-            : "border border-primary bg-primary/10 text-primary shadow-sm hover:shadow-sm hover:shadow-primary",
+            ? "border-primary bg-primary hover:bg-primaryDark border text-white"
+            : "border-primary bg-primary/10 text-primary hover:shadow-primary border shadow-sm hover:shadow-sm",
           rest.className,
         )}
       >

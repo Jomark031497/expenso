@@ -7,7 +7,9 @@ const main = async () => {
   const app = createApp();
 
   const server = app.listen(envs.PORT, () => {
-    logger.info(`Server started at http://localhost:${envs.PORT}`, { port: envs.PORT });
+    logger.info(`Server started at http://localhost:${envs.PORT}`, {
+      port: envs.PORT,
+    });
   });
 
   // Graceful shutdown with a timeout and DB close
