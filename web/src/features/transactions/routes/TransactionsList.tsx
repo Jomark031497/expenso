@@ -11,7 +11,7 @@ export const TransactionsList = () => {
   return (
     <>
       <p>This is Transactions List</p>
-      <RecentTransactions userId={user.id} />
+      <RecentTransactions />
     </>
   );
 };

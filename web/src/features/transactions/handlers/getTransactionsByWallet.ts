@@ -1,6 +1,6 @@
 import { __SERVER_URL__ } from "@/config/constants";
 import type { RequestQueryOptions } from "@/features/misc/misc.types";
-import type { Transaction } from "@/features/transactions/transactions.types";
+import type { Transaction, TransactionWithCategory } from "@/features/transactions/transactions.types";
 
 export const getTransactionsByWallet = async (walletId: Transaction["walletId"], queryOptions: RequestQueryOptions) => {
   const url = new URL(`/api/transactions/wallets/${walletId}`, __SERVER_URL__);
@@ -17,5 +17,5 @@ export const getTransactionsByWallet = async (walletId: Transaction["walletId"],
 
   if (!response.ok) throw new Error(data.message);
 
-  return data as { data: Transaction[]; count: number };
+  return data as { data: TransactionWithCategory[]; count: number };
 };

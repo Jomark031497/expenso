@@ -1,4 +1,4 @@
-import type { Transaction } from "@/features/transactions/transactions.types";
+import type { TransactionWithCategory } from "@/features/transactions/transactions.types";
 import { toCurrency } from "@/utils/toCurrency";
 import { toFormattedDate } from "@/utils/toFormattedDate";
 import { toFormattedTitleCase } from "@/utils/toFormattedTitleCase";
@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 
 interface TransactionCardProps {
-  transaction: Transaction;
+  transaction: TransactionWithCategory;
 }
 
 export const TransactionCard = ({ transaction }: TransactionCardProps) => {
@@ -24,7 +24,7 @@ export const TransactionCard = ({ transaction }: TransactionCardProps) => {
       >
         {toCurrency(parseInt(transaction.amount))}
       </p>
-      <p className="col-span-2 text-xs italic">{toFormattedTitleCase(transaction.category)}</p>
+      <p className="col-span-2 text-xs italic">{toFormattedTitleCase(transaction.category.name)}</p>
       <p className="col-span-1 text-end text-xs">{toFormattedDate(transaction.date)}</p>
       <p className="col-span-2 text-xs">{transaction.wallet.name}</p>
       <p className="col-span-1 text-end text-xs">{toFormattedTitleCase(transaction.wallet.type)}</p>

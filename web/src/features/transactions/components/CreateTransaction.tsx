@@ -18,7 +18,8 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import clsx from "clsx";
-import { createTransactionSchema, TRANSACTION_CATEGORIES } from "@/features/transactions/transactions.schema";
+import { createTransactionSchema } from "@/features/transactions/transactions.schema";
+import { useTransactionCategories } from "@/features/transactions/hooks/useTransactionCategories";
 
 interface CreateTransactionProps {
   userId: User["id"];
@@ -33,13 +34,17 @@ export const CreateTransaction = ({ userId, onClose, isOpen, defaultWalletId }: 
     handleSubmit,
     reset,
     control,
+    watch,
     formState: { errors },
   } = useForm<NewTransaction>({
     resolver: zodResolver(createTransactionSchema),
-    defaultValues: { userId, date: new Date(), amount: "0.00", walletId: defaultWalletId },
+    defaultValues: { userId, date: new Date(), amount: "0.00", walletId: defaultWalletId, type: "income" },
   });
 
+  const transactionType = watch("type");
+
   const { data: wallets } = useWallets();
+  const { data: transactionCategories } = useTransactionCategories(userId, transactionType);
 
   const { isPending, mutate } = useMutation({
     mutationFn: async (values: NewTransaction) =>
@@ -92,10 +97,15 @@ export const CreateTransaction = ({ userId, onClose, isOpen, defaultWalletId }: 
           ))}
         </Select>
 
-        <Select label="Category" {...register("category")} formError={errors.category} containerClassName="col-span-2">
-          {TRANSACTION_CATEGORIES.map((category) => (
-            <option key={category} value={category}>
-              {toFormattedTitleCase(category)}
+        <Select
+          label="Category"
+          {...register("categoryId")}
+          formError={errors.categoryId}
+          containerClassName="col-span-2"
+        >
+          {transactionCategories?.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
             </option>
           ))}
         </Select>

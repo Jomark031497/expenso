@@ -1,5 +1,5 @@
 import { __SERVER_URL__ } from "@/config/constants";
-import type { Transaction } from "@/features/transactions/transactions.types";
+import type { Transaction, TransactionWithCategory } from "@/features/transactions/transactions.types";
 
 export const getSingleTransaction = async (transactionId: Transaction["id"]) => {
   const url = new URL(`/api/transactions/${transactionId}`, __SERVER_URL__);
@@ -13,5 +13,5 @@ export const getSingleTransaction = async (transactionId: Transaction["id"]) => 
 
   if (!response.ok) throw new Error(data.message);
 
-  return data as Transaction;
+  return data as TransactionWithCategory;
 };

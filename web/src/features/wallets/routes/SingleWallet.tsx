@@ -15,11 +15,11 @@ import { DeleteWallet } from "@/features/wallets/components/DeleteWallet";
 import { UpdateWallet } from "@/features/wallets/components/UpdateWallet";
 import { useTimeRangeType } from "@/features/wallets/hooks/useTimeRangeType";
 import type { TimeRangeType } from "@/features/users/users.types";
-import { UserSummary } from "@/features/users/components/UserSummary";
 import { Button } from "@/components/ui/Button";
-import { CreateTransaction } from "@/features/transactions/components/CreateTransaction";
 
 const { RecentTransactions } = lazily(() => import("@/features/transactions/components/RecentTransactions"));
+const { UserSummary } = lazily(() => import("@/features/users/components/UserSummary"));
+const { CreateTransaction } = lazily(() => import("@/features/transactions/components/CreateTransaction"));
 
 export const SingleWallet = () => {
   const { walletId: walletIdParams } = useParams();

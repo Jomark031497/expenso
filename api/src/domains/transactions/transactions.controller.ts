@@ -1,4 +1,5 @@
 import { AppError } from "../../utils/appError.js";
+import type { Transaction } from "./transactions.schema.js";
 import * as transactionsService from "./transactions.service.js";
 import type { Request, Response, NextFunction } from "express";
 
@@ -60,6 +61,27 @@ export const updatedTransactionHandler = async (req: Request, res: Response, nex
 export const deleteTransactionHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await transactionsService.deleteTransaction(req.params.id as string);
+    return res.status(200).json(data);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getTransactionCategoriesHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const categories = await transactionsService.getTransactionCategories(
+      req.params.userId as string,
+      req.query.type as Transaction["type"],
+    );
+    return res.status(200).json(categories);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const createTransactionCategoryHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await transactionsService.createTransactionCategory(req.body);
     return res.status(200).json(data);
   } catch (error) {
     return next(error);

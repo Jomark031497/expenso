@@ -29,6 +29,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </select>
           <FaChevronDown className="group pointer-events-none absolute right-2.5 top-10 size-4" aria-hidden="true" />
         </label>
+        {formError && <p className="text-xs text-error">{formError.message}</p>}
       </div>
     );
   },

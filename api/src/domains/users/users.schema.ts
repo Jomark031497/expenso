@@ -2,6 +2,8 @@ import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
 import { integer, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { transactionCategories, transactions } from "../transactions/transactions.schema.js";
+import { wallets } from "../wallets/wallets.schema.js";
 
 export const users = pgTable("users", {
   id: text("id")
@@ -19,7 +21,9 @@ export const users = pgTable("users", {
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
-  wallets: many(users),
+  wallets: many(wallets),
+  transactionCategories: many(transactionCategories),
+  transactions: many(transactions),
 }));
 
 export const selectUserSchema = createSelectSchema(users);

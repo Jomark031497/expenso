@@ -16,7 +16,21 @@ export type Transaction = {
   createdAt: Date;
   updatedAt: Date;
   wallet: Pick<Wallet, "name" | "type">;
-  category: string;
+  categoryId: string;
+};
+
+export type TransactionCategory = {
+  id: string;
+  name: string;
+  type: "income" | "expense" | "transfer";
+  isDefault: boolean;
+  userId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type TransactionWithCategory = Transaction & {
+  category: TransactionCategory;
 };
 
 export type NewTransaction = z.infer<typeof createTransactionSchema>;

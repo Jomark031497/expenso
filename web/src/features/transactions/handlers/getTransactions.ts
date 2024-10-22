@@ -1,6 +1,6 @@
 import { __SERVER_URL__ } from "@/config/constants";
 import type { RequestQueryOptions } from "@/features/misc/misc.types";
-import type { Transaction } from "@/features/transactions/transactions.types";
+import type { TransactionWithCategory } from "@/features/transactions/transactions.types";
 
 export const getTransactions = async (queryOptions: RequestQueryOptions) => {
   const url = new URL("/api/transactions", __SERVER_URL__);
@@ -17,5 +17,5 @@ export const getTransactions = async (queryOptions: RequestQueryOptions) => {
 
   if (!response.ok) throw new Error(data.message);
 
-  return data as { count: number; data: Transaction[] };
+  return data as { count: number; data: TransactionWithCategory[] };
 };

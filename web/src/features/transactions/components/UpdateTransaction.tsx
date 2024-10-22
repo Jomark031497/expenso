@@ -3,8 +3,9 @@ import { Dialog } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { updateTransaction } from "@/features/transactions/handlers/updateTransaction";
-import { createTransactionSchema, TRANSACTION_CATEGORIES } from "@/features/transactions/transactions.schema";
-import type { NewTransaction, Transaction } from "@/features/transactions/transactions.types";
+import { useTransactionCategories } from "@/features/transactions/hooks/useTransactionCategories";
+import { createTransactionSchema } from "@/features/transactions/transactions.schema";
+import type { NewTransaction, TransactionWithCategory } from "@/features/transactions/transactions.types";
 import { TRANSACTION_TYPES } from "@/features/transactions/transactions.types";
 import { useWallets } from "@/features/wallets/hooks/useWallets";
 import { queryClient } from "@/lib/queryClient";
@@ -18,7 +19,7 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 interface UpdateTransactionProps {
-  transaction: Transaction;
+  transaction: TransactionWithCategory;
   onClose: () => void;
   isOpen: boolean;
 }
@@ -31,7 +32,7 @@ export const UpdateTransaction = ({ transaction, onClose, isOpen }: UpdateTransa
     control,
     handleSubmit,
     reset,
-
+    watch,
     formState: { errors },
   } = useForm<NewTransaction>({
     resolver: zodResolver(createTransactionSchema),
@@ -41,6 +42,10 @@ export const UpdateTransaction = ({ transaction, onClose, isOpen }: UpdateTransa
       description: transaction.description ?? "",
     },
   });
+
+  const transactionType = watch("type");
+
+  const { data: transactionCategories } = useTransactionCategories(transaction.userId, transactionType);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (payload: NewTransaction) => {
@@ -89,10 +94,15 @@ export const UpdateTransaction = ({ transaction, onClose, isOpen }: UpdateTransa
           ))}
         </Select>
 
-        <Select label="Category" {...register("category")} formError={errors.category} containerClassName="col-span-2">
-          {TRANSACTION_CATEGORIES.map((category) => (
-            <option key={category} value={category}>
-              {toFormattedTitleCase(category)}
+        <Select
+          label="Category"
+          {...register("categoryId")}
+          formError={errors.categoryId}
+          containerClassName="col-span-2"
+        >
+          {transactionCategories?.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
             </option>
           ))}
         </Select>

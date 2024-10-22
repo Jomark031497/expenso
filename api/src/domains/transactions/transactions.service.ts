@@ -1,9 +1,10 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "../../db/dbInstance.js";
 import { AppError } from "../../utils/appError.js";
-import type { NewTransaction } from "./transactions.schema.js";
-import { transactions, type Transaction } from "./transactions.schema.js";
+import type { NewTransaction, NewTransactionCategory } from "./transactions.schema.js";
+import { transactionCategories, transactions, type Transaction } from "./transactions.schema.js";
 import { wallets } from "../wallets/wallets.schema.js";
+import type { User } from "../users/users.schema.js";
 
 export const getTransactions = async (userId: Transaction["userId"], options: Record<string, unknown>) => {
   const pageSize = options?.pageSize ? parseInt(options.pageSize as string, 10) : 5;
@@ -22,6 +23,7 @@ export const getTransactions = async (userId: Transaction["userId"], options: Re
             type: true,
           },
         },
+        category: true,
       },
     });
 
@@ -58,6 +60,7 @@ export const getTransactionsByWalletId = async (
             type: true,
           },
         },
+        category: true,
       },
     });
 
@@ -84,6 +87,7 @@ export const getTransactionById = async (transactionId: Transaction["id"], optio
           type: true,
         },
       },
+      category: true,
     },
   });
 
@@ -162,4 +166,22 @@ export const deleteTransaction = async (transactionId: Transaction["id"]) => {
   });
 
   return { message: "transaction deleted successfully" };
+};
+
+export const getTransactionCategories = async (userId: User["id"], type: Transaction["type"] = "income") => {
+  const categories = await db.query.transactionCategories.findMany({
+    where: (transactionCategories, { eq, or, and }) =>
+      and(
+        eq(transactionCategories.type, type),
+        or(eq(transactionCategories.isDefault, true), eq(transactionCategories.userId, userId)),
+      ),
+    orderBy: (transactionCategories, { asc }) => asc(transactionCategories.name),
+  });
+
+  return categories;
+};
+
+export const createTransactionCategory = async (payload: NewTransactionCategory) => {
+  const [result] = await db.insert(transactionCategories).values(payload).returning();
+  return result;
 };

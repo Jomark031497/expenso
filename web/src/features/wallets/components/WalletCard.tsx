@@ -1,4 +1,3 @@
-import { useSingleWallet } from "@/features/wallets/hooks/useSingleWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 import { toCurrency } from "@/utils/toCurrency";
 import { toFormattedTitleCase } from "@/utils/toFormattedTitleCase";
