@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { z } from "zod";
+import { FaGithub, FaDiscord } from "react-icons/fa";
 
 const loginSchema = z.object({
   username: z
@@ -40,12 +41,8 @@ export const Login = () => {
       await handleLogin(values);
     } catch (error) {
       if (error instanceof Error) {
-        setError("username", {
-          message: error.message,
-        });
-        setError("password", {
-          message: error.message,
-        });
+        setError("username", { message: error.message });
+        setError("password", { message: error.message });
         toast.error(error.message);
       } else {
         toast.error("login failed. something went wrong");
@@ -62,7 +59,6 @@ export const Login = () => {
       });
 
       const data = await response.json();
-
       window.location.href = data.url;
     } catch (error) {
       if (error instanceof Error) {
@@ -97,14 +93,24 @@ export const Login = () => {
         </p>
       </form>
 
-      <hr />
+      <hr className="my-4" />
 
       <div className="flex flex-col gap-4">
-        <Button onClick={() => loginWithOAuth("github")} variant="outlined">
+        <Button
+          onClick={() => loginWithOAuth("github")}
+          variant="outlined"
+          className="flex items-center justify-center gap-2"
+        >
+          <FaGithub size="20" />
           Login using Github
         </Button>
 
-        <Button onClick={() => loginWithOAuth("discord")} variant="outlined">
+        <Button
+          onClick={() => loginWithOAuth("discord")}
+          variant="outlined"
+          className="flex items-center justify-center gap-2"
+        >
+          <FaDiscord size="20" />
           Login using Discord
         </Button>
       </div>

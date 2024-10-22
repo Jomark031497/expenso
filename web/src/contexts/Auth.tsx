@@ -65,7 +65,6 @@ export const AuthContextProvider = () => {
     const checkAuthenicated = async () => {
       try {
         const userData = await getAuthenticatedUser();
-        console.log(userData);
         setUser(userData);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
