@@ -36,9 +36,9 @@ export const DeleteTransaction = ({ isOpen, onClose, transaction }: DeleteTransa
         <p className="text-center">Are you sure you want to delete transaction: </p>
         <p className="text-center text-sm font-semibold">{transaction.name}</p>
 
-        <p className="rounded bg-error/20 p-2 text-center text-sm italic text-error">You cannot undo this action.</p>
+        <p className="bg-error/20 text-error rounded p-2 text-center text-sm italic">You cannot undo this action.</p>
 
-        <Button onClick={handleDeleteTransaction} className="w-20 self-center bg-error font-semibold text-white">
+        <Button onClick={handleDeleteTransaction} className="bg-error w-20 self-center font-semibold text-white">
           Delete
         </Button>
       </form>

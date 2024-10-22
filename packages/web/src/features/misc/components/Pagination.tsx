@@ -34,7 +34,9 @@ export const Pagination = ({ pagination, totalCount, onPaginationChange }: Pagin
   return (
     <section className="flex items-center justify-end gap-2 p-2">
       <button
-        className={clsx("rounded border p-1", { "cursor-not-allowed opacity-50": !canGetPreviousPage })}
+        className={clsx("rounded border p-1", {
+          "cursor-not-allowed opacity-50": !canGetPreviousPage,
+        })}
         onClick={handlePreviousPage}
         disabled={!canGetPreviousPage}
         aria-label="Previous Page"
@@ -48,7 +50,9 @@ export const Pagination = ({ pagination, totalCount, onPaginationChange }: Pagin
         </strong>
       </span>
       <button
-        className={clsx("rounded border p-1", { "cursor-not-allowed opacity-50": !canGetNextPage })}
+        className={clsx("rounded border p-1", {
+          "cursor-not-allowed opacity-50": !canGetNextPage,
+        })}
         onClick={handleNextPage}
         disabled={!canGetNextPage}
         aria-label="Next Page"

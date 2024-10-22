@@ -6,7 +6,7 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 export const RootLayout = () => {
   return (
     <>
-      <div id="root_layout" className="relative mx-auto h-screen max-w-md bg-background text-textSecondary shadow">
+      <div id="root_layout" className="bg-background text-textSecondary relative mx-auto h-screen max-w-md shadow">
         <Header />
         <Breadcrumb />
         <main className="h-[calc(100vh-64px)] scroll-m-2 overflow-y-auto p-6">

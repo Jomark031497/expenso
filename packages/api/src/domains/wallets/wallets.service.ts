@@ -14,7 +14,10 @@ export const getWalletById = async (walletId: Wallet["id"], options: { returnErr
     where: (wallets, { eq }) => eq(wallets.id, walletId),
   });
 
-  if (options.returnError && !wallet) throw new AppError(404, "get wallet failed", { walletId: "wallet id not found" });
+  if (options.returnError && !wallet)
+    throw new AppError(404, "get wallet failed", {
+      walletId: "wallet id not found",
+    });
   return wallet;
 };
 
@@ -25,7 +28,10 @@ export const createWallet = async (payload: NewWallet) => {
 
 export const updateWallet = async (walletId: Wallet["id"], payload: Partial<NewWallet>) => {
   const wallet = await getWalletById(walletId, { returnError: false });
-  if (!wallet) throw new AppError(404, "update wallet failed", { walletId: "wallet id not found" });
+  if (!wallet)
+    throw new AppError(404, "update wallet failed", {
+      walletId: "wallet id not found",
+    });
 
   const [updatedWallet] = await db.update(wallets).set(payload).where(eq(wallets.id, walletId)).returning();
 
@@ -36,7 +42,10 @@ export const updateWallet = async (walletId: Wallet["id"], payload: Partial<NewW
 
 export const deleteWallet = async (walletId: Wallet["id"]) => {
   const wallet = await getWalletById(walletId, { returnError: false });
-  if (!wallet) throw new AppError(404, "delete wallet failed", { walletId: "wallet id not found" });
+  if (!wallet)
+    throw new AppError(404, "delete wallet failed", {
+      walletId: "wallet id not found",
+    });
 
   await db.delete(wallets).where(eq(wallets.id, walletId));
 

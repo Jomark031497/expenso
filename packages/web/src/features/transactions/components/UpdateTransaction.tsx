@@ -112,14 +112,14 @@ export const UpdateTransaction = ({ transaction, onClose, isOpen }: UpdateTransa
           name="date"
           render={({ field }) => (
             <div className="col-span-2">
-              <label className="text-sm/6 font-medium text-textSecondary">Date</label>
+              <label className="text-textSecondary text-sm/6 font-medium">Date</label>
               <DatePicker
                 selected={field.value}
                 onChange={(date: Date | null) => field.onChange(date)}
                 dateFormat="MMM/dd/yyyy"
                 className={clsx(
-                  "col-span-2 mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all focus:border-primary",
-                  errors.date ? "border-error hover:border-error" : "border-gray-200 hover:border-primary",
+                  "focus:border-primary col-span-2 mt-0.5 block w-full rounded border-2 px-4 py-1.5 text-sm/6 outline-none transition-all",
+                  errors.date ? "border-error hover:border-error" : "hover:border-primary border-gray-200",
                 )}
               />
               {errors.date && <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>}
@@ -137,7 +137,7 @@ export const UpdateTransaction = ({ transaction, onClose, isOpen }: UpdateTransa
         <Button
           type="submit"
           disabled={isPending}
-          className="col-span-4 mx-auto mt-2 bg-primary px-10 font-semibold text-white"
+          className="bg-primary col-span-4 mx-auto mt-2 px-10 font-semibold text-white"
         >
           Update
         </Button>

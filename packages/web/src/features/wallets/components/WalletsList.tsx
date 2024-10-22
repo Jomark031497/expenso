@@ -9,7 +9,7 @@ export const WalletsList = () => {
 
   if (!wallets.length)
     return (
-      <div className="py-4 text-center text-sm font-semibold italic text-textSecondary">
+      <div className="text-textSecondary py-4 text-center text-sm font-semibold italic">
         You currently have no wallets
       </div>
     );

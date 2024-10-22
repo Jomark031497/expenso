@@ -52,14 +52,14 @@ export const SingleWallet = () => {
 
       <section id="summary" className="mb-8">
         <div className="mb-4 flex items-center justify-end">
-          <h2 className="text-md flex-1 font-semibold text-textSecondary">Summary</h2>
+          <h2 className="text-md text-textSecondary flex-1 font-semibold">Summary</h2>
 
           <div className="relative">
             <select
               onChange={(e) => setTimeRangeType(e.target.value as TimeRangeType)}
               defaultValue={timeRangeType}
               className={
-                "mt-1 block w-[150px] appearance-none rounded border-2 border-primary bg-white px-4 py-1.5 text-xs font-semibold text-primary outline-none hover:border-primary focus:border-primary"
+                "border-primary text-primary hover:border-primary focus:border-primary mt-1 block w-[150px] appearance-none rounded border-2 bg-white px-4 py-1.5 text-xs font-semibold outline-none"
               }
             >
               {timeRangeOptions.map((item) => (
@@ -69,7 +69,7 @@ export const SingleWallet = () => {
               ))}
             </select>
             <FaChevronDown
-              className="group pointer-events-none absolute right-2.5 top-3.5 size-3 fill-primary"
+              className="fill-primary group pointer-events-none absolute right-2.5 top-3.5 size-3"
               aria-hidden="true"
             />
           </div>
@@ -92,7 +92,7 @@ export const SingleWallet = () => {
 
       <section id="recent-transactions">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-md font-semibold text-textSecondary">Recent Transactions</h2>
+          <h2 className="text-md text-textSecondary font-semibold">Recent Transactions</h2>
 
           <Button variant="outlined" onClick={openCreateTransaction}>
             Create Transaction
@@ -127,10 +127,10 @@ const WalletInfo = ({ walletId }: WalletInfoProps) => {
   return (
     <section id="wallet" className="mb-8">
       <div className="mb-2 flex items-center justify-between">
-        <h2 className="text-md font-semibold text-textSecondary">Wallet Info</h2>
+        <h2 className="text-md text-textSecondary font-semibold">Wallet Info</h2>
 
         <Menu>
-          <MenuButton className="flex items-center gap-2 rounded border border-primary px-3 py-1.5 text-xs font-semibold text-primary">
+          <MenuButton className="border-primary text-primary flex items-center gap-2 rounded border px-3 py-1.5 text-xs font-semibold">
             Options
             <FaChevronDown className="fill-primary" />
           </MenuButton>
@@ -143,7 +143,7 @@ const WalletInfo = ({ walletId }: WalletInfoProps) => {
             <MenuItem>
               <button
                 onClick={openUpdateDialog}
-                className="group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition-all hover:bg-primary/20"
+                className="text-primary hover:bg-primary/20 group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold transition-all"
               >
                 <FaRegEdit className="text-base" />
                 Update
@@ -152,7 +152,7 @@ const WalletInfo = ({ walletId }: WalletInfoProps) => {
             <MenuItem>
               <button
                 onClick={openDeleteDialog}
-                className="group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition-all hover:bg-primary/20"
+                className="text-primary hover:bg-primary/20 group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold transition-all"
               >
                 <MdDelete className="text-base" />
                 Delete

@@ -15,7 +15,7 @@ export const UserSummary = ({ timeRangeType, walletId }: UserSummaryProps) => {
     <div className="grid grid-cols-3 gap-2">
       <div className="col-span-1 rounded border bg-white p-4 text-center shadow">
         <p className="mb-2 text-xs font-semibold">Expenses</p>
-        <p className="text-sm font-semibold text-error">{toCurrency(parseInt(userSummary.expenses))}</p>
+        <p className="text-error text-sm font-semibold">{toCurrency(parseInt(userSummary.expenses))}</p>
       </div>
       <div className="col-span-1 rounded border bg-white p-4 text-center shadow">
         <p className="mb-2 text-xs font-semibold">Income</p>

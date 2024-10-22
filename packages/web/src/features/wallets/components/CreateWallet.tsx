@@ -74,7 +74,7 @@ export const CreateWallet = ({ isOpen, close, userId }: CreateWalletProps) => {
           placeholder="ex. My main credit card, Emergency funds"
         />
 
-        <Button type="submit" disabled={isPending} className="self-center bg-primary text-white">
+        <Button type="submit" disabled={isPending} className="bg-primary self-center text-white">
           Create
         </Button>
       </form>

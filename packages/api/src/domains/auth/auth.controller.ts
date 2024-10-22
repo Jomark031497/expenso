@@ -86,7 +86,9 @@ export const githubCallbackHandler = async (req: Request, res: Response, next: N
     if (!githubUserResponse.ok) throw new AppError(400, "Failed to fetch GitHub user");
 
     const githubUser = (await githubUserResponse.json()) as GitHubUser;
-    const existingUser = await getUser("githubId", githubUser.id, { returnError: false });
+    const existingUser = await getUser("githubId", githubUser.id, {
+      returnError: false,
+    });
 
     if (existingUser) {
       await createSessionAndSetCookie(res, existingUser.id);
@@ -151,7 +153,9 @@ export const discordCallbackHandler = async (req: Request, res: Response, next: 
     if (!discordUserResponse.ok) throw new AppError(400, "Failed to fetch Discord user");
 
     const discordUser = (await discordUserResponse.json()) as DiscordUser;
-    const existingUser = await getUser("discordId", discordUser.id, { returnError: false });
+    const existingUser = await getUser("discordId", discordUser.id, {
+      returnError: false,
+    });
 
     if (existingUser) {
       await createSessionAndSetCookie(res, existingUser.id);

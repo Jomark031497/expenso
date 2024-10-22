@@ -26,7 +26,7 @@ export const SingleTransaction = () => {
     <>
       <div className="mb-2 flex justify-end">
         <Menu>
-          <MenuButton className="flex items-center gap-2 rounded border border-primary px-3 py-1.5 text-sm font-semibold text-primary">
+          <MenuButton className="border-primary text-primary flex items-center gap-2 rounded border px-3 py-1.5 text-sm font-semibold">
             Options
             <FaChevronDown className="fill-primary" />
           </MenuButton>
@@ -39,7 +39,7 @@ export const SingleTransaction = () => {
             <MenuItem>
               <button
                 onClick={openUpdateDialog}
-                className="group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition-all hover:bg-primary/20"
+                className="text-primary hover:bg-primary/20 group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold transition-all"
               >
                 <FaRegEdit className="text-base" />
                 Update
@@ -48,7 +48,7 @@ export const SingleTransaction = () => {
             <MenuItem>
               <button
                 onClick={openDeleteDialog}
-                className="group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition-all hover:bg-primary/20"
+                className="text-primary hover:bg-primary/20 group flex w-full items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold transition-all"
               >
                 <MdDelete className="text-base" />
                 Delete

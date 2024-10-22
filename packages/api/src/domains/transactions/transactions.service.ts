@@ -92,7 +92,9 @@ export const getTransactionById = async (transactionId: Transaction["id"], optio
   });
 
   if (options.returnError && !transaction)
-    throw new AppError(404, "get transaction failed", { transactionId: "transaction id not found" });
+    throw new AppError(404, "get transaction failed", {
+      transactionId: "transaction id not found",
+    });
 
   return transaction;
 };
@@ -112,8 +114,13 @@ export const createTransaction = async (payload: NewTransaction) => {
 };
 
 export const updateTransaction = async (transactionId: Transaction["id"], payload: Partial<NewTransaction>) => {
-  const transaction = await getTransactionById(transactionId, { returnError: false });
-  if (!transaction) throw new AppError(400, "update transaction failed", { transactionId: "transaction id not found" });
+  const transaction = await getTransactionById(transactionId, {
+    returnError: false,
+  });
+  if (!transaction)
+    throw new AppError(400, "update transaction failed", {
+      transactionId: "transaction id not found",
+    });
 
   return await db.transaction(async (tx) => {
     // update the transaction
@@ -149,8 +156,13 @@ export const updateTransaction = async (transactionId: Transaction["id"], payloa
 };
 
 export const deleteTransaction = async (transactionId: Transaction["id"]) => {
-  const transaction = await getTransactionById(transactionId, { returnError: false });
-  if (!transaction) throw new AppError(400, "delete transaction failed", { transactionId: "transaction id not found" });
+  const transaction = await getTransactionById(transactionId, {
+    returnError: false,
+  });
+  if (!transaction)
+    throw new AppError(400, "delete transaction failed", {
+      transactionId: "transaction id not found",
+    });
 
   await db.transaction(async (tx) => {
     // delete the transaction
