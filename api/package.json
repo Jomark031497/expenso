@@ -8,8 +8,7 @@
     "dev": "NODE_ENV=development tsx watch --env-file=.env src/server.ts",
     "lint": "eslint ./src/**/*.{ts,js}",
     "format": "pnpm prettier --write ./src/**/*.{ts,tsx,js,jsx,json,css,md}",
-    "db:push": "node --import tsx ./node_modules/drizzle-kit/bin.cjs push",
-    "db:studio": "node --import tsx ./node_modules/drizzle-kit/bin.cjs studio",
+    "drizzle-kit": "node --import tsx ./node_modules/drizzle-kit/bin.cjs",
     "test": "NODE_ENV=test node --import tsx --env-file=.env --test --experimental-test-coverage ./src/**/*.test.ts",
     "test:watch": "NODE_ENV=test node --import tsx --env-file=.env --test --watch ./src/**/*.test.ts"
   },
