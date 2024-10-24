@@ -1,8 +1,8 @@
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 import type { User } from "@/features/users/users.types";
 
 export const getAuthenticatedUser = async () => {
-  const url = new URL("/api/auth/user", __SERVER_URL__);
+  const url = new URL("/api/auth/user", __API_URL__);
 
   const response = await fetch(url, {
     method: "GET",

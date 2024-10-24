@@ -1,7 +1,7 @@
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 
 export const logoutUser = async () => {
-  const url = new URL("/api/auth/logout", __SERVER_URL__);
+  const url = new URL("/api/auth/logout", __API_URL__);
 
   const response = await fetch(url, {
     method: "DELETE",

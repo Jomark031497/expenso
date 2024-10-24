@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SubmitHandler } from "react-hook-form";
@@ -52,7 +52,7 @@ export const Login = () => {
 
   const loginWithOAuth = async (provider: "discord" | "github") => {
     try {
-      const url = new URL(`/api/auth/login/${provider}`, __SERVER_URL__);
+      const url = new URL(`/api/auth/login/${provider}`, __API_URL__);
       const response = await fetch(url, {
         method: "GET",
         credentials: "include",

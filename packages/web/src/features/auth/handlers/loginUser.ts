@@ -1,9 +1,9 @@
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 import type { LoginUser } from "@/features/auth/routes/Login";
 import type { User } from "@/features/users/users.types";
 
 export const loginUser = async (payload: LoginUser) => {
-  const url = new URL("/api/auth/login", __SERVER_URL__);
+  const url = new URL("/api/auth/login", __API_URL__);
 
   const response = await fetch(url, {
     method: "POST",

@@ -1,8 +1,8 @@
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 import type { NewTransaction, Transaction, TransactionWithCategory } from "@/features/transactions/transactions.types";
 
 export const updateTransaction = async (transactionId: Transaction["id"], payload: NewTransaction) => {
-  const url = new URL(`/api/transactions/${transactionId}`, __SERVER_URL__);
+  const url = new URL(`/api/transactions/${transactionId}`, __API_URL__);
 
   const response = await fetch(url, {
     method: "PATCH",

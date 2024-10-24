@@ -1,8 +1,8 @@
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 import type { NewTransaction, Transaction } from "@/features/transactions/transactions.types";
 
 export const createTransaction = async (payload: NewTransaction) => {
-  const url = new URL("/api/transactions", __SERVER_URL__);
+  const url = new URL("/api/transactions", __API_URL__);
 
   const response = await fetch(url, {
     method: "POST",
