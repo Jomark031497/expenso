@@ -1,9 +1,9 @@
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 import type { NewWallet } from "@/features/wallets/components/CreateWallet";
 import type { Wallet } from "@/features/wallets/wallets.types";
 
 export const updateWallet = async (walletId: Wallet["id"], payload: NewWallet) => {
-  const url = new URL(`/api/wallets/${walletId}`, __SERVER_URL__);
+  const url = new URL(`/api/wallets/${walletId}`, __API_URL__);
 
   const response = await fetch(url, {
     method: "PATCH",

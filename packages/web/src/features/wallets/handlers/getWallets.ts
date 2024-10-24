@@ -1,8 +1,8 @@
-import { __SERVER_URL__ } from "@/config/constants";
+import { __API_URL__ } from "@/config/constants";
 import type { Wallet } from "@/features/wallets/wallets.types";
 
 export const getWallets = async () => {
-  const url = new URL("/api/wallets", __SERVER_URL__);
+  const url = new URL("/api/wallets", __API_URL__);
 
   const response = await fetch(url, {
     method: "GET",
