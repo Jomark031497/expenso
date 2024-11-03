@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node --env-file=.env dist/server.js",
+    "start": "node --env-file=.env.prod dist/server.js",
     "dev": "tsx watch --env-file=.env src/server.ts",
     "lint": "eslint ./src/**/*.{ts,js}",
     "format": "pnpm prettier --write ./src/**/*.{ts,tsx,js,jsx,json,css,md}",
