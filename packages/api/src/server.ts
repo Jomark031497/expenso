@@ -12,17 +12,14 @@ const main = async () => {
     });
   });
 
-  // Capture termination signals
   process.on("SIGINT", () => shutdown("SIGINT", server));
   process.on("SIGTERM", () => shutdown("SIGTERM", server));
 
-  // Handle unhandled promise rejections
   process.on("unhandledRejection", (reason, promise) => {
     logger.error("Unhandled Rejection at:", promise, "reason:", reason);
     process.exit(1);
   });
 
-  // Handle uncaught exceptions
   process.on("uncaughtException", (err) => {
     logger.error("Uncaught Exception thrown:", err);
     process.exit(1);
