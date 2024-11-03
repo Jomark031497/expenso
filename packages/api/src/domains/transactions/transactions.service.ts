@@ -123,26 +123,22 @@ export const updateTransaction = async (transactionId: Transaction["id"], payloa
     });
 
   return await db.transaction(async (tx) => {
-    // update the transaction
     const [updatedTransaction] = await tx
       .update(transactions)
       .set(payload)
       .where(eq(transactions.id, transactionId))
       .returning();
 
-    // update the balance if amount and type is included in the payload
     if (payload.amount || payload.type) {
       const newAmount = payload.amount ?? transaction.amount;
 
       const newType = payload.type ?? transaction.type;
 
-      // revert the balance of the wallet
       const balanceAdjustment =
         transaction.type === "income"
           ? sql`${wallets.balance}::numeric - ${transaction.amount}::numeric`
           : sql`${wallets.balance}::numeric + ${transaction.amount}::numeric`;
 
-      // apply the updated balance
       const updatedBalance =
         newType === "income"
           ? sql`${balanceAdjustment}::numeric + ${newAmount}::numeric`

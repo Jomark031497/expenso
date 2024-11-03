@@ -11,51 +11,33 @@ import type { Wallet } from "../wallets/wallets.schema.js";
 
 export const getUsers = async () => {
   return await db.query.users.findMany({
-    columns: {
-      password: false,
-    },
+    columns: { password: false },
   });
 };
 
-export const getUser = async (
-  field: keyof User,
-  value: string | number,
-  options: { includePassword?: boolean; returnError?: boolean } = {
-    returnError: true,
-  },
-) => {
+export const getUser = async (field: keyof User, value: string | number, returnError: boolean = true) => {
   const user = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users[field], value),
   });
 
-  if (!user && (options.returnError ?? true)) {
-    throw new AppError(404, `${field} not found`);
-  }
+  if (!user && (returnError ?? true)) throw new AppError(404, `${field} not found`);
 
   return user;
 };
 
 export const createUser = async (payload: NewUser) => {
   const errors: Record<string, unknown> = {};
-
-  const usernameExists = await getUser("username", payload.username, {
-    returnError: false,
-  });
   let emailExists;
   let hashedPassword;
 
-  if (payload.email) {
-    emailExists = await getUser("email", payload.email, { returnError: false });
-  }
+  const usernameExists = await getUser("username", payload.username, false);
+  if (payload.email) emailExists = await getUser("email", payload.email, false);
 
   if (usernameExists) errors.username = "username is already taken";
   if (emailExists) errors.email = "email is already taken";
+  if (Object.keys(errors).length) throw new AppError(400, "create user failed", errors);
 
-  if (Object.keys(errors).length) throw new AppError(400, "user creation failed", errors);
-
-  if (payload.password) {
-    hashedPassword = await new Argon2id().hash(payload.password);
-  }
+  if (payload.password) hashedPassword = await new Argon2id().hash(payload.password);
 
   const [user] = await db
     .insert(users)
@@ -73,11 +55,11 @@ export const createUser = async (payload: NewUser) => {
 };
 
 export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
-  const existingUser = await getUser("id", id);
+  const existingUser = await getUser("id", id, false);
   if (!existingUser) throw new AppError(404, "update user failed. userId not found");
 
   if (payload.username) {
-    const usernameExists = await getUser("username", payload.username);
+    const usernameExists = await getUser("username", payload.username, false);
     if (usernameExists)
       throw new AppError(400, "update user failed", {
         username: "username is already taken",
@@ -86,35 +68,19 @@ export const updateUser = async (id: User["id"], payload: Partial<NewUser>) => {
 
   if (payload.email) {
     const emailExists = await getUser("email", payload.email);
-    if (emailExists)
-      throw new AppError(400, "update user failed", {
-        email: "email is already taken",
-      });
+    if (emailExists) throw new AppError(400, "update user failed", { email: "email is already taken" });
   }
 
-  if (payload.password) {
-    payload.password = await new Argon2id().hash(payload.password);
-  }
+  if (payload.password) payload.password = await new Argon2id().hash(payload.password);
 
-  // if (payload.role && existingUser.role !== "admin") {
-  //   throw new AppError(403, "You are not authorized to change user roles.");
-  // }
-
-  const query = await db
-    .update(users)
-    .set({
-      ...payload, // Only update provided fields
-    })
-    .where(eq(users.id, id))
-    .returning();
-
+  const query = await db.update(users).set(payload).where(eq(users.id, id)).returning();
   if (!query[0]) throw new AppError(400, "update user failed");
 
   return excludeFields(query[0], ["password"]);
 };
 
 export const deleteUser = async (id: User["id"]) => {
-  const existingUser = await getUser("id", id);
+  const existingUser = await getUser("id", id, false);
   if (!existingUser) throw new AppError(404, "delete user failed. userId not found");
 
   await db.delete(users).where(eq(users.id, id)).returning();

@@ -47,7 +47,7 @@ export const updateUserHandler = async (req: Request, res: Response, next: NextF
 export const deleteUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await usersService.deleteUser(req.params.id as string);
-    return res.status(204).send(); // 204 for no content on successful delete
+    return res.status(204).send();
   } catch (error) {
     return next(error);
   }
@@ -59,7 +59,6 @@ export const getUserSummary = async (req: Request, res: Response, next: NextFunc
     if (!user) throw new AppError(403, "Forbidden");
 
     const { timeRangeType, wallet_id } = req.query;
-
     if (!timeRangeType) throw new AppError(400, "Please provide a timeRangeType");
 
     const data = await usersService.getUserSummary(user.id, timeRangeType as TimeRangeType, wallet_id as string);

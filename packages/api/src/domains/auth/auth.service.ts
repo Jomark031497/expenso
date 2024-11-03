@@ -6,20 +6,16 @@ import { createUser, getUser } from "../users/users.service.js";
 
 export const signUpUser = async (payload: NewUser) => {
   const user = await createUser(payload);
+
   return user;
 };
 
 export const getAuthenticatedUser = async (id: User["id"]) => {
-  return await getUser("id", id, {
-    returnError: true,
-  });
+  return await getUser("id", id);
 };
 
 export const loginUser = async (payload: Pick<User, "username" | "password">) => {
-  const user = await getUser("username", payload.username, {
-    includePassword: true,
-    returnError: false,
-  });
+  const user = await getUser("username", payload.username, false);
   if (!user) throw new AppError(404, "invalid username/password");
 
   if (payload.password && user.password) {
