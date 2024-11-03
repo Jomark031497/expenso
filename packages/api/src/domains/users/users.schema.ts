@@ -27,7 +27,6 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 export const selectUserSchema = createSelectSchema(users);
-
 export const insertUserSchema = createInsertSchema(users, {
   username: (schema) =>
     schema.username
@@ -47,5 +46,5 @@ export const insertUserSchema = createInsertSchema(users, {
   fullName: (schema) => schema.fullName.max(256, "fullName must not exceed 256 characters"),
 });
 
-export type User = typeof users.$inferSelect; // return type when queried
-export type NewUser = typeof users.$inferInsert; // insert type
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;

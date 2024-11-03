@@ -57,10 +57,10 @@ export const initiateGithubLoginHandler = async (_req: Request, res: Response, n
       .appendHeader(
         "Set-Cookie",
         serializeCookie("github_oauth_state", state, {
-          secure: process.env.NODE_ENV === "production", // set to false in localhost
+          secure: process.env.NODE_ENV === "production",
           path: "/",
           httpOnly: true,
-          maxAge: 60 * 10, // 10 min
+          maxAge: 60 * 10,
           sameSite: "lax",
         }),
       )
@@ -86,9 +86,7 @@ export const githubCallbackHandler = async (req: Request, res: Response, next: N
     if (!githubUserResponse.ok) throw new AppError(400, "Failed to fetch GitHub user");
 
     const githubUser = (await githubUserResponse.json()) as GitHubUser;
-    const existingUser = await getUser("githubId", githubUser.id, {
-      returnError: false,
-    });
+    const existingUser = await getUser("githubId", githubUser.id, false);
 
     if (existingUser) {
       await createSessionAndSetCookie(res, existingUser.id);
@@ -122,10 +120,10 @@ export const initiateDiscordLoginHandler = async (_req: Request, res: Response, 
       .appendHeader(
         "Set-Cookie",
         serializeCookie("discord_oauth_state", state, {
-          secure: process.env.NODE_ENV === "production", // set to false in localhost
+          secure: process.env.NODE_ENV === "production",
           path: "/",
           httpOnly: true,
-          maxAge: 60 * 10, // 10 min
+          maxAge: 60 * 10,
           sameSite: "lax",
         }),
       )
@@ -153,9 +151,7 @@ export const discordCallbackHandler = async (req: Request, res: Response, next: 
     if (!discordUserResponse.ok) throw new AppError(400, "Failed to fetch Discord user");
 
     const discordUser = (await discordUserResponse.json()) as DiscordUser;
-    const existingUser = await getUser("discordId", discordUser.id, {
-      returnError: false,
-    });
+    const existingUser = await getUser("discordId", discordUser.id, false);
 
     if (existingUser) {
       await createSessionAndSetCookie(res, existingUser.id);
