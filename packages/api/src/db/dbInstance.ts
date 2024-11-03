@@ -7,8 +7,8 @@ import * as wallets from "../domains/wallets/wallets.schema.js";
 import * as transactions from "../domains/transactions/transactions.schema.js";
 
 const sql = postgres(envs.DATABASE_URL, {
-  max: 10, // Set max connections in the pool
-  idle_timeout: 300, // 300 seconds idle time
+  max: 10,
+  idle_timeout: 300,
 });
 
 export const db = drizzle(sql, {
